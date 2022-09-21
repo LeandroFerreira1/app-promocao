@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Promo</string>
+
+    <string-array name="departamento">
+        <item>Açougue</item>
+        <item>Congelados</item>
+        <item>Frios e laticínios</item>
+        <item>Adega e bebidas</item>
+        <item>Higiene e limpeza</item>
+        <item>Hortifruti e mercearia</item>
+        <item>Padaria</item>
+        <item>Enlatados</item>
+        <item>Cereais</item>
+        <item>Utensílios</item>
+        <item>Outros</item>
+    </string-array>
+</resources>
