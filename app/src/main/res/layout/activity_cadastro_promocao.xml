@@ -10,20 +10,48 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_margin="10dp"
-        android:src="@drawable/ic_usuario"
+        android:layout_marginTop="92dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="#00000000"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adicione um produto nessa promoção!"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewUsuario"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewUsuario"
+        app:layout_constraintStart_toStartOf="@+id/imageViewUsuario"
+        app:layout_constraintTop_toTopOf="@+id/imageViewUsuario" />
+
+    <ImageButton
+        android:id="@+id/imageSeta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:src="@drawable/ic_seta"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewUsuario"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewUsuario"
+        app:layout_constraintHorizontal_bias="0.86"
+        app:layout_constraintStart_toStartOf="@+id/imageViewUsuario"
+        app:layout_constraintTop_toTopOf="@+id/imageViewUsuario"
+        app:layout_constraintVertical_bias="0.8"
         tools:ignore="MissingConstraints" />
 
     <ImageButton
         android:id="@+id/imageButtonCamera"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/mais"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewUsuario"
         app:layout_constraintEnd_toEndOf="@+id/imageViewUsuario"
         app:layout_constraintHorizontal_bias="0.95"
+        android:background="#00000000"
         app:layout_constraintStart_toStartOf="@+id/imageViewUsuario"
         tools:ignore="MissingConstraints" />
 
@@ -31,7 +59,7 @@
         android:id="@+id/buttonLoginCadastrar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:background="@drawable/background_botao"
         android:text="Escolher Supermercado"
         android:textColor="@color/black"
@@ -40,47 +68,87 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewUsuario"
         tools:ignore="MissingConstraints" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginTop="15dp"
+        android:padding="5dp"
+        android:textStyle="bold"
+        android:text="Preço:"
+        android:textColor="@color/red_secundary"
+        app:layout_constraintBottom_toTopOf="@+id/editValorOriginal"
+        app:layout_constraintStart_toStartOf="@+id/editValorOriginal"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginCadastrar" />
+
     <EditText
-        android:id="@+id/editCadastroNome"
+        android:id="@+id/editValorOriginal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/background_caixa_texto"
         android:ems="10"
-        android:hint="Valor Original"
-        android:inputType="textEmailAddress"
+        android:inputType="numberDecimal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLoginCadastrar" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:padding="8dp"
+        android:textStyle="bold"
+        android:text="Preço Promocional:"
+        android:textColor="@color/red_secundary"
+        app:layout_constraintStart_toStartOf="@+id/editValorPromocional"
+        app:layout_constraintTop_toBottomOf="@+id/editValorOriginal"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/editValorPromocional"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/background_caixa_texto"
         android:ems="10"
-        android:hint="Valor Promocional"
-        android:inputType="date"
+        android:inputType="numberDecimal"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editCadastroNome" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"/>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:padding="8dp"
+        android:textStyle="bold"
+        android:text="Data de Validade:"
+        android:textColor="@color/red_secundary"
+        app:layout_constraintStart_toStartOf="@+id/editDataValidade"
+        app:layout_constraintTop_toBottomOf="@+id/editValorPromocional"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/editDataValidade"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/background_caixa_texto"
         android:ems="10"
-        android:hint="Data Validade"
         android:inputType="date"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editValorPromocional" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"/>
 
     <Button
         android:id="@+id/buttonCadastarPromocao"
@@ -93,5 +161,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDataValidade" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
