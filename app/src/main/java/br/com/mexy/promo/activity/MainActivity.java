@@ -25,17 +25,30 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import br.com.mexy.promo.R;
+import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.util.Permissao;
+import br.com.mexy.promo.util.StaticInstances;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MainActivity extends AppCompatActivity
@@ -44,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap mMap;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private Retrofit retrofit;
     private Map<Marker, Map<String, Object>> markers = new HashMap<>();
 
     FloatingActionButton floatingActionButton;
@@ -52,7 +66,7 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
-
+    private List<Promocao> promocoes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +85,13 @@ public class MainActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync((OnMapReadyCallback) this);
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(DataService.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        recuperarPromocoes();
 
     }
 
@@ -229,6 +250,47 @@ public class MainActivity extends AppCompatActivity
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+    }
+
+
+    private void recuperarPromocoes() {
+
+        DataService service = retrofit.create(DataService.class);
+        Call<List<Promocao>> promocaoCall = service.recuperarPromocoes();
+
+        promocaoCall.enqueue(new Callback<List<Promocao>>() {
+            @Override
+            public void onResponse(Call<List<Promocao>> call, Response<List<Promocao>> response) {
+                if (response.isSuccessful()) {
+
+                    StaticInstances.promocoes.clear();
+                    StaticInstances.promocoes.addAll(response.body());
+                    promocoes = StaticInstances.promocoes;
+
+                    for (Promocao a : promocoes) {
+
+                        Map<String, Object> dataModel = new HashMap<>();
+                        dataModel.put("title", a.getProduto().getNome());
+                        dataModel.put("latitude", a.getEstabelecimento().getLongitude());
+                        dataModel.put("longitude", a.getEstabelecimento().getLatitude());
+                        dataModel.put("idPromocao", a.getId());
+
+
+                        Marker marker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(Double.parseDouble(a.getEstabelecimento().getLatitude()), Double.parseDouble(a.getEstabelecimento().getLongitude())))
+                                .icon(BitmapDescriptorFactory.fromBitmap(resizeBitmap("pin",110,158))));
+                        markers.put(marker, dataModel);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Promocao>> call, Throwable t) {
+                // TODO
+            }
+        });
 
     }
 
