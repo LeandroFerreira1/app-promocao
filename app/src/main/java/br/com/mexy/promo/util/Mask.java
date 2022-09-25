@@ -1,4 +1,4 @@
-package br.com.mexy.promo;
+package br.com.mexy.promo.util;
 
 import android.text.Editable;
 import android.text.TextWatcher;

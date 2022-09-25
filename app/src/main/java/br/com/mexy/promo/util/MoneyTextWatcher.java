@@ -1,4 +1,4 @@
-package br.com.mexy.promo;
+package br.com.mexy.promo.util;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-class MoneyTextWatcher implements TextWatcher {
+public class MoneyTextWatcher implements TextWatcher {
     private final WeakReference<EditText> editTextWeakReference;
     private final Locale locale = Locale.getDefault();
 
