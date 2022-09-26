@@ -41,6 +41,7 @@ import java.util.Map;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.fragment.BottomSheetPerfil;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.util.Permissao;
 import br.com.mexy.promo.util.StaticInstances;
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity
 
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.maps_style));
 
-        /*
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -125,14 +126,14 @@ public class MainActivity extends AppCompatActivity
                 final BottomSheetPerfil bottomSheetPerfil = new BottomSheetPerfil();
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("idArtesao", (Integer) dataModel.get("idArtesao"));
+                bundle.putInt("idPromocao", (Integer) dataModel.get("idPromocao"));
 
                 bottomSheetPerfil.setArguments(bundle);
                 bottomSheetPerfil.show(getSupportFragmentManager(), bottomSheetPerfil.getTag());
 
                 return false;
             }
-        });*/
+        });
 
 
         //Objeto responsável por gerenciar a localização do usuário

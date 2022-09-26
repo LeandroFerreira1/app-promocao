@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.mexy.promo.model.Promocao;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface DataService {
@@ -15,6 +16,8 @@ public interface DataService {
     @GET("/api/v1/promocoes/")
     Call<List<Promocao>> recuperarPromocoes();
 
+    @GET("/api/v1/promocoes/{id}")
+    Call<Promocao> buscarPromocao(@Path("id") Integer id);
 
 /*
     @GET("/api/audio")
