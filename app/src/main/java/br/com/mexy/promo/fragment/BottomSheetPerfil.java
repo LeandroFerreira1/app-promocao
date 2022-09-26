@@ -1,8 +1,5 @@
 package br.com.mexy.promo.fragment;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
@@ -53,7 +45,7 @@ public class BottomSheetPerfil extends BottomSheetDialogFragment {
         idPromocao = getArguments().getInt("idPromocao");
 
         return inflater
-                .inflate(R.layout.bottom_sheet_perfil, container, false);
+                .inflate(R.layout.bottom_sheet_promocao, container, false);
 
     }
 

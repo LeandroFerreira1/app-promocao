@@ -11,6 +11,7 @@ public class Estabelecimento {
 	private String latitude;
 	private String longitude;
 	private String urlImagem;
+	private Promocao promocao;
 
 	public Integer getId() {
 		return id;
@@ -66,6 +67,14 @@ public class Estabelecimento {
 
 	public void setUrlImagem(String urlImagem) {
 		this.urlImagem = urlImagem;
+	}
+
+	public Promocao getPromocao() {
+		return promocao;
+	}
+
+	public void setPromocao(Promocao estabelecimento) {
+		this.promocao = promocao;
 	}
 
 }
