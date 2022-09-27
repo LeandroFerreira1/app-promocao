@@ -1,5 +1,6 @@
 package br.com.mexy.promo.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +12,25 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.mexy.promo.R;
+import br.com.mexy.promo.activity.MainActivity;
+import br.com.mexy.promo.adapter.PromocaoAdapter;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
+import br.com.mexy.promo.util.StaticInstances;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,9 +44,14 @@ public class BottomSheetPerfil extends BottomSheetDialogFragment {
     private TextView textViewEstabelecimento;
     private Button buttonPerfil;
     private ProgressBar progressBar;
-    private Promocao promocao = new Promocao();
-    private Integer idPromocao;
+    private Estabelecimento estabelecimento = new Estabelecimento();
+    private Integer idEstabelecimento;
     private Retrofit retrofit;
+    private RecyclerView recyclerEstabelecimento;
+    private PromocaoAdapter promocaoAdapter;
+    private List<Estabelecimento> estabelecimentos = new ArrayList<>();
+    private FragmentActivity myContext;
+    private ArrayList<Promocao> promocoes;
 
     @Nullable
     @Override public View onCreateView(
@@ -42,7 +60,7 @@ public class BottomSheetPerfil extends BottomSheetDialogFragment {
             @Nullable Bundle savedInstanceState
     ) {
 
-        idPromocao = getArguments().getInt("idPromocao");
+        idEstabelecimento = getArguments().getInt("idEstabelecimento");
 
         return inflater
                 .inflate(R.layout.bottom_sheet_promocao, container, false);
@@ -53,25 +71,20 @@ public class BottomSheetPerfil extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        imageViewProduto = view.findViewById(R.id.ImgPromocao);
-        textViewMarca = view.findViewById(R.id.textViewMarca);
-        textViewEstabelecimento = view.findViewById(R.id.textEstabelecimento);
-        buttonPerfil = view.findViewById(R.id.buttonPerfil);
         progressBar = view.findViewById(R.id.progressBar);
-
-
-        imageViewProduto.setVisibility(View.GONE);
-        textViewEstabelecimento.setVisibility(View.GONE);
-        textViewMarca.setVisibility(View.GONE);
-        buttonPerfil.setVisibility(View.GONE);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        recuperarPromocao(idPromocao);
+        recyclerEstabelecimento = view.findViewById(R.id.recyclerEstabelecimentos);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
+                myContext, LinearLayoutManager.HORIZONTAL,false);
+        recyclerEstabelecimento.setLayoutManager(layoutManager);
+
+        recuperarEstabelecimentoPromocao(idEstabelecimento);
+
 /*
         buttonPerfil.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -90,42 +103,38 @@ public class BottomSheetPerfil extends BottomSheetDialogFragment {
         });*/
     }
 
-    private void recuperarPromocao(Integer id) {
+
+    private void recuperarEstabelecimentoPromocao(Integer id) {
 
         DataService service = retrofit.create(DataService.class);
-        Call<Promocao> promocaoCall = service.buscarPromocao(id);
+        Call<Estabelecimento> estabelecimentoCall = service.buscarPromocoes(id);
 
-        promocaoCall.enqueue(new Callback<Promocao>() {
+        estabelecimentoCall.enqueue(new Callback<Estabelecimento>() {
             @Override
-            public void onResponse(Call<Promocao> call, Response<Promocao> response) {
+            public void onResponse(Call<Estabelecimento> call, Response<Estabelecimento> response) {
                 if (response.isSuccessful()) {
-                    promocao = response.body();
 
-                    // TESTE
-                    Picasso.get()
-                            .load(DataService.BASE_URL + promocao.getProduto().getUrlImagem())
-                            .error(R.drawable.ic_error)
-                            .into(imageViewProduto);
-
-                    textViewMarca.setText(promocao.getProduto().getMarca());
-                    textViewEstabelecimento.setText(promocao.getEstabelecimento().getNome());
-
+                    estabelecimento = response.body();
+                    promocoes = estabelecimento.getPromocoes();
+                    System.out.println("TESTE ESTA: "+ estabelecimento.getNome());
+                    PromocaoAdapter adapter = new PromocaoAdapter(promocoes);
+                    recyclerEstabelecimento.setAdapter(adapter);
                     progressBar.setVisibility(View.GONE);
-
-                    imageViewProduto.setVisibility(View.VISIBLE);
-                    textViewEstabelecimento.setVisibility(View.VISIBLE);
-                    textViewMarca.setVisibility(View.VISIBLE);
-                    buttonPerfil.setVisibility(View.VISIBLE);
-
-
                 }
             }
 
             @Override
-            public void onFailure(Call<Promocao> call, Throwable t) {
+            public void onFailure(Call<Estabelecimento> call, Throwable t) {
                 // TODO
             }
         });
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        myContext=(MainActivity) activity;
+        super.onAttach(activity);
+    }
+
 
 }

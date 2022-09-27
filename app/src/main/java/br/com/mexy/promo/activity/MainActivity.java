@@ -42,6 +42,7 @@ import java.util.Map;
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.fragment.BottomSheetPerfil;
+import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.util.Permissao;
 import br.com.mexy.promo.util.StaticInstances;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity
             Manifest.permission.ACCESS_FINE_LOCATION
     };
 
-    private List<Promocao> promocoes = new ArrayList<>();
+    private List<Estabelecimento> estabelecimentos = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        recuperarPromocoes();
+        recuperarEstabelecimentos();
 
     }
 
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity
                 final BottomSheetPerfil bottomSheetPerfil = new BottomSheetPerfil();
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("idPromocao", (Integer) dataModel.get("idPromocao"));
+                bundle.putInt("idEstabelecimento", (Integer) dataModel.get("idEstabelecimento"));
 
                 bottomSheetPerfil.setArguments(bundle);
                 bottomSheetPerfil.show(getSupportFragmentManager(), bottomSheetPerfil.getTag());
@@ -255,31 +256,31 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void recuperarPromocoes() {
+    private void recuperarEstabelecimentos() {
 
         DataService service = retrofit.create(DataService.class);
-        Call<List<Promocao>> promocaoCall = service.recuperarPromocoes();
+        Call<List<Estabelecimento>> estabelecimentoCall = service.recuperarEstabelecimentos();
 
-        promocaoCall.enqueue(new Callback<List<Promocao>>() {
+        estabelecimentoCall.enqueue(new Callback<List<Estabelecimento>>() {
             @Override
-            public void onResponse(Call<List<Promocao>> call, Response<List<Promocao>> response) {
+            public void onResponse(Call<List<Estabelecimento>> call, Response<List<Estabelecimento>> response) {
                 if (response.isSuccessful()) {
 
-                    StaticInstances.promocoes.clear();
-                    StaticInstances.promocoes.addAll(response.body());
-                    promocoes = StaticInstances.promocoes;
+                    StaticInstances.estabelecimentos.clear();
+                    StaticInstances.estabelecimentos.addAll(response.body());
+                    estabelecimentos = StaticInstances.estabelecimentos;
 
-                    for (Promocao a : promocoes) {
+                    for (Estabelecimento a : estabelecimentos) {
 
                         Map<String, Object> dataModel = new HashMap<>();
-                        dataModel.put("title", a.getProduto().getNome());
-                        dataModel.put("latitude", a.getEstabelecimento().getLongitude());
-                        dataModel.put("longitude", a.getEstabelecimento().getLatitude());
-                        dataModel.put("idPromocao", a.getId());
+                        dataModel.put("title", a.getNome());
+                        dataModel.put("latitude", a.getLongitude());
+                        dataModel.put("longitude", a.getLatitude());
+                        dataModel.put("idEstabelecimento", a.getId());
 
 
                         Marker marker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(Double.parseDouble(a.getEstabelecimento().getLatitude()), Double.parseDouble(a.getEstabelecimento().getLongitude())))
+                                .position(new LatLng(Double.parseDouble(a.getLatitude()), Double.parseDouble(a.getLongitude())))
                                 .icon(BitmapDescriptorFactory.fromBitmap(resizeBitmap("pin",110,158))));
                         markers.put(marker, dataModel);
 
@@ -288,7 +289,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<List<Promocao>> call, Throwable t) {
+            public void onFailure(Call<List<Estabelecimento>> call, Throwable t) {
                 // TODO
             }
         });

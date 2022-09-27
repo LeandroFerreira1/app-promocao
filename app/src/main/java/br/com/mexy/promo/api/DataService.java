@@ -2,6 +2,7 @@ package br.com.mexy.promo.api;
 
 import java.util.List;
 
+import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,8 +17,15 @@ public interface DataService {
     @GET("/api/v1/promocoes/")
     Call<List<Promocao>> recuperarPromocoes();
 
+    @GET("/api/v1/estabelecimentos/promocoes/")
+    Call<List<Estabelecimento>> recuperarEstabelecimentos();
+
     @GET("/api/v1/promocoes/{id}")
     Call<Promocao> buscarPromocao(@Path("id") Integer id);
+
+    @GET("/api/v1/estabelecimentos/promocao/{id}")
+    Call<Estabelecimento> buscarPromocoes(@Path("id") Integer id);
+
 
 /*
     @GET("/api/audio")

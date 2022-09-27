@@ -2,16 +2,19 @@ package br.com.mexy.promo.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Estabelecimento {
 	private Integer id;
-	@SerializedName("nome_estabelecimento")
+	@SerializedName("nome")
 	private String nome;
 	private String endereco;
 	private String telefone;
 	private String latitude;
 	private String longitude;
 	private String urlImagem;
-	private Promocao promocao;
+	private ArrayList<Promocao> promocoes;
 
 	public Integer getId() {
 		return id;
@@ -69,12 +72,12 @@ public class Estabelecimento {
 		this.urlImagem = urlImagem;
 	}
 
-	public Promocao getPromocao() {
-		return promocao;
+	public ArrayList<Promocao> getPromocoes() {
+		return promocoes;
 	}
 
-	public void setPromocao(Promocao estabelecimento) {
-		this.promocao = promocao;
+	public void setPromocoes(ArrayList<Promocao> promocoes) {
+		this.promocoes = promocoes;
 	}
 
 }

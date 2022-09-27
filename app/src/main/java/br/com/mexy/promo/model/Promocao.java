@@ -9,9 +9,9 @@ public class Promocao {
 
 	private Integer id;
 
-	private String valorOriginal;
+	private String valor_original;
 
-	private String valorPromocional;
+	private String valor_promocional;
 
 	private Date dataValidade;
 
@@ -35,19 +35,19 @@ public class Promocao {
 	}
 
 	public String getValorOriginal() {
-		return valorOriginal;
+		return valor_original;
 	}
 
 	public void setValorOriginal(String valorOriginal) {
-		this.valorOriginal = valorOriginal;
+		this.valor_original = valor_original;
 	}
 
 	public String getValorPromocional() {
-		return valorPromocional;
+		return valor_promocional;
 	}
 
-	public void setValorPromocional(String valorPromocional) {
-		this.valorPromocional = valorPromocional;
+	public void setValorPromocional(String valor_promocional) {
+		this.valor_promocional = valor_promocional;
 	}
 
 	public Date getDataValidade() {
