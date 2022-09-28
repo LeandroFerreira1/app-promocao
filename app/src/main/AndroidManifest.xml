@@ -42,7 +42,7 @@
             android:value="@string/MAPS_API_KEY" />
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.ProdutoActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

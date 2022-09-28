@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="#00000000"
+
         tools:ignore="MissingConstraints" />
 
     <ProgressBar
@@ -57,18 +58,19 @@
         android:padding="5dp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLoginCadastrar"
+        app:layout_constraintBottom_toTopOf="@+id/scan_barcode_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewProduto" />
 
     <Button
-        android:id="@+id/buttonLoginCadastrar"
+        android:id="@+id/scan_barcode_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/background_botao"
-        android:text="Ler Código de Barras"
+        android:onClick="onScanButtonClicked"
+        android:text="@string/scan_barcode_button"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +89,7 @@
         android:textColor="@color/red_secundary"
         app:layout_constraintBottom_toTopOf="@+id/editValorOriginal"
         app:layout_constraintStart_toStartOf="@+id/editValorOriginal"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLoginCadastrar" />
+        app:layout_constraintTop_toBottomOf="@+id/scan_barcode_button" />
 
     <EditText
         android:id="@+id/editValorOriginal"
