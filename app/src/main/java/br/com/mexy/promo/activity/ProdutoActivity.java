@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -38,6 +40,10 @@ public class ProdutoActivity extends AppCompatActivity {
     private TextView barcodeResultView;
     private String codigo;
     private Retrofit retrofit;
+    private Produto produto;
+    private TextView editNomeProduto;
+    private TextView editMarca;
+    private ImageView imageViewProduto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,10 @@ public class ProdutoActivity extends AppCompatActivity {
 
         barcodeResultView = findViewById(R.id.EditTextEan);
         allowManualInput = true;
+
+        editNomeProduto = findViewById(R.id.editNomeProduto);
+        editMarca = findViewById(R.id.editMarca);
+        imageViewProduto =findViewById(R.id.imageViewProduto);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
@@ -118,11 +128,40 @@ public class ProdutoActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.isSuccessful())
-                    System.out.println("SUCESSO");
+                    buscarProdutoEan(ean);
             }
 
             @Override
             public void onFailure(Call<Result> call, Throwable t) {
+                System.out.println("FALHA: " + t.toString());
+            }
+        });
+
+    }
+
+
+    private void buscarProdutoEan(final String ean) {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<Produto> produtoCall = service.buscarProdutoEan(ean);
+
+        produtoCall.enqueue(new Callback<Produto>() {
+            @Override
+            public void onResponse(Call<Produto> call, Response<Produto> response) {
+                if (response.isSuccessful()) {
+                    produto = response.body();
+                    editNomeProduto.setText(produto.getNome());
+                    editMarca.setText(produto.getMarca());
+                    Picasso.get()
+                            .load(DataService.BASE_URL + produto.getUrlImagem())
+                            .error(R.drawable.ic_error)
+                            .into(imageViewProduto);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Produto> call, Throwable t) {
                 System.out.println("FALHA: " + t.toString());
             }
         });

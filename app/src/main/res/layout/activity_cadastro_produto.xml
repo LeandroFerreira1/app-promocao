@@ -87,12 +87,12 @@
         android:textStyle="bold"
         android:text="Produto:"
         android:textColor="@color/red_secundary"
-        app:layout_constraintBottom_toTopOf="@+id/editValorOriginal"
-        app:layout_constraintStart_toStartOf="@+id/editValorOriginal"
+        app:layout_constraintBottom_toTopOf="@+id/editNomeProduto"
+        app:layout_constraintStart_toStartOf="@+id/editNomeProduto"
         app:layout_constraintTop_toBottomOf="@+id/scan_barcode_button" />
 
     <EditText
-        android:id="@+id/editValorOriginal"
+        android:id="@+id/editNomeProduto"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -114,12 +114,12 @@
         android:textStyle="bold"
         android:text="Marca:"
         android:textColor="@color/red_secundary"
-        app:layout_constraintStart_toStartOf="@+id/editValorPromocional"
-        app:layout_constraintTop_toBottomOf="@+id/editValorOriginal"
+        app:layout_constraintStart_toStartOf="@+id/editMarca"
+        app:layout_constraintTop_toBottomOf="@+id/editNomeProduto"
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/editValorPromocional"
+        android:id="@+id/editMarca"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -142,7 +142,7 @@
         android:text="Departamento:"
         android:textColor="@color/red_secundary"
         app:layout_constraintStart_toStartOf="@+id/spinnerDepartamento"
-        app:layout_constraintTop_toBottomOf="@+id/editValorPromocional"
+        app:layout_constraintTop_toBottomOf="@+id/editMarca"
         tools:ignore="MissingConstraints" />
 
     <Spinner

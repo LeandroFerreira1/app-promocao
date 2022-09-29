@@ -39,6 +39,9 @@ public interface DataService {
     @POST("/api/v1/produtos/ean/{ean}")
     Call<Result> registrarProdutoEan(@Path("ean") String ean);
 
+    @GET("/api/v1/produtos/ean/{ean}")
+    Call<Produto> buscarProdutoEan(@Path("ean") String ean);
+
 
 
 /*
