@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 public class Produto {
 
 	private Integer id;
-	@SerializedName("nome_produto")
 	private String nome;
 	private String marca;
 	private String departamento;

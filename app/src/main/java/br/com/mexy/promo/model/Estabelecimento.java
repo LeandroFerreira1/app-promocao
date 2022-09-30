@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Estabelecimento {
 	private Integer id;
-	@SerializedName("nome")
 	private String nome;
 	private String endereco;
 	private String telefone;

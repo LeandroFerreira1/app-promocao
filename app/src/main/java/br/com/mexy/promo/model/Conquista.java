@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 public class Conquista {
 
     private Integer id;
-    @SerializedName("nome_produto")
     private String nome;
     private Integer valor;
 

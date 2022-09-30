@@ -16,12 +16,15 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
 import br.com.mexy.promo.model.Result;
 import okhttp3.MediaType;
@@ -40,10 +43,11 @@ public class ProdutoActivity extends AppCompatActivity {
     private TextView barcodeResultView;
     private String codigo;
     private Retrofit retrofit;
-    private Produto produto;
+    private List<Produto> produtos = new ArrayList<>();
     private TextView editNomeProduto;
     private TextView editMarca;
     private ImageView imageViewProduto;
+    private Result result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +132,15 @@ public class ProdutoActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.isSuccessful())
-                    buscarProdutoEan(ean);
+                    result = response.body();
+                    System.out.println("TESTE: "+ result.getNome());
+                    System.out.println("TESTE ID: "+ result.getId());
+                    editNomeProduto.setText(result.getNome());
+                    editMarca.setText(result.getMarca());
+                    Picasso.get()
+                        .load(DataService.BASE_URL + result.getUrlImagem())
+                        .error(R.drawable.ic_error)
+                        .into(imageViewProduto);
             }
 
             @Override
@@ -143,17 +155,17 @@ public class ProdutoActivity extends AppCompatActivity {
     private void buscarProdutoEan(final String ean) {
 
         DataService service = retrofit.create(DataService.class);
-        final Call<Produto> produtoCall = service.buscarProdutoEan(ean);
+        final Call<List<Produto>> produtoCall = service.buscarProdutoEan(ean);
 
-        produtoCall.enqueue(new Callback<Produto>() {
+        produtoCall.enqueue(new Callback<List<Produto>>() {
             @Override
-            public void onResponse(Call<Produto> call, Response<Produto> response) {
+            public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
                 if (response.isSuccessful()) {
-                    produto = response.body();
-                    editNomeProduto.setText(produto.getNome());
-                    editMarca.setText(produto.getMarca());
+                    produtos = response.body();
+                    editNomeProduto.setText(produtos.get(0).getNome());
+                    editMarca.setText(produtos.get(0).getMarca());
                     Picasso.get()
-                            .load(DataService.BASE_URL + produto.getUrlImagem())
+                            .load(DataService.BASE_URL + produtos.get(0).getUrlImagem())
                             .error(R.drawable.ic_error)
                             .into(imageViewProduto);
                 }
@@ -161,7 +173,7 @@ public class ProdutoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Produto> call, Throwable t) {
+            public void onFailure(Call<List<Produto>> call, Throwable t) {
                 System.out.println("FALHA: " + t.toString());
             }
         });

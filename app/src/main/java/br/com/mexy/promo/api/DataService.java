@@ -40,7 +40,7 @@ public interface DataService {
     Call<Result> registrarProdutoEan(@Path("ean") String ean);
 
     @GET("/api/v1/produtos/ean/{ean}")
-    Call<Produto> buscarProdutoEan(@Path("ean") String ean);
+    Call<List<Produto>> buscarProdutoEan(@Path("ean") String ean);
 
 
 
