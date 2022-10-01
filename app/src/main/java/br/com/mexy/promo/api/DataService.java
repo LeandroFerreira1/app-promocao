@@ -1,5 +1,6 @@
 package br.com.mexy.promo.api;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
@@ -39,8 +41,11 @@ public interface DataService {
     @POST("/api/v1/produtos/ean/{ean}")
     Call<Result> registrarProdutoEan(@Path("ean") String ean);
 
-    @GET("/api/v1/produtos/ean/{ean}")
-    Call<List<Produto>> buscarProdutoEan(@Path("ean") String ean);
+    @GET("/api/v1/produtos/")
+    Call<List<Produto>> buscarProdutos();
+
+    @PATCH("/api/v1/produtos/{id}")
+    Call<Produto> alterarProduto(@Path("id") BigInteger id);
 
 
 

@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/imageViewProduto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_margin="10dp"
         android:layout_marginTop="92dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,29 +20,14 @@
         tools:ignore="MissingConstraints" />
 
     <ProgressBar
-        android:id="@+id/progressCadastro"
+        android:id="@+id/progressCadastroProduto"
         style="?android:attr/progressBarStyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/EditTextEan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewProduto" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="150dp"
-        android:text="Adicione um produto!"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/EditTextEan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewProduto"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewProduto"
+        app:layout_constraintStart_toStartOf="@+id/imageViewProduto"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText

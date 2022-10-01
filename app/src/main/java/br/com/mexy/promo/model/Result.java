@@ -2,18 +2,19 @@ package br.com.mexy.promo.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.math.BigInteger;
+
 public class Result {
-    private Integer id;
+    private BigInteger id;
     private String nome;
     private String marca;
     private String urlImagem;
-    private String ean;
 
-    public Integer getId() {
+    public BigInteger getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -39,13 +40,5 @@ public class Result {
 
     public void setUrlImagem(String urlImagem) {
         this.urlImagem = urlImagem;
-    }
-
-    public String getEan() {
-        return ean;
-    }
-
-    public void setEan(String ean) {
-        this.ean = ean;
     }
 }

@@ -3,8 +3,12 @@ package br.com.mexy.promo.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +20,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.squareup.picasso.Picasso;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +40,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ProdutoActivity extends AppCompatActivity {
+public class ProdutoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String KEY_ALLOW_MANUAL_INPUT = "allow_manual_input";
 
@@ -48,11 +53,22 @@ public class ProdutoActivity extends AppCompatActivity {
     private TextView editMarca;
     private ImageView imageViewProduto;
     private Result result;
+    private Produto produto;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_produto);
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerDepartamento);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.departamento, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        progressBar = findViewById(R.id.progressCadastroProduto);
 
         barcodeResultView = findViewById(R.id.EditTextEan);
         allowManualInput = true;
@@ -66,6 +82,16 @@ public class ProdutoActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerDepartamento);
+        spinner.setOnItemSelectedListener(this);
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
     }
 
     public void onScanButtonClicked(View view) {
@@ -103,7 +129,7 @@ public class ProdutoActivity extends AppCompatActivity {
                         "%s",
                         barcode.getRawValue());
         codigo = barcodeValue;
-        registrarProdutoEan(codigo);
+        buscarProdutoEan(codigo);
         return getString(R.string.barcode_result, barcodeValue);
     }
 
@@ -125,6 +151,7 @@ public class ProdutoActivity extends AppCompatActivity {
 
     private void registrarProdutoEan(final String ean) {
 
+        progressBar.setVisibility(View.VISIBLE);
         DataService service = retrofit.create(DataService.class);
         final Call<Result> produtoCall = service.registrarProdutoEan(ean);
 
@@ -133,14 +160,13 @@ public class ProdutoActivity extends AppCompatActivity {
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.isSuccessful())
                     result = response.body();
-                    System.out.println("TESTE: "+ result.getNome());
-                    System.out.println("TESTE ID: "+ result.getId());
                     editNomeProduto.setText(result.getNome());
                     editMarca.setText(result.getMarca());
                     Picasso.get()
                         .load(DataService.BASE_URL + result.getUrlImagem())
                         .error(R.drawable.ic_error)
                         .into(imageViewProduto);
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -152,22 +178,35 @@ public class ProdutoActivity extends AppCompatActivity {
     }
 
 
-    private void buscarProdutoEan(final String ean) {
+    private void buscarProdutoEan(final String str) {
+
+        BigInteger id = new BigInteger(str);
 
         DataService service = retrofit.create(DataService.class);
-        final Call<List<Produto>> produtoCall = service.buscarProdutoEan(ean);
+        final Call<List<Produto>> produtoCall = service.buscarProdutos();
 
         produtoCall.enqueue(new Callback<List<Produto>>() {
             @Override
             public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
+
                 if (response.isSuccessful()) {
                     produtos = response.body();
-                    editNomeProduto.setText(produtos.get(0).getNome());
-                    editMarca.setText(produtos.get(0).getMarca());
-                    Picasso.get()
-                            .load(DataService.BASE_URL + produtos.get(0).getUrlImagem())
-                            .error(R.drawable.ic_error)
-                            .into(imageViewProduto);
+
+                    for (Produto p : produtos) {
+                        if(p.getId().equals(id)) {
+                            editNomeProduto.setText(p.getNome());
+                            editMarca.setText(p.getMarca());
+                            Picasso.get()
+                                    .load(DataService.BASE_URL + p.getUrlImagem())
+                                    .error(R.drawable.ic_error)
+                                    .into(imageViewProduto);
+                        }
+                    }
+                }else{
+                    if (response.code() == 404) {
+                        progressBar.setVisibility(View.GONE);
+                        registrarProdutoEan(str);
+                    }
                 }
 
             }

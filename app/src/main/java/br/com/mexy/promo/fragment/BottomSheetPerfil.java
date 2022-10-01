@@ -39,17 +39,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BottomSheetPerfil extends BottomSheetDialogFragment {
 
-    private ImageView imageViewProduto;
-    private TextView textViewMarca;
-    private TextView textViewEstabelecimento;
-    private Button buttonPerfil;
     private ProgressBar progressBar;
     private Estabelecimento estabelecimento = new Estabelecimento();
     private Integer idEstabelecimento;
     private Retrofit retrofit;
     private RecyclerView recyclerEstabelecimento;
-    private PromocaoAdapter promocaoAdapter;
-    private List<Estabelecimento> estabelecimentos = new ArrayList<>();
     private FragmentActivity myContext;
     private ArrayList<Promocao> promocoes;
 
