@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -55,7 +56,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private Result result;
     private Produto produto;
     private ProgressBar progressBar;
-
+    private Integer cont = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +68,8 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                 R.array.departamento, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        spinner.setSelection(11);
 
         progressBar = findViewById(R.id.progressCadastroProduto);
 
@@ -142,7 +145,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                 case MlKitException.CODE_SCANNER_APP_NAME_UNAVAILABLE:
                     return getString(R.string.error_app_name_unavailable);
                 default:
-                    return getString(R.string.error_default_message, e);
+                    return getString(R.string.error_default_message);
             }
         } else {
             return e.getMessage();
@@ -158,15 +161,29 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         produtoCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
-                if (response.isSuccessful())
+                if (response.isSuccessful()) {
                     result = response.body();
                     editNomeProduto.setText(result.getNome());
                     editMarca.setText(result.getMarca());
                     Picasso.get()
-                        .load(DataService.BASE_URL + result.getUrlImagem())
-                        .error(R.drawable.ic_error)
-                        .into(imageViewProduto);
-                progressBar.setVisibility(View.GONE);
+                            .load(DataService.BASE_URL + result.getUrlImagem())
+                            .error(R.drawable.ic_error)
+                            .into(imageViewProduto);
+                    progressBar.setVisibility(View.GONE);
+                }else{
+                    switch (response.code()) {
+                        case 404:
+                            Toast.makeText(ProdutoActivity.this, "not found", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 500:
+                            Toast.makeText(ProdutoActivity.this, "Produto não localizado, favor cadastrar!", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            break;
+                        default:
+                            Toast.makeText(ProdutoActivity.this, "unknown error", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
             }
 
             @Override
@@ -182,6 +199,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
         BigInteger id = new BigInteger(str);
 
+
         DataService service = retrofit.create(DataService.class);
         final Call<List<Produto>> produtoCall = service.buscarProdutos();
 
@@ -193,21 +211,28 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     produtos = response.body();
 
                     for (Produto p : produtos) {
-                        if(p.getId().equals(id)) {
+                        if(!p.getId().equals(id)) {
+                            cont = 1;
+                            System.out.println("TESTE1");
+
+                        }else if(p.getId().equals(id)){
                             editNomeProduto.setText(p.getNome());
                             editMarca.setText(p.getMarca());
                             Picasso.get()
                                     .load(DataService.BASE_URL + p.getUrlImagem())
                                     .error(R.drawable.ic_error)
                                     .into(imageViewProduto);
+                            cont = 0;
+                            System.out.println("TESTE");
                         }
                     }
-                }else{
-                    if (response.code() == 404) {
+                    if(cont == 1){
+                        System.out.println("TESTE2");
                         progressBar.setVisibility(View.GONE);
                         registrarProdutoEan(str);
                     }
                 }
+
 
             }
 

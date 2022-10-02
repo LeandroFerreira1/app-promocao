@@ -14,6 +14,7 @@
         <item>Cereais</item>
         <item>Utensílios</item>
         <item>Outros</item>
+        <item></item>
     </string-array>
 
     <string name="allow_manual_input" translatable="false">Allow input code manually</string>
@@ -22,7 +23,7 @@
     <string name="error_scanner_cancelled" translatable="false">Code scanner is cancelled.</string>
     <string name="error_camera_permission_not_granted" translatable="false">Camera permission is not granted.</string>
     <string name="error_app_name_unavailable" translatable="false">App name is not set.</string>
-    <string name="error_default_message" translatable="false">Failed to scan code: %1$s</string>
+    <string name="error_default_message" translatable="false"></string>
 
 
 </resources>
