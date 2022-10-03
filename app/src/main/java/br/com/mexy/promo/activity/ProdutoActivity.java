@@ -14,6 +14,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.mlkit.common.MlKitException;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
@@ -30,9 +34,11 @@ import java.util.Map;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
 import br.com.mexy.promo.model.Result;
+import br.com.mexy.promo.util.StaticInstances;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -50,6 +56,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private String codigo;
     private Retrofit retrofit;
     private List<Produto> produtos = new ArrayList<>();
+    private List<Departamento> departamentos = new ArrayList<>();
     private TextView editNomeProduto;
     private TextView editMarca;
     private ImageView imageViewProduto;
@@ -57,19 +64,17 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private Produto produto;
     private ProgressBar progressBar;
     private Integer cont = 0;
+    private Spinner spinner;
+    private Integer idDepartamento = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_produto);
 
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinnerDepartamento);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.departamento, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        spinner = (Spinner) findViewById(R.id.spinnerDepartamento);
 
-        spinner.setSelection(11);
+
 
         progressBar = findViewById(R.id.progressCadastroProduto);
 
@@ -84,6 +89,10 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                 .baseUrl(DataService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
+        recuperarDepartamentos();
+
+
 
     }
 
@@ -198,8 +207,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private void buscarProdutoEan(final String str) {
 
         BigInteger id = new BigInteger(str);
-
-
         DataService service = retrofit.create(DataService.class);
         final Call<List<Produto>> produtoCall = service.buscarProdutos();
 
@@ -243,4 +250,38 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         });
 
     }
+
+    private void recuperarDepartamentos() {
+
+        DataService service = retrofit.create(DataService.class);
+        Call<List<Departamento>> departamentoCall = service.recuperarDepartamentos();
+
+        departamentoCall.enqueue(new Callback<List<Departamento>>() {
+            @Override
+            public void onResponse(Call<List<Departamento>> call, Response<List<Departamento>> response) {
+                if (response.isSuccessful()) {
+
+                    StaticInstances.departamentos.clear();
+                    StaticInstances.departamentos.addAll(response.body());
+                    departamentos = StaticInstances.departamentos;
+
+                    ArrayAdapter adapter = new ArrayAdapter(ProdutoActivity.this, android.R.layout.simple_spinner_item, departamentos);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(adapter);
+
+                    //idDepartamento = ((Departamento)spinner.getSelectedItem()).getId();
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Departamento>> call, Throwable t) {
+                // TODO
+            }
+        });
+
+    }
+
+
 }

@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
+import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
 import br.com.mexy.promo.model.Promocao;
@@ -46,6 +47,11 @@ public interface DataService {
 
     @PATCH("/api/v1/produtos/{id}")
     Call<Produto> alterarProduto(@Path("id") BigInteger id);
+
+    @GET("/api/v1/departamentos/")
+    Call<List<Departamento>> recuperarDepartamentos();
+
+
 
 
 
