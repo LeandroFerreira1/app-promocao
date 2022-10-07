@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -61,11 +62,14 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private TextView editMarca;
     private ImageView imageViewProduto;
     private Result result;
-    private Produto produto;
+    private Produto produtoAlterado = new Produto();
     private ProgressBar progressBar;
     private Integer cont = 0;
     private Spinner spinner;
     private Integer idDepartamento = 0;
+    private Button btnSalvar;
+    private BigInteger idProduto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +77,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
 
         spinner = (Spinner) findViewById(R.id.spinnerDepartamento);
-
-
 
         progressBar = findViewById(R.id.progressCadastroProduto);
 
@@ -91,6 +93,13 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                 .build();
 
         recuperarDepartamentos();
+
+        btnSalvar = (Button) findViewById(R.id.buttonCadastarPromocao);
+        btnSalvar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                alteraProdutos(idProduto);
+            }
+        });
 
 
 
@@ -206,7 +215,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     private void buscarProdutoEan(final String str) {
 
-        BigInteger id = new BigInteger(str);
+        idProduto = new BigInteger(str);
         DataService service = retrofit.create(DataService.class);
         final Call<List<Produto>> produtoCall = service.buscarProdutos();
 
@@ -217,20 +226,26 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                 if (response.isSuccessful()) {
                     produtos = response.body();
 
+                    if(produtos.isEmpty()){
+                        progressBar.setVisibility(View.GONE);
+                        registrarProdutoEan(str);
+                    }
+
                     for (Produto p : produtos) {
-                        if(!p.getId().equals(id)) {
+                        if(!p.getId().equals(idProduto)) {
                             cont = 1;
                             System.out.println("TESTE1");
 
-                        }else if(p.getId().equals(id)){
+                        }else if(p.getId().equals(idProduto)){
                             editNomeProduto.setText(p.getNome());
                             editMarca.setText(p.getMarca());
                             Picasso.get()
                                     .load(DataService.BASE_URL + p.getUrlImagem())
                                     .error(R.drawable.ic_error)
                                     .into(imageViewProduto);
+                            spinner.setSelection(1);
                             cont = 0;
-                            System.out.println("TESTE");
+                            System.out.println("TESTE10 "+ p.getDepartamento());
                         }
                     }
                     if(cont == 1){
@@ -269,6 +284,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(adapter);
 
+
                     //idDepartamento = ((Departamento)spinner.getSelectedItem()).getId();
 
 
@@ -277,6 +293,31 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
             @Override
             public void onFailure(Call<List<Departamento>> call, Throwable t) {
+                // TODO
+            }
+        });
+
+    }
+
+    private void alteraProdutos(BigInteger id) {
+
+
+        produtoAlterado.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
+        DataService service = retrofit.create(DataService.class);
+        Call<Produto> produtoCall = service.alterarProduto(id, produtoAlterado);
+
+        idDepartamento = ((Departamento)spinner.getSelectedItem()).getId();
+
+        produtoCall.enqueue(new Callback<Produto>() {
+            @Override
+            public void onResponse(Call<Produto> call, Response<Produto> response) {
+                if (response.isSuccessful()) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Produto> call, Throwable t) {
                 // TODO
             }
         });

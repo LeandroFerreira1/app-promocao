@@ -46,7 +46,7 @@ public interface DataService {
     Call<List<Produto>> buscarProdutos();
 
     @PATCH("/api/v1/produtos/{id}")
-    Call<Produto> alterarProduto(@Path("id") BigInteger id);
+    Call<Produto> alterarProduto(@Path("id") BigInteger id, @Body Produto produto);
 
     @GET("/api/v1/departamentos/")
     Call<List<Departamento>> recuperarDepartamentos();

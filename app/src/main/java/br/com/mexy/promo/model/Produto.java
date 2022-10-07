@@ -9,7 +9,7 @@ public class Produto {
 	private BigInteger id;
 	private String nome;
 	private String marca;
-	private String departamento;
+	private Integer departamento_id;
 	private String urlImagem;
 
 	public BigInteger getId() {
@@ -36,12 +36,12 @@ public class Produto {
 		this.marca = marca;
 	}
 
-	public String getDepartamento() {
-		return departamento;
+	public Integer getDepartamento() {
+		return departamento_id;
 	}
 
-	public void setDepartamento(String departamento) {
-		this.departamento = departamento;
+	public void setDepartamento(Integer departamento_id) {
+		this.departamento_id = departamento_id;
 	}
 
 	public String getUrlImagem() {
