@@ -63,6 +63,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private ImageView imageViewProduto;
     private Result result;
     private Produto produtoAlterado = new Produto();
+    private Produto produto = new Produto();
     private ProgressBar progressBar;
     private Integer cont = 0;
     private Spinner spinner;
@@ -150,7 +151,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                         "%s",
                         barcode.getRawValue());
         codigo = barcodeValue;
-        buscarProdutoEan(codigo);
+        buscarProduto(codigo);
         return getString(R.string.barcode_result, barcodeValue);
     }
 
@@ -171,11 +172,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void registrarProdutoEan(final String ean) {
-
         progressBar.setVisibility(View.VISIBLE);
         DataService service = retrofit.create(DataService.class);
         final Call<Result> produtoCall = service.registrarProdutoEan(ean);
-
         produtoCall.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
@@ -212,6 +211,52 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
+    private void buscarProduto(final String str) {
+
+        idProduto = new BigInteger(str);
+        DataService service = retrofit.create(DataService.class);
+        final Call<Produto> produtoCall = service.buscarProduto(idProduto);
+
+        produtoCall.enqueue(new Callback<Produto>() {
+            @Override
+            public void onResponse(Call<Produto> call, Response<Produto> response) {
+
+                if (response.isSuccessful()) {
+                    produto = response.body();
+                    editNomeProduto.setText(produto.getNome());
+                    editMarca.setText(produto.getMarca());
+                    Picasso.get()
+                            .load(DataService.BASE_URL + produto.getUrlImagem())
+                            .error(R.drawable.ic_error)
+                            .into(imageViewProduto);
+                    spinner.setSelection(produto.getDepartamento());
+                }else{
+
+                    switch (response.code()) {
+                        case 404:
+                            progressBar.setVisibility(View.GONE);
+                            registrarProdutoEan(str);
+                            break;
+                        case 500:
+                            Toast.makeText(ProdutoActivity.this, "Produto não localizado, favor cadastrar!", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            break;
+                        default:
+                            Toast.makeText(ProdutoActivity.this, "unknown error", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Produto> call, Throwable t) {
+                System.out.println("FALHA: " + t.toString());
+            }
+        });
+
+    }
+
+    /*
 
     private void buscarProdutoEan(final String str) {
 
@@ -243,9 +288,8 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                                     .load(DataService.BASE_URL + p.getUrlImagem())
                                     .error(R.drawable.ic_error)
                                     .into(imageViewProduto);
-                            spinner.setSelection(1);
+                            spinner.setSelection(p.getDepartamento());
                             cont = 0;
-                            System.out.println("TESTE10 "+ p.getDepartamento());
                         }
                     }
                     if(cont == 1){
@@ -265,6 +309,8 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         });
 
     }
+
+     */
 
     private void recuperarDepartamentos() {
 
