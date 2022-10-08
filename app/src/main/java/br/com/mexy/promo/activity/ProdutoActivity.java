@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -35,6 +36,7 @@ import java.util.Map;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.fragment.BottomSheetCadastroProduto;
 import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
@@ -61,6 +63,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private TextView editNomeProduto;
     private TextView editMarca;
     private ImageView imageViewProduto;
+    private ImageButton imageButtonFoto;
     private Result result;
     private Produto produtoAlterado = new Produto();
     private Produto produto = new Produto();
@@ -87,6 +90,8 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         editNomeProduto = findViewById(R.id.editNomeProduto);
         editMarca = findViewById(R.id.editMarca);
         imageViewProduto =findViewById(R.id.imageViewProduto);
+        imageButtonFoto = (ImageButton)findViewById(R.id.imageButtonFoto);
+
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
@@ -101,9 +106,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                 alteraProdutos(idProduto);
             }
         });
-
-
-
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -171,6 +173,24 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         }
     }
 
+    private void configurarCadastro(String ean){
+        editNomeProduto.setFocusable(true);
+        editMarca.setFocusable(true);
+        spinner.setFocusable(true);
+        imageButtonFoto.setVisibility(View.VISIBLE);
+        imageButtonFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final BottomSheetCadastroProduto bottomSheetCadastroProduto = new BottomSheetCadastroProduto();
+                Bundle bundle = new Bundle();
+                bundle.putString("idProduto", (String) ean);
+                bottomSheetCadastroProduto.setArguments(bundle);
+                bottomSheetCadastroProduto.show(getSupportFragmentManager(), bottomSheetCadastroProduto.getTag());
+            }
+        });
+    }
+
     private void registrarProdutoEan(final String ean) {
         progressBar.setVisibility(View.VISIBLE);
         DataService service = retrofit.create(DataService.class);
@@ -187,6 +207,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                             .error(R.drawable.ic_error)
                             .into(imageViewProduto);
                     progressBar.setVisibility(View.GONE);
+                    imageButtonFoto.setVisibility(View.GONE);
+                    editNomeProduto.setFocusable(false);
+                    editMarca.setFocusable(false);
                 }else{
                     switch (response.code()) {
                         case 404:
@@ -195,6 +218,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                         case 500:
                             Toast.makeText(ProdutoActivity.this, "Produto não localizado, favor cadastrar!", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
+                            configurarCadastro(ean);
                             break;
                         default:
                             Toast.makeText(ProdutoActivity.this, "unknown error", Toast.LENGTH_SHORT).show();
@@ -230,6 +254,10 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                             .error(R.drawable.ic_error)
                             .into(imageViewProduto);
                     spinner.setSelection(produto.getDepartamento());
+                    imageButtonFoto.setVisibility(View.GONE);
+                    editNomeProduto.setFocusable(false);
+                    editMarca.setFocusable(false);
+                    spinner.setFocusable(false);
                 }else{
 
                     switch (response.code()) {

@@ -5,24 +5,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.activity.MainActivity;
@@ -30,14 +23,13 @@ import br.com.mexy.promo.adapter.PromocaoAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
-import br.com.mexy.promo.util.StaticInstances;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class BottomSheetPerfil extends BottomSheetDialogFragment {
+public class BottomSheetPromocao extends BottomSheetDialogFragment {
 
     private ProgressBar progressBar;
     private Estabelecimento estabelecimento = new Estabelecimento();

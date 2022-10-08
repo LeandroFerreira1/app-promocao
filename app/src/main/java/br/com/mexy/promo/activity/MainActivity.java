@@ -19,7 +19,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,7 +32,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +39,8 @@ import java.util.Map;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
-import br.com.mexy.promo.fragment.BottomSheetPerfil;
+import br.com.mexy.promo.fragment.BottomSheetPromocao;
 import br.com.mexy.promo.model.Estabelecimento;
-import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.util.Permissao;
 import br.com.mexy.promo.util.StaticInstances;
 import retrofit2.Call;
@@ -124,13 +121,13 @@ public class MainActivity extends AppCompatActivity
             public boolean onMarkerClick(Marker marker) {
 
                 Map dataModel = (Map) markers.get(marker);
-                final BottomSheetPerfil bottomSheetPerfil = new BottomSheetPerfil();
+                final BottomSheetPromocao bottomSheetPromocao = new BottomSheetPromocao();
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("idEstabelecimento", (Integer) dataModel.get("idEstabelecimento"));
 
-                bottomSheetPerfil.setArguments(bundle);
-                bottomSheetPerfil.show(getSupportFragmentManager(), bottomSheetPerfil.getTag());
+                bottomSheetPromocao.setArguments(bundle);
+                bottomSheetPromocao.show(getSupportFragmentManager(), bottomSheetPromocao.getTag());
 
                 return false;
             }
