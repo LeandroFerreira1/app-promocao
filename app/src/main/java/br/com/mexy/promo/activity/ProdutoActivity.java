@@ -1,7 +1,14 @@
 package br.com.mexy.promo.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +34,10 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +54,7 @@ import br.com.mexy.promo.model.Produto;
 import br.com.mexy.promo.model.Result;
 import br.com.mexy.promo.util.StaticInstances;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,12 +85,12 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private Integer idDepartamento = 0;
     private Button btnSalvar;
     private BigInteger idProduto;
+    private Bitmap imagem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_produto);
-
 
         spinner = (Spinner) findViewById(R.id.spinnerDepartamento);
 
@@ -103,7 +115,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         btnSalvar = (Button) findViewById(R.id.buttonCadastarPromocao);
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                alteraProdutos(idProduto);
             }
         });
     }
@@ -181,7 +192,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         imageButtonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 final BottomSheetCadastroProduto bottomSheetCadastroProduto = new BottomSheetCadastroProduto();
                 Bundle bundle = new Bundle();
                 bundle.putString("idProduto", (String) ean);
@@ -190,6 +200,8 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             }
         });
     }
+
+
 
     private void registrarProdutoEan(final String ean) {
         progressBar.setVisibility(View.VISIBLE);
@@ -374,8 +386,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void alteraProdutos(BigInteger id) {
-
-
         produtoAlterado.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
         DataService service = retrofit.create(DataService.class);
         Call<Produto> produtoCall = service.alterarProduto(id, produtoAlterado);
@@ -397,6 +407,8 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         });
 
     }
+
+
 
 
 }
