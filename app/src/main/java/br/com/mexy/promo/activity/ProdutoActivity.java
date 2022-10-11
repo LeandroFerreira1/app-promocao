@@ -1,6 +1,7 @@
 package br.com.mexy.promo.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -70,7 +71,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private TextView barcodeResultView;
     private String codigo;
     private Retrofit retrofit;
-    private List<Produto> produtos = new ArrayList<>();
     private List<Departamento> departamentos = new ArrayList<>();
     private TextView editNomeProduto;
     private TextView editMarca;
@@ -78,14 +78,14 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private ImageButton imageButtonFoto;
     private Result result;
     private Produto produtoAlterado = new Produto();
+    private Produto produtoAlteradoCompleto = new Produto();
     private Produto produto = new Produto();
     private ProgressBar progressBar;
-    private Integer cont = 0;
     private Spinner spinner;
     private Integer idDepartamento = 0;
     private Button btnSalvar;
     private BigInteger idProduto;
-    private Bitmap imagem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +115,16 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         btnSalvar = (Button) findViewById(R.id.buttonCadastarPromocao);
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if(produto != null){
+                    Intent intent = new Intent(ProdutoActivity.this, PromocaoActivity.class);
+                    intent.putExtra("produto", produto.getId());
+                    startActivity(intent);
+                }else if(result != null){
+                    alteraProdutos(idProduto);
+                }else{
+                    alteraProdutosCompleto(idProduto);
+                }
+
             }
         });
     }
@@ -185,6 +195,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void configurarCadastro(String ean){
+        idProduto = new BigInteger(ean);
         editNomeProduto.setFocusable(true);
         editMarca.setFocusable(true);
         spinner.setFocusable(true);
@@ -205,6 +216,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     private void registrarProdutoEan(final String ean) {
         progressBar.setVisibility(View.VISIBLE);
+        idProduto = new BigInteger(ean);
         DataService service = retrofit.create(DataService.class);
         final Call<Result> produtoCall = service.registrarProdutoEan(ean);
         produtoCall.enqueue(new Callback<Result>() {
@@ -271,7 +283,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     editMarca.setFocusable(false);
                     spinner.setFocusable(false);
                 }else{
-
                     switch (response.code()) {
                         case 404:
                             progressBar.setVisibility(View.GONE);
@@ -396,7 +407,37 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onResponse(Call<Produto> call, Response<Produto> response) {
                 if (response.isSuccessful()) {
+                    produto = response.body();
+                    Intent intent = new Intent(ProdutoActivity.this, PromocaoActivity.class);
+                    intent.putExtra("produto", produto.getId());
+                    startActivity(intent);
+                }
+            }
+            @Override
+            public void onFailure(Call<Produto> call, Throwable t) {
+                // TODO
+            }
+        });
 
+    }
+
+    private void alteraProdutosCompleto(BigInteger id) {
+        produtoAlteradoCompleto.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
+        produtoAlteradoCompleto.setNome((String) editNomeProduto.getText());
+        produtoAlteradoCompleto.setMarca((String) editMarca.getText());
+        DataService service = retrofit.create(DataService.class);
+        Call<Produto> produtoCall = service.alterarProduto(id, produtoAlteradoCompleto);
+
+        idDepartamento = ((Departamento)spinner.getSelectedItem()).getId();
+
+        produtoCall.enqueue(new Callback<Produto>() {
+            @Override
+            public void onResponse(Call<Produto> call, Response<Produto> response) {
+                if (response.isSuccessful()) {
+                    produto = response.body();
+                    Intent intent = new Intent(ProdutoActivity.this, PromocaoActivity.class);
+                    intent.putExtra("produto", produto.getId());
+                    startActivity(intent);
                 }
             }
 
@@ -407,8 +448,5 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         });
 
     }
-
-
-
 
 }

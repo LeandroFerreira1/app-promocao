@@ -8,7 +8,9 @@ import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
 import br.com.mexy.promo.model.Promocao;
+import br.com.mexy.promo.model.ResponseUsuario;
 import br.com.mexy.promo.model.Result;
+import br.com.mexy.promo.model.Usuario;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -26,7 +28,7 @@ import retrofit2.http.Query;
 
 public interface DataService {
 
-    public static final String BASE_URL = "http://10.0.0.173:8000";
+    public static final String BASE_URL = "http://192.168.0.109:8000";
    // String API_KEY = "501e0a13-f1ed-4c86-b7ec-c36d8b55c7ae";
 
     @GET("/api/v1/promocoes/")
@@ -61,8 +63,13 @@ public interface DataService {
     Call<String> uploadImageProduto(
             @Path("id") BigInteger id,
             @Part MultipartBody.Part file);
-/*
-    @GET("/api/audio")
-    Call<List<Musica>> recuperarMusicas(@Query("key") String key);*/
+
+    @GET("/api/v1/usuarios")
+    Call<List<Usuario>> listarUsuarios();
+
+    @POST("/api/v1/usuarios/login")
+    @FormUrlEncoded
+    Call<ResponseUsuario> verificarUsuario(@Field("username") String username,
+                                           @Field("password") String password);
 
 }
