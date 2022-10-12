@@ -73,7 +73,7 @@ public interface DataService {
                                            @Field("password") String password);
 
     @POST("/api/v1/usuarios/signup")
-    Call<Usuario> registrarProdutoEan(@Body Usuario usuario);
+    Call<Usuario> registrarUsuario(@Body Usuario usuario);
 
     @POST("/api/v1/upload-images/user/{id}")
     @Multipart

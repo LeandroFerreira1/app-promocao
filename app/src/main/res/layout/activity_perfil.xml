@@ -5,12 +5,28 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        tools:ignore="MissingConstraints,Orientation"></LinearLayout>
+    <ImageView
+        android:id="@+id/imageViewUsuario"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:src="@drawable/ic_usuario"
+        android:layout_marginBottom="400dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
+    <ImageButton
+        android:id="@+id/imageButtonCamera"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/camera"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewUsuario"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewUsuario"
+        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintStart_toStartOf="@+id/imageViewUsuario"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/editCadastroNome"
@@ -20,24 +36,12 @@
         android:background="@drawable/background_caixa_texto"
         android:ems="10"
         android:hint="Nome"
+        android:inputType="textEmailAddress"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewUsuario"
         tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/editCadastroSobrenome"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/background_caixa_texto"
-        android:ems="10"
-        android:hint="Sobrenome"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editCadastroNome" />
 
     <EditText
         android:id="@+id/editCadastroEmail"
@@ -51,7 +55,7 @@
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editCadastroSobrenome"
+        app:layout_constraintTop_toBottomOf="@+id/editCadastroNome"
         tools:ignore="MissingConstraints" />
 
     <EditText

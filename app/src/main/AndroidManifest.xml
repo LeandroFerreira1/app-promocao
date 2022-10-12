@@ -42,7 +42,7 @@
             android:value="@string/MAPS_API_KEY" />
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.CadastroUsuarioActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
