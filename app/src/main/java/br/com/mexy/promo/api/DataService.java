@@ -72,4 +72,13 @@ public interface DataService {
     Call<ResponseUsuario> verificarUsuario(@Field("username") String username,
                                            @Field("password") String password);
 
+    @POST("/api/v1/usuarios/signup")
+    Call<Usuario> registrarProdutoEan(@Body Usuario usuario);
+
+    @POST("/api/v1/upload-images/user/{id}")
+    @Multipart
+    Call<String> uploadImageUser(
+            @Path("id") Integer id,
+            @Part MultipartBody.Part file);
+
 }

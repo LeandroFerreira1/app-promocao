@@ -8,6 +8,8 @@ import br.com.mexy.promo.R;
 
 public class CadastroUsuarioActivity extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
