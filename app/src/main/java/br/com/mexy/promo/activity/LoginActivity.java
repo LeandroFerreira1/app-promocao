@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_avaliacao_promocao);
-/*
+
         editLoginEmail = findViewById(R.id.editLoginEmail);
         editLoginSenha = findViewById(R.id.editLoginSenha);
         buttonLoginEntrar = findViewById(R.id.buttonLoginEntrar);
@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                 String senha = editLoginSenha.getText().toString();
                 autenticarUsuario(emailUsuario, senha);
             }
-        });*/
+        });
 
     }
 
