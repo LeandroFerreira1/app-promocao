@@ -10,6 +10,7 @@ package br.com.mexy.promo.fragment;
         import android.graphics.Matrix;
         import android.media.ExifInterface;
         import android.net.Uri;
+        import android.os.Build;
         import android.os.Bundle;
         import android.os.Environment;
         import android.provider.MediaStore;
@@ -41,6 +42,7 @@ package br.com.mexy.promo.fragment;
         import br.com.mexy.promo.R;
         import br.com.mexy.promo.activity.MainActivity;
         import br.com.mexy.promo.activity.ProdutoActivity;
+        import br.com.mexy.promo.activity.PromocaoActivity;
         import br.com.mexy.promo.api.DataService;
         import br.com.mexy.promo.util.Permissao;
         import okhttp3.MediaType;
@@ -359,9 +361,19 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        myContext=(ProdutoActivity) context;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
     public void onAttach(Activity activity) {
-        myContext=(ProdutoActivity) activity;
         super.onAttach(activity);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            myContext=(ProdutoActivity) activity;
+        }
     }
 
 

@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity
     private void recuperarEstabelecimentos() {
 
         DataService service = retrofit.create(DataService.class);
-        Call<List<Estabelecimento>> estabelecimentoCall = service.recuperarEstabelecimentos();
+        Call<List<Estabelecimento>> estabelecimentoCall = service.recuperarEstabelecimentosPromo();
 
         estabelecimentoCall.enqueue(new Callback<List<Estabelecimento>>() {
             @Override

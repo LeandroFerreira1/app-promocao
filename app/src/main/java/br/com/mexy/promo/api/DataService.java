@@ -35,6 +35,9 @@ public interface DataService {
     Call<List<Promocao>> recuperarPromocoes();
 
     @GET("/api/v1/estabelecimentos/promocoes/")
+    Call<List<Estabelecimento>> recuperarEstabelecimentosPromo();
+
+    @GET("/api/v1/estabelecimentos/")
     Call<List<Estabelecimento>> recuperarEstabelecimentos();
 
     @GET("/api/v1/promocoes/{id}")

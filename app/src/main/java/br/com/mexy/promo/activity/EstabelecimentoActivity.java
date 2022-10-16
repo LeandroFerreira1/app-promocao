@@ -58,10 +58,8 @@ public class EstabelecimentoActivity extends AppCompatActivity {
             public void onResponse(Call<List<Estabelecimento>> call, Response<List<Estabelecimento>> response) {
                 if (response.isSuccessful()) {
 
-                    StaticInstances.estabelecimentos.clear();
-                    StaticInstances.estabelecimentos.addAll(response.body());
-                    estabelecimentos = StaticInstances.estabelecimentos;
-
+                    estabelecimentos.clear();
+                    estabelecimentos.addAll(response.body());
                     EstabelecimentoAdapter adapter = new EstabelecimentoAdapter(estabelecimentos);
                     recyclerEstabelecimento.setAdapter(adapter);
                 }

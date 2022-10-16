@@ -1,6 +1,8 @@
 package br.com.mexy.promo.fragment;
 
 import android.app.Activity;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.activity.MainActivity;
+import br.com.mexy.promo.activity.ProdutoActivity;
 import br.com.mexy.promo.adapter.PromocaoAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Estabelecimento;
@@ -32,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BottomSheetPromocao extends BottomSheetDialogFragment {
 
     private ProgressBar progressBar;
-    private Estabelecimento estabelecimento = new Estabelecimento();
+    private Estabelecimento estabelecimento;
     private Integer idEstabelecimento;
     private Retrofit retrofit;
     private RecyclerView recyclerEstabelecimento;
@@ -116,11 +119,24 @@ public class BottomSheetPromocao extends BottomSheetDialogFragment {
         });
     }
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        myContext=(MainActivity) context;
+    }
+
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
-        myContext=(MainActivity) activity;
         super.onAttach(activity);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            myContext=(MainActivity) activity;
+        }
     }
+
+
 
 
 }

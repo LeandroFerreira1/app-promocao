@@ -56,7 +56,7 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/buttonLoginCadastrar"
+        android:id="@+id/buttonEstabelecimento"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
@@ -80,7 +80,7 @@
         android:textColor="@color/red_secundary"
         app:layout_constraintBottom_toTopOf="@+id/editValorOriginal"
         app:layout_constraintStart_toStartOf="@+id/editValorOriginal"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLoginCadastrar" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonEstabelecimento" />
 
     <EditText
         android:id="@+id/editValorOriginal"
