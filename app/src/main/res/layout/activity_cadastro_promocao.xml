@@ -6,7 +6,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/imageViewUsuario"
+        android:id="@+id/imageViewProdu"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_margin="10dp"
@@ -18,69 +18,59 @@
         android:background="#00000000"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Adicione um produto nessa promoção!"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewUsuario"
-        app:layout_constraintEnd_toEndOf="@+id/imageViewUsuario"
-        app:layout_constraintStart_toStartOf="@+id/imageViewUsuario"
-        app:layout_constraintTop_toTopOf="@+id/imageViewUsuario" />
-
     <ImageButton
-        android:id="@+id/imageSeta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:src="@drawable/ic_seta"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewUsuario"
-        app:layout_constraintEnd_toEndOf="@+id/imageViewUsuario"
-        app:layout_constraintHorizontal_bias="0.86"
-        app:layout_constraintStart_toStartOf="@+id/imageViewUsuario"
-        app:layout_constraintTop_toTopOf="@+id/imageViewUsuario"
-        app:layout_constraintVertical_bias="0.8"
-        tools:ignore="MissingConstraints" />
-
-    <ImageButton
-        android:id="@+id/imageButtonCamera"
+        android:id="@+id/imageButtonProduto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/mais"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewUsuario"
-        app:layout_constraintEnd_toEndOf="@+id/imageViewUsuario"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewProdu"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewProdu"
         app:layout_constraintHorizontal_bias="0.95"
         android:background="#00000000"
-        app:layout_constraintStart_toStartOf="@+id/imageViewUsuario"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/imageViewProdu"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/buttonEstabelecimento"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_margin="20dp"
         android:background="@drawable/background_botao"
         android:text="Escolher Supermercado"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewUsuario"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProdu"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textViewEstabelecimento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:ems="10"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEstabelecimento" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:layout_marginTop="15dp"
         android:padding="5dp"
-        android:textStyle="bold"
+        android:layout_marginTop="16dp"
         android:text="Preço:"
         android:textColor="@color/red_secundary"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/editValorOriginal"
         app:layout_constraintStart_toStartOf="@+id/editValorOriginal"
-        app:layout_constraintTop_toBottomOf="@+id/buttonEstabelecimento" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewEstabelecimento" />
 
     <EditText
         android:id="@+id/editValorOriginal"

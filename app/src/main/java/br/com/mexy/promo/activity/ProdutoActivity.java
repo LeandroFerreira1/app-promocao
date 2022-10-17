@@ -1,5 +1,7 @@
 package br.com.mexy.promo.activity;
 
+import static java.lang.String.valueOf;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -116,9 +118,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(produto != null){
-                    Intent intent = new Intent(ProdutoActivity.this, PromocaoActivity.class);
-                    intent.putExtra("produto", produto.getId());
-                    startActivity(intent);
+                    Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
+                    i.putExtra("produto", valueOf(produto.getId()));
+                    startActivity(i);
                 }else if(result != null){
                     alteraProdutos(idProduto);
                 }else{
@@ -277,7 +279,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                             .load(DataService.BASE_URL + produto.getUrlImagem())
                             .error(R.drawable.ic_error)
                             .into(imageViewProduto);
-                    spinner.setSelection(produto.getDepartamento());
+//                    spinner.setSelection(produto.getDepartamento());
                     imageButtonFoto.setVisibility(View.GONE);
                     editNomeProduto.setFocusable(false);
                     editMarca.setFocusable(false);
@@ -408,9 +410,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             public void onResponse(Call<Produto> call, Response<Produto> response) {
                 if (response.isSuccessful()) {
                     produto = response.body();
-                    Intent intent = new Intent(ProdutoActivity.this, PromocaoActivity.class);
-                    intent.putExtra("produto", produto.getId());
-                    startActivity(intent);
+                    Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
+                    i.putExtra("produto", valueOf(produto.getId()));
+                    startActivity(i);
                 }
             }
             @Override
@@ -435,9 +437,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             public void onResponse(Call<Produto> call, Response<Produto> response) {
                 if (response.isSuccessful()) {
                     produto = response.body();
-                    Intent intent = new Intent(ProdutoActivity.this, PromocaoActivity.class);
-                    intent.putExtra("produto", produto.getId());
-                    startActivity(intent);
+                    Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
+                    i.putExtra("produto", valueOf(produto.getId()));
+                    startActivity(i);
                 }
             }
 
