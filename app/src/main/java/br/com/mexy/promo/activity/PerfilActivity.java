@@ -1,4 +1,16 @@
 package br.com.mexy.promo.activity;
 
-public class PerfilActivity {
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import br.com.mexy.promo.R;
+
+public class PerfilActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_perfil);
+    }
 }

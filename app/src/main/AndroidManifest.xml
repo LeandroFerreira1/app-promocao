@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Promo"
+        android:theme="@style/AppTheme"
         tools:targetApi="31">
 
         <provider
@@ -42,7 +42,7 @@
             android:value="@string/MAPS_API_KEY" />
 
         <activity
-            android:name=".activity.ProdutoActivity"
+            android:name=".activity.PerfilActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -56,6 +56,13 @@
             android:name=".activity.PromocaoActivity"
             android:label="Criar Produto"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="Entrar"
+            android:screenOrientation="portrait" />
+
+
     </application>
 
 </manifest>

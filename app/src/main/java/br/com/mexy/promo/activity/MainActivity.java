@@ -9,6 +9,8 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -72,10 +75,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
         bottomAppBar = findViewById(R.id.bar);
         //main line for setting menu in bottom app bar
-        //setSupportActionBar(bottomAppBar);
+        setSupportActionBar(bottomAppBar);
 
         //Validar permissões
         Permissao.validarPermissoes(permissoes, this, 1);
@@ -98,6 +100,34 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
         return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.botton_app_perfil :
+
+
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
+                int res = sharedPreferences.getInt(getString(R.string.pref_text),0);
+
+                if (res == 0) {
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                } else {
+                    Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
+                    intent.putExtra("idUsuario", res);
+                    startActivity(intent);
+                }
+
+                break;
+           /* case R.id.botton_app_search :
+                startActivity(new Intent(getApplicationContext(), PesquisaActivity.class));
+                break;*/
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
