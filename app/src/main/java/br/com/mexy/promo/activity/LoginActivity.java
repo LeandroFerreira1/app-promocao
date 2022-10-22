@@ -29,24 +29,32 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editLoginEmail;
     private EditText editLoginSenha;
     private Button buttonLoginEntrar;
+    private Button buttonLoginCadastrar;
     private TextView textCadastrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_avaliacao_promocao);
+        setContentView(R.layout.activity_login);
 
         editLoginEmail = findViewById(R.id.editLoginEmail);
         editLoginSenha = findViewById(R.id.editLoginSenha);
         buttonLoginEntrar = findViewById(R.id.buttonLoginEntrar);
         textCadastrar = findViewById(R.id.textCadastrar);
-
-        getSupportActionBar().hide();
+        buttonLoginCadastrar = findViewById(R.id.buttonLoginCadastrar);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
+        buttonLoginCadastrar.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), CadastroUsuarioActivity.class);
+                startActivity(intent);
+            }
+        }));
 
         buttonLoginEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,10 +86,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     System.out.println("USUARIO LOGADO: " + usuario.getAccessToken());
 
-                    /*
                     Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
-                    intent.putExtra("idUsuario", usuario.getId());
-                    startActivity(intent);*/
+                    startActivity(intent);
 
                 } else {
                     System.out.println("USUARIO FALHOU");

@@ -42,7 +42,7 @@
             android:value="@string/MAPS_API_KEY" />
 
         <activity
-            android:name=".activity.PerfilActivity"
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -54,13 +54,33 @@
 
         <activity
             android:name=".activity.PromocaoActivity"
-            android:label="Criar Produto"
+            android:label="Criar Promoção"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.LoginActivity"
             android:label="Entrar"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.PerfilActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.EstabelecimentoActivity"
+            android:label="Estabelecimentos"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.CadastroUsuarioActivity"
+            android:label="Cadastrar Usuario"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ProdutoActivity"
+            android:label="Cadastro de Produto"
+            android:screenOrientation="portrait" />
+
 
 
     </application>

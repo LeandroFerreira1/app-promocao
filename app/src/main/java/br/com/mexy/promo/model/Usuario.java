@@ -59,6 +59,10 @@ public class Usuario {
 		this.urlImagem = urlImagem;
 	}
 
+	public String toString() {
+		return nome + " " + sobrenome;
+	}
+
 
 
 }

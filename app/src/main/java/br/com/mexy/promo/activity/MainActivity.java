@@ -111,13 +111,12 @@ public class MainActivity extends AppCompatActivity
 
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
-                int res = sharedPreferences.getInt(getString(R.string.pref_text),0);
+                String res = sharedPreferences.getString("ID_USUARIO", null);
 
-                if (res == 0) {
+                if (res == null) {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 } else {
                     Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
-                    intent.putExtra("idUsuario", res);
                     startActivity(intent);
                 }
 
