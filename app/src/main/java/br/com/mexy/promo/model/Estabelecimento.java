@@ -18,7 +18,7 @@ public class Estabelecimento implements Parcelable {
 	private String urlImagem;
 	private ArrayList<Promocao> promocoes;
 
-	protected Estabelecimento(Parcel in) {
+	public Estabelecimento(Parcel in) {
 		if (in.readByte() == 0) {
 			id = null;
 		} else {
@@ -28,6 +28,10 @@ public class Estabelecimento implements Parcelable {
 		endereco = in.readString();
 		telefone = in.readString();
 	}
+
+    public Estabelecimento() {
+
+    }
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {

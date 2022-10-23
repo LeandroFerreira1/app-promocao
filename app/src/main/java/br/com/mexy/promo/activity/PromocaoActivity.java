@@ -1,8 +1,10 @@
 package br.com.mexy.promo.activity;
 
 import android.app.SharedElementCallback;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +29,7 @@ import br.com.mexy.promo.fragment.BottomSheetCadastroProduto;
 import br.com.mexy.promo.fragment.BottomSheetEstabelecimento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
+import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.util.CustomInterface;
 import br.com.mexy.promo.util.Mask;
 import br.com.mexy.promo.util.MoneyTextWatcher;
@@ -47,6 +50,10 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
     private Retrofit retrofit;
     private Produto produto = new Produto();
     private String idEstabelecimento;
+    private Promocao promocao = new Promocao();
+    private Estabelecimento estabelecimentoCadastro = new Estabelecimento();
+    private EditText editValorPromocional;
+    private EditText editValorOriginal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +67,20 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
 
         EditText editDataValidade = (EditText) findViewById(R.id.editDataValidade);
         editDataValidade.setText(formatarDate.format(data));
-        editDataValidade.addTextChangedListener(Mask.insert("##/##/####", editDataValidade));
+        editDataValidade.addTextChangedListener(Mask.insert("##/##/####", editDataValidade));*/
 
-        EditText editValorPromocional = (EditText) findViewById(R.id.editValorPromocional);
+        editValorPromocional = (EditText) findViewById(R.id.editValorPromocional);
         editValorPromocional.setText("0,00");
         editValorPromocional.addTextChangedListener(new MoneyTextWatcher(editValorPromocional));
 
-        EditText editValorOriginal = (EditText) findViewById(R.id.editValorOriginal);
+        editValorOriginal = (EditText) findViewById(R.id.editValorOriginal);
         editValorOriginal.setText("0,00");
-        editValorOriginal.addTextChangedListener(new MoneyTextWatcher(editValorOriginal));*/
+        editValorOriginal.addTextChangedListener(new MoneyTextWatcher(editValorOriginal));
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
+        String res = sharedPreferences.getString("ID_USUARIO", null);
+
+        String token = "Bearer " + res;
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
@@ -95,14 +107,6 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
                 bottomSheetEstabelecimento.show(getSupportFragmentManager(), bottomSheetEstabelecimento.getTag());
             }
         });
-
-        buttonProduto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
     }
 
 
@@ -129,6 +133,31 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
                 System.out.println("FALHA: " + t.toString());
             }
         });
+    }
+
+    private void registrarPromocao(final String token) {
+
+        promocao.setProduto(produto);
+        promocao.setEstabelecimento(estabelecimentoCadastro);
+        promocao.setValorPromocional(String.valueOf(editValorPromocional.getText()));
+        promocao.setValorOriginal(String.valueOf(editValorOriginal.getText()));
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<Promocao> promocaoCall = service.registrarPromocao(token, promocao);
+
+        promocaoCall.enqueue(new Callback<Promocao>() {
+            @Override
+            public void onResponse(Call<Promocao> call, Response<Promocao> response) {
+                if (response.isSuccessful()) {
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Promocao> call, Throwable t) {
+                System.out.println("FALHA: " + t.toString());
+            }
+        });
 
     }
 
@@ -136,5 +165,6 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
     @Override
     public void callbackMethod(Estabelecimento estabelecimento) {
         textViewEstabelecimento.setText(estabelecimento.getNome());
+        estabelecimentoCadastro = estabelecimento;
     }
 }

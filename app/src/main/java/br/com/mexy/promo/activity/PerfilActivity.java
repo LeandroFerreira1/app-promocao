@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.ResponseUsuario;
 import br.com.mexy.promo.model.Usuario;
 import retrofit2.Call;
@@ -24,7 +27,7 @@ public class PerfilActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private Usuario usuario = new Usuario();
     private TextView textViewNome;
-
+    private FloatingActionButton floatingActionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,16 @@ public class PerfilActivity extends AppCompatActivity {
 
         logado(token);
 
+        floatingActionButton = findViewById(R.id.fab);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), PromocaoActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void logado(String token) {
@@ -59,7 +72,6 @@ public class PerfilActivity extends AppCompatActivity {
                     textViewNome.setText(usuario.toString());
                 }
             }
-
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
 

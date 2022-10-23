@@ -44,6 +44,10 @@ public interface DataService {
     @GET("/api/v1/promocoes/{id}")
     Call<Promocao> buscarPromocao(@Path("id") Integer id);
 
+    @POST("/api/v1/promocoes/")
+    Call<Promocao> registrarPromocao(@Header("Authorization") String token, @Body Promocao promocao);
+
+
     @GET("/api/v1/estabelecimentos/promocao/{id}")
     Call<Estabelecimento> buscarPromocoes(@Path("id") Integer id);
 
