@@ -51,8 +51,6 @@ public class BottomSheetEstabelecimento extends BottomSheetDialogFragment {
     private FragmentActivity myContext;
     private ArrayList<Estabelecimento> estabelecimentos = new ArrayList<>();
 
-
-
     public BottomSheetEstabelecimento(CustomInterface callback) {
         this.callback=callback;
     }

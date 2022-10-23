@@ -1,65 +1,61 @@
 package br.com.mexy.promo.fragment;
 
-        import android.Manifest;
-        import android.app.Activity;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.database.Cursor;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
-        import android.graphics.Matrix;
-        import android.media.ExifInterface;
-        import android.net.Uri;
-        import android.os.Build;
-        import android.os.Bundle;
-        import android.os.Environment;
-        import android.provider.MediaStore;
-        import android.view.LayoutInflater;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.Button;
-        import android.widget.ImageButton;
-        import android.widget.Toast;
+import static androidx.core.content.FileProvider.getUriForFile;
 
-        import androidx.annotation.NonNull;
-        import androidx.annotation.Nullable;
-        import androidx.core.content.FileProvider;
-        import androidx.fragment.app.FragmentActivity;
+import static java.lang.String.valueOf;
 
-        import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-        import com.google.android.material.navigation.NavigationView;
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
-        import java.io.ByteArrayOutputStream;
-        import java.io.File;
-        import java.io.FileOutputStream;
-        import java.io.IOException;
-        import java.math.BigInteger;
-        import java.text.SimpleDateFormat;
-        import java.util.Date;
-        import static androidx.core.content.FileProvider.getUriForFile;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
-        import br.com.mexy.promo.R;
-        import br.com.mexy.promo.activity.MainActivity;
-        import br.com.mexy.promo.activity.ProdutoActivity;
-        import br.com.mexy.promo.activity.PromocaoActivity;
-        import br.com.mexy.promo.api.DataService;
-        import br.com.mexy.promo.util.Permissao;
-        import okhttp3.MediaType;
-        import okhttp3.MultipartBody;
-        import okhttp3.RequestBody;
-        import retrofit2.Call;
-        import retrofit2.Callback;
-        import retrofit2.Response;
-        import retrofit2.Retrofit;
-        import retrofit2.converter.gson.GsonConverterFactory;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+
+import br.com.mexy.promo.R;
+import br.com.mexy.promo.activity.CadastroUsuarioActivity;
+import br.com.mexy.promo.activity.ProdutoActivity;
+import br.com.mexy.promo.activity.UploadImagemUserActivity;
+import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.util.Permissao;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class BottomSheetImagemUsuario extends BottomSheetDialogFragment {
 
     private ImageButton buttonCamera;
     private ImageButton buttonArquivos;
-    private String idProduto;
-    private BigInteger id;
+    private Integer idUsuario;
     private FragmentActivity myContext;
     private Retrofit retrofit;
     private Bitmap imagem;
@@ -80,8 +76,7 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
             @Nullable Bundle savedInstanceState
     ) {
 
-        idProduto = getArguments().getString("idProduto");
-        id = new BigInteger(idProduto);
+        idUsuario = getArguments().getInt("idUsuario");
         return inflater
                 .inflate(R.layout.produto_bottom_sheet_foto, container, false);
     }
@@ -159,7 +154,7 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String imageFileName = idProduto;
+        String imageFileName = valueOf(idUsuario);
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -214,12 +209,12 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
         return file;
     }
 
-    private void uploadImageProduto(BigInteger id, File file){
+    private void uploadImageProduto(Integer id, File file){
 
         System.out.println("TESTE2 "+ id + file);
 
         DataService service = retrofit.create(DataService.class);
-        final Call<String> postCall = service.uploadImageProduto(id, prepareFilePart("file", file));
+        final Call<String> postCall = service.uploadImageUser(id, prepareFilePart("file", file));
 
         postCall.enqueue(new Callback<String>() {
             @Override
@@ -252,13 +247,13 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
                 switch ( requestCode ){
                     case SELECAO_CAMERA :
                         //imagem = (Bitmap) BitmapFactory.decodeFile(currentPhotoPath);
-                        Intent i = new Intent(getActivity(), ProdutoActivity.class);
+                        Intent i = new Intent(getActivity(), CadastroUsuarioActivity.class);
                         i.putExtra("fotoEscolhida", currentPhotoPath );
                         publicarImagemProduto(currentPhotoPath);
                         startActivity( i );
                         break;
                     case SELECAO_GALERIA :
-                        Intent i2 = new Intent(getActivity(), ProdutoActivity.class);
+                        Intent i2 = new Intent(getActivity(), CadastroUsuarioActivity.class);
                         Uri localImagemSelecionada = data.getData();
 
                         Uri selectedImage = data.getData();
@@ -316,39 +311,39 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
                 ExifInterface.ORIENTATION_UNDEFINED);
 
         Bitmap rotatedBitmap = null;
-            switch (orientation) {
+        switch (orientation) {
 
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotatedBitmap = rotateImage(bitmapOri, 90);
-                    break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotatedBitmap = rotateImage(bitmapOri, 90);
+                break;
 
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotatedBitmap = rotateImage(bitmapOri, 180);
-                    break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotatedBitmap = rotateImage(bitmapOri, 180);
+                break;
 
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotatedBitmap = rotateImage(bitmapOri, 270);
-                    break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotatedBitmap = rotateImage(bitmapOri, 270);
+                break;
 
-                case ExifInterface.ORIENTATION_NORMAL:
-                default:
-                    rotatedBitmap = bitmapOri;
-            }
+            case ExifInterface.ORIENTATION_NORMAL:
+            default:
+                rotatedBitmap = bitmapOri;
+        }
 
-            Bitmap bitmapResize = null;
+        Bitmap bitmapResize = null;
 
-            if (rotatedBitmap.getWidth() > 6000) {
-                bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.1), (int) (rotatedBitmap.getHeight() * 0.1), true);
-            } else if (rotatedBitmap.getWidth() > 3000) {
-                bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.3), (int) (rotatedBitmap.getHeight() * 0.3), true);
-            } else if (rotatedBitmap.getWidth() > 1270) {
-                bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.8), (int) (rotatedBitmap.getHeight() * 0.8), true);
-            } else {
-                bitmapResize = rotatedBitmap;
-            }
-            imagem = bitmapResize;
-            File file = storeOnCache(myContext,imagem);
-            uploadImageProduto(id, file);
+        if (rotatedBitmap.getWidth() > 6000) {
+            bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.1), (int) (rotatedBitmap.getHeight() * 0.1), true);
+        } else if (rotatedBitmap.getWidth() > 3000) {
+            bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.3), (int) (rotatedBitmap.getHeight() * 0.3), true);
+        } else if (rotatedBitmap.getWidth() > 1270) {
+            bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.8), (int) (rotatedBitmap.getHeight() * 0.8), true);
+        } else {
+            bitmapResize = rotatedBitmap;
+        }
+        imagem = bitmapResize;
+        File file = storeOnCache(myContext,imagem);
+        uploadImageProduto(idUsuario, file);
     }
 
 
@@ -363,7 +358,7 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myContext=(ProdutoActivity) context;
+        myContext=(UploadImagemUserActivity) context;
     }
 
     @SuppressWarnings("deprecation")
@@ -372,7 +367,7 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
         super.onAttach(activity);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            myContext=(ProdutoActivity) activity;
+            myContext=(UploadImagemUserActivity) activity;
         }
     }
 

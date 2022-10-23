@@ -1,9 +1,11 @@
 package br.com.mexy.promo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,9 +28,11 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     private EditText editCadastroEmail;
     private EditText editCadastroSenha;
     private EditText editCadastroSobrenome;
+    private ProgressBar progressCadastroUsuario;
     private Button buttonLoginCadastrar;
     private Retrofit retrofit;
     private Usuario usuario = new Usuario();
+    private Usuario resultUsuario = new Usuario();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
         editCadastroEmail = (EditText) findViewById(R.id.editCadastroEmail);
         editCadastroSenha = (EditText) findViewById(R.id.editCadastroSenha);
         buttonLoginCadastrar = (Button) findViewById(R.id.buttonLoginCadastrar);
+        progressCadastroUsuario = (ProgressBar) findViewById(R.id.progressCadastroUsuario);
+
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
@@ -53,6 +59,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                 usuario.setSobrenome(editCadastroSobrenome.getText().toString());
                 usuario.setEmail(editCadastroEmail.getText().toString());
                 usuario.setSenha(editCadastroSenha.getText().toString());
+                progressCadastroUsuario.setVisibility(View.VISIBLE);
                 cadastrarUsuario(usuario);
             }
         });
@@ -67,7 +74,11 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful()) {
-                    System.out.println("SUCESSO");
+                    resultUsuario = response.body();
+                    Intent intent = new Intent(getBaseContext(), UploadImagemUserActivity.class);
+                    intent.putExtra("usuario", resultUsuario);
+                    startActivity(intent);
+                    progressCadastroUsuario.setVisibility(View.GONE);
                 }
             }
 

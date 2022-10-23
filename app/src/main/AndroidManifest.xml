@@ -42,7 +42,7 @@
             android:value="@string/MAPS_API_KEY" />
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.CadastroUsuarioActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -71,9 +71,10 @@
             android:label="Estabelecimentos"
             android:screenOrientation="portrait" />
 
+
+
         <activity
-            android:name=".activity.CadastroUsuarioActivity"
-            android:label="Cadastrar Usuario"
+            android:name=".activity.UploadImagemUserActivity"
             android:screenOrientation="portrait" />
 
         <activity
