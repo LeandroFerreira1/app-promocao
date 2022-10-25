@@ -154,7 +154,7 @@ public class BottomSheetImagemUsuario extends BottomSheetDialogFragment {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String imageFileName = valueOf(idUsuario);
+        String imageFileName = "TMP";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -247,13 +247,13 @@ public class BottomSheetImagemUsuario extends BottomSheetDialogFragment {
                 switch ( requestCode ){
                     case SELECAO_CAMERA :
                         //imagem = (Bitmap) BitmapFactory.decodeFile(currentPhotoPath);
-                        Intent i = new Intent(getActivity(), CadastroUsuarioActivity.class);
-                        i.putExtra("fotoEscolhida", currentPhotoPath );
+                        Intent i = new Intent(getActivity(), UploadImagemUserActivity.class);
+                        i.getIntExtra("idusuario", idUsuario);
                         publicarImagemProduto(currentPhotoPath);
                         startActivity( i );
                         break;
                     case SELECAO_GALERIA :
-                        Intent i2 = new Intent(getActivity(), CadastroUsuarioActivity.class);
+                        Intent i2 = new Intent(getActivity(), UploadImagemUserActivity.class);
                         Uri localImagemSelecionada = data.getData();
 
                         Uri selectedImage = data.getData();
@@ -266,9 +266,7 @@ public class BottomSheetImagemUsuario extends BottomSheetDialogFragment {
                         cursor.close();
 
                         String testee = localImagemSelecionada.getPath();
-                        Toast.makeText(getActivity().getApplicationContext(), testee, Toast.LENGTH_SHORT).show();
-
-                        i2.putExtra("fotoEscolhida", picturePath );
+                        i2.getIntExtra("idusuario", idUsuario);
                         publicarImagemProduto(picturePath);
                         startActivity( i2 );
                         //imagem = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), localImagemSelecionada);
@@ -332,15 +330,21 @@ public class BottomSheetImagemUsuario extends BottomSheetDialogFragment {
 
         Bitmap bitmapResize = null;
 
-        if (rotatedBitmap.getWidth() > 6000) {
-            bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.1), (int) (rotatedBitmap.getHeight() * 0.1), true);
-        } else if (rotatedBitmap.getWidth() > 3000) {
-            bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.3), (int) (rotatedBitmap.getHeight() * 0.3), true);
-        } else if (rotatedBitmap.getWidth() > 1270) {
-            bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.8), (int) (rotatedBitmap.getHeight() * 0.8), true);
+        final int maxSize = 560;
+        int outWidth;
+        int outHeight;
+        int inWidth = bitmapOri.getWidth();
+        int inHeight = bitmapOri.getHeight();
+        if(inWidth > inHeight){
+            outWidth = maxSize;
+            outHeight = (inHeight * maxSize) / inWidth;
         } else {
-            bitmapResize = rotatedBitmap;
+            outHeight = maxSize;
+            outWidth = (inWidth * maxSize) / inHeight;
         }
+
+        bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, outHeight, outWidth, false);
+
         imagem = bitmapResize;
         File file = storeOnCache(myContext,imagem);
         uploadImageProduto(idUsuario, file);

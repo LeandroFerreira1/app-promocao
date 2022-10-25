@@ -336,16 +336,20 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
             }
 
             Bitmap bitmapResize = null;
+        final int maxSize = 560;
+        int outWidth;
+        int outHeight;
+        int inWidth = bitmapOri.getWidth();
+        int inHeight = bitmapOri.getHeight();
+        if(inWidth > inHeight){
+            outWidth = maxSize;
+            outHeight = (inHeight * maxSize) / inWidth;
+        } else {
+            outHeight = maxSize;
+            outWidth = (inWidth * maxSize) / inHeight;
+        }
 
-            if (rotatedBitmap.getWidth() > 6000) {
-                bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.1), (int) (rotatedBitmap.getHeight() * 0.1), true);
-            } else if (rotatedBitmap.getWidth() > 3000) {
-                bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.3), (int) (rotatedBitmap.getHeight() * 0.3), true);
-            } else if (rotatedBitmap.getWidth() > 1270) {
-                bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, (int) (rotatedBitmap.getWidth() * 0.8), (int) (rotatedBitmap.getHeight() * 0.8), true);
-            } else {
-                bitmapResize = rotatedBitmap;
-            }
+        bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, outHeight, outWidth, false);
             imagem = bitmapResize;
             File file = storeOnCache(myContext,imagem);
             uploadImageProduto(id, file);

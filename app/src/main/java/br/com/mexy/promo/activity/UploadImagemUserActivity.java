@@ -1,16 +1,20 @@
 package br.com.mexy.promo.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import br.com.mexy.promo.R;
+import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.fragment.BottomSheetCadastroProduto;
 import br.com.mexy.promo.fragment.BottomSheetImagemUsuario;
 import br.com.mexy.promo.model.Usuario;
@@ -21,13 +25,27 @@ public class UploadImagemUserActivity extends AppCompatActivity {
     private Usuario usuario = new Usuario();
     private TextView textViewNome;
     private ImageButton buttomImagem;
+    private Integer idUsuario;
+    private Bundle extras;
+    private ImageView imageViewUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagem_usuario);
 
-        usuario = getIntent().getExtras().getParcelable("usuario");
+        imageViewUsuario = findViewById(R.id.imageViewUsuario);
+        extras = getIntent().getExtras();
+
+        if(extras != null){
+            idUsuario = extras.getInt("idUsuario");
+            System.out.println("TESTE "+ idUsuario);
+        }else{
+            usuario = getIntent().getExtras().getParcelable("usuario");
+            textViewNome.setText(usuario.toString());
+        }
+
+
         textViewNome = findViewById(R.id.textViewNome);
         buttomImagem = (ImageButton)findViewById(R.id.imagemUploadUsuario);
 
@@ -42,7 +60,6 @@ public class UploadImagemUserActivity extends AppCompatActivity {
                 bottomSheetImagemUsuario.show(getSupportFragmentManager(), bottomSheetImagemUsuario.getTag());
             }
         });
-        System.out.println("TESTE: "+ usuario.getId());
-        textViewNome.setText(usuario.toString());
+
     }
 }
