@@ -42,6 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PromocaoActivity extends AppCompatActivity  implements CustomInterface{
 
     private Button buttonEstabelecimento;
+    private Button buttonCadastarPromocao;
     private ImageButton buttonProduto;
     BottomSheetEstabelecimento bottomSheetEstabelecimento;
     private CustomInterface callback;
@@ -54,6 +55,7 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
     private Estabelecimento estabelecimentoCadastro = new Estabelecimento();
     private EditText editValorPromocional;
     private EditText editValorOriginal;
+    private EditText editDataValidade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +65,10 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
         callback=this;
 /*
         Date data = new Date(System.currentTimeMillis());
-        SimpleDateFormat formatarDate = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatarDate = new SimpleDateFormat("dd/MM/yyyy");*/
 
-        EditText editDataValidade = (EditText) findViewById(R.id.editDataValidade);
-        editDataValidade.setText(formatarDate.format(data));
-        editDataValidade.addTextChangedListener(Mask.insert("##/##/####", editDataValidade));*/
+        editDataValidade = (EditText) findViewById(R.id.editDataValidade);
+        editDataValidade.addTextChangedListener(Mask.insert("##/##/####", editDataValidade));
 
         editValorPromocional = (EditText) findViewById(R.id.editValorPromocional);
         editValorPromocional.setText("0,00");
@@ -88,6 +89,7 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
                 .build();
 
         buttonEstabelecimento = (Button) findViewById(R.id.buttonEstabelecimento);
+        buttonCadastarPromocao = (Button) findViewById(R.id.buttonCadastarPromocao);
         buttonProduto = (ImageButton ) findViewById(R.id.imageButtonProduto);
         textViewEstabelecimento = findViewById(R.id.textViewEstabelecimento);
         imageViewProdu = (ImageView) findViewById(R.id.imageViewProdu);
@@ -99,6 +101,13 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
             System.out.println("TESTE: "+ idEstabelecimento);
             buscarProduto(idEstabelecimento);
         }
+
+        buttonCadastarPromocao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registrarPromocao(token);
+            }
+        });
 
         buttonEstabelecimento.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +150,7 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
         promocao.setEstabelecimento(estabelecimentoCadastro);
         promocao.setValorPromocional(String.valueOf(editValorPromocional.getText()));
         promocao.setValorOriginal(String.valueOf(editValorOriginal.getText()));
+        promocao.setDataValidade(String.valueOf(editDataValidade.getText()));
 
         DataService service = retrofit.create(DataService.class);
         final Call<Promocao> promocaoCall = service.registrarPromocao(token, promocao);

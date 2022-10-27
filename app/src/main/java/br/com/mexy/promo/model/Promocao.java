@@ -13,7 +13,7 @@ public class Promocao {
 
 	private String valor_promocional;
 
-	private Date dataValidade;
+	private String dataValidade;
 
 	private Integer curtida;
 
@@ -50,11 +50,11 @@ public class Promocao {
 		this.valor_promocional = valor_promocional;
 	}
 
-	public Date getDataValidade() {
+	public String getDataValidade() {
 		return dataValidade;
 	}
 
-	public void setDataValidade(Date dataValidade) {
+	public void setDataValidade(String dataValidade) {
 		this.dataValidade = dataValidade;
 	}
 
