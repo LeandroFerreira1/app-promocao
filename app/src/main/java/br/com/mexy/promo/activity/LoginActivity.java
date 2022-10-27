@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,11 +35,16 @@ public class LoginActivity extends AppCompatActivity {
     private Button buttonLoginEntrar;
     private Button buttonLoginCadastrar;
     private TextView textCadastrar;
+    private Animation zoomIn;
+    private LinearLayout logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        zoomIn = AnimationUtils.loadAnimation(this, R.anim.zoom_in);
+        logo = findViewById(R.id.logo);
 
         editLoginEmail = findViewById(R.id.editLoginEmail);
         editLoginSenha = findViewById(R.id.editLoginSenha);
@@ -53,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), CadastroUsuarioActivity.class);
                 startActivity(intent);
+                finish();
             }
         }));
 
@@ -77,6 +87,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseUsuario> call, Response<ResponseUsuario> response) {
                 if (response.isSuccessful()) {
 
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            logo.startAnimation(zoomIn);
+                        }
+                    }, 1000);
+
                     usuario = response.body();
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
@@ -86,8 +103,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     System.out.println("USUARIO LOGADO: " + usuario.getAccessToken());
 
+
                     Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
                     startActivity(intent);
+                    finish();
 
                 } else {
                     System.out.println("USUARIO FALHOU");

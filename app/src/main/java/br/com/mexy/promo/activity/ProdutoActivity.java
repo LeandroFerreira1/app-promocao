@@ -121,6 +121,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
                     i.putExtra("produto", valueOf(produto.getId()));
                     startActivity(i);
+                    finish();
                 }else if(result != null){
                     alteraProdutos(idProduto);
                 }else{
@@ -413,6 +414,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
                     i.putExtra("produto", valueOf(produto.getId()));
                     startActivity(i);
+                    finish();
                 }
             }
             @Override
@@ -440,6 +442,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
                     i.putExtra("produto", valueOf(produto.getId()));
                     startActivity(i);
+                    finish();
                 }
             }
 

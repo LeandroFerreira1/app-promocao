@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
@@ -28,13 +31,16 @@ public class PerfilActivity extends AppCompatActivity {
     private Usuario usuario = new Usuario();
     private TextView textViewNome;
     private FloatingActionButton floatingActionButton;
+    private ImageView imageViewUsuario;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
         textViewNome = findViewById(R.id.textViewNome);
-
+        imageViewUsuario = findViewById(R.id.imageViewUsuario);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
         String res = sharedPreferences.getString("ID_USUARIO", null);
 
@@ -70,6 +76,10 @@ public class PerfilActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     usuario = response.body();
                     textViewNome.setText(usuario.toString());
+                    Picasso.get()
+                            .load(DataService.BASE_URL + usuario.getUrlImagem())
+                            .error(R.drawable.ic_error)
+                            .into(imageViewUsuario);
                 }
             }
             @Override

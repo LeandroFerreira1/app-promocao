@@ -167,4 +167,9 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
         textViewEstabelecimento.setText(estabelecimento.getNome());
         estabelecimentoCadastro = estabelecimento;
     }
+
+    @Override
+    public void callbackMethodPhoto(String photo) {
+
+    }
 }
