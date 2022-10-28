@@ -58,7 +58,7 @@ public class PerfilActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), PromocaoActivity.class);
+                Intent intent = new Intent(getBaseContext(), ProdutoActivity.class);
                 startActivity(intent);
             }
         });

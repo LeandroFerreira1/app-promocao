@@ -30,6 +30,7 @@ import br.com.mexy.promo.fragment.BottomSheetEstabelecimento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
 import br.com.mexy.promo.model.Promocao;
+import br.com.mexy.promo.model.PromocaoCad;
 import br.com.mexy.promo.util.CustomInterface;
 import br.com.mexy.promo.util.Mask;
 import br.com.mexy.promo.util.MoneyTextWatcher;
@@ -51,7 +52,7 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
     private Retrofit retrofit;
     private Produto produto = new Produto();
     private String idEstabelecimento;
-    private Promocao promocao = new Promocao();
+    private PromocaoCad promocao = new PromocaoCad();
     private Estabelecimento estabelecimentoCadastro = new Estabelecimento();
     private EditText editValorPromocional;
     private EditText editValorOriginal;
@@ -146,25 +147,26 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
 
     private void registrarPromocao(final String token) {
 
-        promocao.setProduto(produto);
-        promocao.setEstabelecimento(estabelecimentoCadastro);
+        promocao.setProduto(produto.getId());
+        promocao.setEstabelecimento(estabelecimentoCadastro.getId());
         promocao.setValorPromocional(String.valueOf(editValorPromocional.getText()));
         promocao.setValorOriginal(String.valueOf(editValorOriginal.getText()));
         promocao.setDataValidade(String.valueOf(editDataValidade.getText()));
 
         DataService service = retrofit.create(DataService.class);
-        final Call<Promocao> promocaoCall = service.registrarPromocao(token, promocao);
+        final Call<PromocaoCad> promocaoCall = service.registrarPromocao(token, promocao);
 
-        promocaoCall.enqueue(new Callback<Promocao>() {
+        promocaoCall.enqueue(new Callback<PromocaoCad>() {
             @Override
-            public void onResponse(Call<Promocao> call, Response<Promocao> response) {
+            public void onResponse(Call<PromocaoCad> call, Response<PromocaoCad> response) {
+                System.out.println("FALHA2 ");
                 if (response.isSuccessful()) {
-
+                    System.out.println("FALHA1 ");
                 }
             }
 
             @Override
-            public void onFailure(Call<Promocao> call, Throwable t) {
+            public void onFailure(Call<PromocaoCad> call, Throwable t) {
                 System.out.println("FALHA: " + t.toString());
             }
         });

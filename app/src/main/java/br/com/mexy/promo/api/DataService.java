@@ -8,6 +8,7 @@ import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
 import br.com.mexy.promo.model.Promocao;
+import br.com.mexy.promo.model.PromocaoCad;
 import br.com.mexy.promo.model.ResponseUsuario;
 import br.com.mexy.promo.model.Result;
 import br.com.mexy.promo.model.Usuario;
@@ -45,7 +46,7 @@ public interface DataService {
     Call<Promocao> buscarPromocao(@Path("id") Integer id);
 
     @POST("/api/v1/promocoes/")
-    Call<Promocao> registrarPromocao(@Header("Authorization") String token, @Body Promocao promocao);
+    Call<PromocaoCad> registrarPromocao(@Header("Authorization") String token, @Body PromocaoCad promocao);
 
     @GET("/api/v1/estabelecimentos/promocao/{id}")
     Call<Estabelecimento> buscarPromocoes(@Path("id") Integer id);
