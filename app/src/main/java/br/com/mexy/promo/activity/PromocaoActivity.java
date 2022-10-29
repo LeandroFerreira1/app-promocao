@@ -99,7 +99,6 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
 
         if (extras != null) {
             idEstabelecimento = extras.getString("produto");
-            System.out.println("TESTE: "+ idEstabelecimento);
             buscarProduto(idEstabelecimento);
         }
 
@@ -145,13 +144,14 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
         });
     }
 
-    private void registrarPromocao(final String token) {
+    private void registrarPromocao(String token) {
 
         promocao.setProduto(produto.getId());
         promocao.setEstabelecimento(estabelecimentoCadastro.getId());
         promocao.setValorPromocional(String.valueOf(editValorPromocional.getText()));
         promocao.setValorOriginal(String.valueOf(editValorOriginal.getText()));
         promocao.setDataValidade(String.valueOf(editDataValidade.getText()));
+        promocao.setUsuario_id(0);
 
         DataService service = retrofit.create(DataService.class);
         final Call<PromocaoCad> promocaoCall = service.registrarPromocao(token, promocao);
@@ -159,9 +159,10 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
         promocaoCall.enqueue(new Callback<PromocaoCad>() {
             @Override
             public void onResponse(Call<PromocaoCad> call, Response<PromocaoCad> response) {
-                System.out.println("FALHA2 ");
                 if (response.isSuccessful()) {
-                    System.out.println("FALHA1 ");
+                    Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
 

@@ -37,7 +37,7 @@ public class PromocaoAdapter  extends RecyclerView.Adapter<PromocaoAdapter.MyVie
     public void onBindViewHolder(PromocaoAdapter.MyViewHolder holder, int position) {
         Promocao promocao = promocoes.get(position);
         holder.textMarca.setText(promocao.getProduto().getMarca());
-        holder.textValor.setText(promocao.getValorPromocional());
+        holder.textValor.setText("R$ "+promocao.getValorPromocional());
         Picasso.get()
                 .load(DataService.BASE_URL + promocao.getProduto().getUrlImagem())
                 .error(R.drawable.ic_error)

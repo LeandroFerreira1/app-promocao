@@ -13,6 +13,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewEstab"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_usuario"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
         <ImageView
             android:id="@+id/imageViewProduto"
             android:layout_width="110dp"
@@ -29,12 +39,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="União"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewProduto" />
 
         <TextView
-            android:id="@+id/textViewPreço"
+            android:id="@+id/textViewPreco"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"

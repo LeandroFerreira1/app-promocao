@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 break;
-           /* case R.id.botton_app_search :
-                startActivity(new Intent(getApplicationContext(), PesquisaActivity.class));
-                break;*/
+            case R.id.botton_app_supermercado:
+                startActivity(new Intent(getApplicationContext(), EstabelecimentoActivity.class));
+                break;
         }
 
         return super.onOptionsItemSelected(item);

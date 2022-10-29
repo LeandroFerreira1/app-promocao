@@ -72,8 +72,6 @@ public interface DataService {
             @Path("id") BigInteger id,
             @Part MultipartBody.Part file);
 
-
-
     @GET("/api/v1/usuarios")
     Call<List<Usuario>> listarUsuarios();
 

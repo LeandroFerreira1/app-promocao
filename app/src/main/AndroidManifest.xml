@@ -80,7 +80,9 @@
             android:label="Cadastro de Produto"
             android:screenOrientation="portrait" />
 
-
+        <activity
+            android:name=".activity.PromocaoListActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

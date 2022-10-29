@@ -60,6 +60,7 @@ public class PerfilActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), ProdutoActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

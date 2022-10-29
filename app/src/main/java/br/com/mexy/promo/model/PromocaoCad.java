@@ -19,12 +19,9 @@ public class PromocaoCad {
 
     private Integer usuario_id;
 
-    private BigInteger produto_id;
-
     private  Integer estabelecimento_id;
 
-    public PromocaoCad() {
-    }
+    private BigInteger produto_id;
 
     public Integer getId() {
         return id;
