@@ -10,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.fragment.PostFragment;
+import br.com.mexy.promo.fragment.RankingFragment;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.ResponseUsuario;
 import br.com.mexy.promo.model.Usuario;
@@ -24,6 +27,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 
 public class PerfilActivity extends AppCompatActivity {
 
@@ -32,12 +38,29 @@ public class PerfilActivity extends AppCompatActivity {
     private TextView textViewNome;
     private FloatingActionButton floatingActionButton;
     private ImageView imageViewUsuario;
+    private SmartTabLayout smartTabLayout;
+    private ViewPager viewPager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
+
+        smartTabLayout = findViewById(R.id.viewPagerTab);
+        viewPager = findViewById(R.id.viewPager);
+
+        //Configurar adapter para abas
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+                getSupportFragmentManager(),
+                FragmentPagerItems.with(this)
+                        .add("Postagens", PostFragment.class )
+                        .add("Ranking", RankingFragment.class )
+                        .create()
+        );
+
+        viewPager.setAdapter( adapter );
+        smartTabLayout.setViewPager( viewPager );
 
         textViewNome = findViewById(R.id.textViewNome);
         imageViewUsuario = findViewById(R.id.imageViewUsuario);

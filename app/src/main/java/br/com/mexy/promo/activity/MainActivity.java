@@ -124,6 +124,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.botton_app_supermercado:
                 startActivity(new Intent(getApplicationContext(), EstabelecimentoActivity.class));
                 break;
+
+            case R.id.botton_app_promocao:
+                startActivity(new Intent(getApplicationContext(), PromocaoListActivity.class));
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -167,6 +171,8 @@ public class MainActivity extends AppCompatActivity
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         locationListener = new LocationListener() {
+
+
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onLocationChanged(Location location) {
