@@ -89,6 +89,8 @@ public class BottomSheetImagemUsuario extends BottomSheetDialogFragment {
                 .build();
 
 
+
+
         buttonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

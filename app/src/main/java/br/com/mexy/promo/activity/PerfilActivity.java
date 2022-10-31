@@ -34,7 +34,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 public class PerfilActivity extends AppCompatActivity {
 
     private Retrofit retrofit;
-    private Usuario usuario = new Usuario();
+    Usuario usuario = new Usuario();
     private TextView textViewNome;
     private FloatingActionButton floatingActionButton;
     private ImageView imageViewUsuario;
@@ -76,6 +76,8 @@ public class PerfilActivity extends AppCompatActivity {
 
         logado(token);
 
+
+
         floatingActionButton = findViewById(R.id.fab);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +106,9 @@ public class PerfilActivity extends AppCompatActivity {
                             .load(DataService.BASE_URL + usuario.getUrlImagem())
                             .error(R.drawable.ic_error)
                             .into(imageViewUsuario);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("idUsuario", (Integer) usuario.getId());
+
                 }
             }
             @Override
