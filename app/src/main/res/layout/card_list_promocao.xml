@@ -14,9 +14,9 @@
         android:layout_margin="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageViewEstab"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:id="@+id/imageViewUsuariop"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="10dp"
             android:src="@drawable/ic_usuario"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,9 +31,20 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageViewEstab"
+            app:layout_constraintStart_toEndOf="@+id/imageViewUsuariop"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/textViewEstabelecimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Supermercado Perim Center"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewProduto" />
 
         <TextView
             android:id="@+id/textViewMarca"
@@ -42,9 +53,9 @@
             android:layout_margin="5dp"
             android:textColor="@color/red_primary"
             android:text="União"
-            android:textSize="12sp"
+            android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewProduto" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewEstabelecimento" />
 
         <TextView
             android:id="@+id/textViewPreco"

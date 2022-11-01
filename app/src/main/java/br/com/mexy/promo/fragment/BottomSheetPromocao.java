@@ -102,11 +102,10 @@ public class BottomSheetPromocao extends BottomSheetDialogFragment {
             @Override
             public void onResponse(Call<Estabelecimento> call, Response<Estabelecimento> response) {
                 if (response.isSuccessful()) {
-
                     estabelecimento = response.body();
                     promocoes = estabelecimento.getPromocoes();
                     System.out.println("TESTE ESTA: "+ estabelecimento.getNome());
-                    PromocaoAdapter adapter = new PromocaoAdapter(promocoes);
+                    PromocaoAdapter adapter = new PromocaoAdapter(promocoes, estabelecimento);
                     recyclerEstabelecimento.setAdapter(adapter);
                     progressBar.setVisibility(View.GONE);
                 }

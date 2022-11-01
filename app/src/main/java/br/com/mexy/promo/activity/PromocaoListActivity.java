@@ -3,6 +3,8 @@ package br.com.mexy.promo.activity;
 import static br.com.mexy.promo.util.StaticInstances.estabelecimentos;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,11 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mexy.promo.R;
-import br.com.mexy.promo.adapter.EstabelecimentoAdapter;
-import br.com.mexy.promo.adapter.PromocaoCardAdapter;
+import br.com.mexy.promo.adapter.PromocaoListAdapter;
 import br.com.mexy.promo.api.DataService;
-import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
+import br.com.mexy.promo.util.RecyclerItemClickListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +30,7 @@ public class PromocaoListActivity extends AppCompatActivity {
     private List<Promocao> promocoes = new ArrayList<>();
     private int position;
     private Retrofit retrofit;
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,31 @@ public class PromocaoListActivity extends AppCompatActivity {
 
         recuperarPromocoes();
 
-        PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
+        PromocaoListAdapter adapter = new PromocaoListAdapter( promocoes );
         recyclerListPromocao.setAdapter( adapter );
+
+        recyclerListPromocao.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getApplicationContext(),
+                        recyclerListPromocao,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
 
 
     }
@@ -66,7 +91,8 @@ public class PromocaoListActivity extends AppCompatActivity {
 
                     promocoes.clear();
                     promocoes.addAll(response.body());
-                    PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
+                    System.out.println("TESTE "+ promocoes.get(1).getId());
+                    PromocaoListAdapter adapter = new PromocaoListAdapter( promocoes );
                     recyclerListPromocao.setAdapter( adapter );
                 }
             }

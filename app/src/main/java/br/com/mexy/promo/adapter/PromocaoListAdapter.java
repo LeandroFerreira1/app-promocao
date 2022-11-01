@@ -14,40 +14,38 @@ import java.util.List;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
-import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
 
-public class PromocaoAdapter  extends RecyclerView.Adapter<PromocaoAdapter.MyViewHolder> {
+public class PromocaoListAdapter extends RecyclerView.Adapter<PromocaoListAdapter.MyViewHolder> {
 
     private List<Promocao> promocoes;
-    private Estabelecimento estabelecimento;
 
-    public PromocaoAdapter(List<Promocao> promocoes, Estabelecimento estabelecimento) {
+    public PromocaoListAdapter(List<Promocao> promocoes) {
         this.promocoes = promocoes;
-        this.estabelecimento = estabelecimento;
     }
 
     @Override
-    public PromocaoAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PromocaoListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_perfil_promocao, parent, false);
-        return new PromocaoAdapter.MyViewHolder(itemLista);
+                .inflate(R.layout.card_list_promocao, parent, false);
+        return new PromocaoListAdapter.MyViewHolder(itemLista);
 
     }
 
     @Override
-    public void onBindViewHolder(PromocaoAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(PromocaoListAdapter.MyViewHolder holder, int position) {
         Promocao promocao = promocoes.get(position);
         holder.textViewMarca.setText(promocao.getProduto().getNome());
         holder.textViewPreco.setText("R$ "+promocao.getValorPromocional());
+        holder.textViewEstabelecimento.setText(promocao.getEstabelecimento().getNome());
         Picasso.get()
                 .load(DataService.BASE_URL + promocao.getProduto().getUrlImagem())
                 .error(R.drawable.ic_error)
                 .into(holder.imageViewProduto);
         Picasso.get()
-                .load(DataService.BASE_URL + estabelecimento.getUrlImagem())
+                .load(DataService.BASE_URL + promocao.getUsuario().getUrlImagem())
                 .error(R.drawable.ic_error)
-                .into(holder.imageViewEstab);
+                .into(holder.imageViewUsuario);
     }
 
     @Override
@@ -59,16 +57,17 @@ public class PromocaoAdapter  extends RecyclerView.Adapter<PromocaoAdapter.MyVie
 
         private TextView textViewMarca;
         private TextView textViewPreco;
+        private TextView textViewEstabelecimento;
         private ImageView imageViewProduto;
-        private ImageView imageViewEstab;
+        private ImageView imageViewUsuario;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             textViewMarca = itemView.findViewById(R.id.textViewMarca);
             textViewPreco = itemView.findViewById(R.id.textViewPreco);
+            textViewEstabelecimento = itemView.findViewById(R.id.textViewEstabelecimento);
             imageViewProduto = itemView.findViewById(R.id.imageViewProduto);
-            imageViewEstab = itemView.findViewById(R.id.imageViewEstab);
-
+            imageViewUsuario = itemView.findViewById(R.id.imageViewUsuariop);
         }
     }
 
