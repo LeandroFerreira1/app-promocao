@@ -96,7 +96,7 @@
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewNomeProduto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -121,12 +121,12 @@
         android:text="União"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintStart_toStartOf="@+id/textViewNomeProduto"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNomeProduto" />
 
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textViewDepartamentoProduto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -138,9 +138,9 @@
         android:text="Cereal"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="@+id/textViewNomeProduto"
         app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewNomeProduto" />
 
     <TextView
         android:id="@+id/textViewPrecoPromocional"
@@ -211,12 +211,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/buttonCadastarPromocao"
+        android:id="@+id/buttonAvaliarPromocao"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:background="@drawable/background_botao"
-        android:text="Avaliar Promoção"
+        android:text="Avaliar Oferta"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

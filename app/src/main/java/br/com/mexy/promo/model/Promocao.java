@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class Promocao {
+public class Promocao implements Parcelable{
 
 	private Integer id;
 
@@ -28,6 +28,42 @@ public class Promocao {
 
 	public Promocao() {
 	}
+
+	public Promocao(Parcel in) {
+		if (in.readByte() == 0) {
+			id = null;
+		} else {
+			id = in.readInt();
+		}
+	}
+
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		if (id == null) {
+			dest.writeByte((byte) 0);
+		} else {
+			dest.writeByte((byte) 1);
+			dest.writeInt(id);
+		}
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	public static final Parcelable.Creator<Promocao> CREATOR = new Parcelable.Creator<Promocao>() {
+		@Override
+		public Promocao createFromParcel(Parcel in) {
+			return new Promocao(in);
+		}
+
+		@Override
+		public Promocao[] newArray(int size) {
+			return new Promocao[size];
+		}
+	};
 
 	public Integer getId() {
 		return id;

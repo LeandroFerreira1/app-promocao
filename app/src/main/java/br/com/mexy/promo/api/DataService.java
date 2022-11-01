@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
+import br.com.mexy.promo.model.Avaliacao;
 import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
@@ -34,6 +35,7 @@ public interface DataService {
    // String API_KEY = "501e0a13-f1ed-4c86-b7ec-c36d8b55c7ae";
 
     @GET("/api/v1/promocoes/")
+
     Call<List<Promocao>> recuperarPromocoes();
 
     @GET("/api/v1/promocoes/usuario/{id}")
@@ -50,6 +52,9 @@ public interface DataService {
 
     @POST("/api/v1/promocoes/")
     Call<PromocaoCad> registrarPromocao(@Header("Authorization") String token, @Body PromocaoCad promocao);
+
+    @POST("/api/v1/avaliacoes/")
+    Call<Avaliacao> registrarAvaliacao(@Header("Authorization") String token, @Body Avaliacao avaliacao);
 
     @GET("/api/v1/estabelecimentos/promocao/{id}")
     Call<Estabelecimento> buscarPromocoes(@Path("id") Integer id);

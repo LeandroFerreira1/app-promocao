@@ -2,6 +2,7 @@ package br.com.mexy.promo.activity;
 
 import static br.com.mexy.promo.util.StaticInstances.estabelecimentos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,7 +61,7 @@ public class PromocaoListActivity extends AppCompatActivity {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-
+                                iniciarActivityPromocaoCompleta(view, position);
                             }
 
                             @Override
@@ -77,6 +78,12 @@ public class PromocaoListActivity extends AppCompatActivity {
         );
 
 
+    }
+
+    private void iniciarActivityPromocaoCompleta(View view, int position) {
+        Intent intent = new Intent(PromocaoListActivity.this, PromocaoCompletaActivity.class);
+        intent.putExtra("promocao", promocoes.get(position));
+        startActivity(intent);
     }
 
     private void recuperarPromocoes() {

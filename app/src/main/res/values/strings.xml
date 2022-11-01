@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Guru das Promoções</string>
+    <string name="app_name">Guia das Ofertas</string>
     <string name="MAPS_API_KEY">AIzaSyDJvosD8O2cmsjo8tKjLA8_CWiK2qMc0Gc</string>
     <string name="pref_key">PROMO_APP</string>
     <string name="pref_text">ID_USUARIO</string>
