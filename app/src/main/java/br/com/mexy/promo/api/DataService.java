@@ -56,6 +56,9 @@ public interface DataService {
     @POST("/api/v1/avaliacoes/")
     Call<Avaliacao> registrarAvaliacao(@Header("Authorization") String token, @Body Avaliacao avaliacao);
 
+    @GET("/api/v1/avaliacoes/avaliacoes_promocao/{id}")
+    Call<Avaliacao> buscarAvaliacoes(@Path("id") Integer id);
+
     @GET("/api/v1/estabelecimentos/promocao/{id}")
     Call<Estabelecimento> buscarPromocoes(@Path("id") Integer id);
 
@@ -82,6 +85,9 @@ public interface DataService {
 
     @GET("/api/v1/usuarios")
     Call<List<Usuario>> listarUsuarios();
+
+    @PATCH("/api/v1/usuarios/pontuacao/{id}")
+    Call<Usuario> alterarponto(@Header("Authorization") String token, @Path("id") Integer id);
 
     @POST("/api/v1/usuarios/login")
     @FormUrlEncoded

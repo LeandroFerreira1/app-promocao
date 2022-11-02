@@ -36,6 +36,7 @@ public class PerfilActivity extends AppCompatActivity {
     private Retrofit retrofit;
     Usuario usuario = new Usuario();
     private TextView textViewNome;
+    private TextView textViewNota;
     private FloatingActionButton floatingActionButton;
     private ImageView imageViewUsuario;
     private SmartTabLayout smartTabLayout;
@@ -63,6 +64,7 @@ public class PerfilActivity extends AppCompatActivity {
         smartTabLayout.setViewPager( viewPager );
 
         textViewNome = findViewById(R.id.textViewNome);
+        textViewNota = findViewById(R.id.textViewNota);
         imageViewUsuario = findViewById(R.id.imageViewUsuario);
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
         String res = sharedPreferences.getString("ID_USUARIO", null);
@@ -102,6 +104,7 @@ public class PerfilActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     usuario = response.body();
                     textViewNome.setText(usuario.toString());
+                    textViewNota.setText(usuario.getPontuacao());
                     Picasso.get()
                             .load(DataService.BASE_URL + usuario.getUrlImagem())
                             .error(R.drawable.ic_error)

@@ -13,6 +13,7 @@ public class Usuario implements Parcelable{
 	private String email;
 	private String senha;
 	private String urlImagem;
+	private Integer pontuacao;
 
 	public Usuario(Parcel in) {
 		if (in.readByte() == 0) {
@@ -25,6 +26,7 @@ public class Usuario implements Parcelable{
 		email = in.readString();
 		senha = in.readString();
 		urlImagem = in.readString();
+		pontuacao = in.readInt();
 	}
 
 	public Usuario() {
@@ -44,6 +46,7 @@ public class Usuario implements Parcelable{
 		dest.writeString(email);
 		dest.writeString(senha);
 		dest.writeString(urlImagem);
+		dest.writeInt(pontuacao);
 	}
 
 	@Override
@@ -114,6 +117,15 @@ public class Usuario implements Parcelable{
 	public String toString() {
 		return nome + " " + sobrenome;
 	}
+
+	public Integer getPontuacao() {
+		return pontuacao;
+	}
+
+	public void setPontuacao(Integer pontuacao) {
+		this.pontuacao = pontuacao;
+	}
+
 
 
 

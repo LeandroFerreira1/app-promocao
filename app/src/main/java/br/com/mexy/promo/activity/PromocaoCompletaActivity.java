@@ -1,5 +1,8 @@
 package br.com.mexy.promo.activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,15 +76,17 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         buttonAvaliarPromocao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(PromocaoCompletaActivity.this, androidx.appcompat.R.style.AlertDialog_AppCompat);
-                view = LayoutInflater.from(PromocaoCompletaActivity.this).inflate(
-                        R.layout.dialog_avaliacao_promocao,(ConstraintLayout)findViewById(R.id.dialogAvaliacao)
-                );
-                builder.setView(view);
 
-                final AlertDialog alertDialog = builder.create();
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
+                String res = sharedPreferences.getString("ID_USUARIO", null);
 
-                alertDialog.show();
+                if (res == null) {
+                    Toast.makeText(getApplicationContext(),"Você deve estar logado para fazer uma avaliação!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(PromocaoCompletaActivity.this, AvaliacaoActivity.class);
+                    intent.putExtra("promocao", promocaoId);
+                    startActivity(intent);
+                }
 
             }
         });

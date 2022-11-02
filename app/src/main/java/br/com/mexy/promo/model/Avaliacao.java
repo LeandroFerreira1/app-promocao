@@ -3,27 +3,27 @@ package br.com.mexy.promo.model;
 public class Avaliacao {
 
 //	private Integer id;
-	private Usuario usuario;
-	private Promocao promocao;
+	private Integer usuario_id;
+	private Integer promocao_id;
 	private String descricao;
 	private Integer nota;
 	private String latitude;
 	private String longitude;
 
-	public Usuario getUsuario() {
-		return usuario;
+	public Integer getUsuario() {
+		return usuario_id;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuario(Integer usuario_id) {
+		this.usuario_id = usuario_id;
 	}
 
-	public Promocao getPromocao() {
-		return promocao;
+	public Integer getPromocao() {
+		return promocao_id;
 	}
 
-	public void setPromocao(Promocao promocao) {
-		this.promocao = promocao;
+	public void setPromocao(Integer promocao_id) {
+		this.promocao_id = promocao_id;
 	}
 
 	public String getDescricao() {

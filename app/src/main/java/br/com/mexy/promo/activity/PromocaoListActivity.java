@@ -66,7 +66,7 @@ public class PromocaoListActivity extends AppCompatActivity {
 
                             @Override
                             public void onLongItemClick(View view, int position) {
-
+                                iniciarActivityPromocaoCompleta(view, position);
                             }
 
                             @Override
