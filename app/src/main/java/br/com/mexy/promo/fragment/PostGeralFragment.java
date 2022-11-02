@@ -2,12 +2,14 @@ package br.com.mexy.promo.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -23,27 +25,30 @@ import br.com.mexy.promo.R;
 import br.com.mexy.promo.activity.MainActivity;
 import br.com.mexy.promo.activity.PerfilActivity;
 import br.com.mexy.promo.activity.PerfilGeralActivity;
+import br.com.mexy.promo.activity.PromocaoCompletaActivity;
+import br.com.mexy.promo.activity.PromocaoListActivity;
 import br.com.mexy.promo.adapter.PromocaoCardAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.Usuario;
+import br.com.mexy.promo.util.RecyclerItemClickListener;
+import br.com.mexy.promo.util.StaticInstances;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PostFragment extends Fragment {
+public class PostGeralFragment extends Fragment {
 
     private FragmentActivity myContext;
-    private Integer idUsuario;
     public View view;
     private Retrofit retrofit;
     private RecyclerView recyclerListPromo;
     private List<Promocao> promocoes = new ArrayList<>();
     private Usuario usuario = new Usuario();
 
-    public PostFragment() {
+    public PostGeralFragment() {
         // Required empty public constructor
     }
 
@@ -53,20 +58,12 @@ public class PostFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_post, container, false);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
-        String res = sharedPreferences.getString("ID_USUARIO", null);
-
-        String token = "Bearer " + res;
-
-        System.out.println("TESTE: "+ token);
-
-
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        logado(token);
+        recuperarPromocoes(StaticInstances.idUsuario);
 
         recyclerListPromo = view.findViewById(R.id.recyclerListPromo);
 
@@ -77,28 +74,38 @@ public class PostFragment extends Fragment {
         PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
         recyclerListPromo.setAdapter( adapter );
 
+        recyclerListPromo.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        myContext,
+                        recyclerListPromo,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                iniciarActivityPromocaoCompleta(view, position);
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                iniciarActivityPromocaoCompleta(view, position);
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
+
 
         return view;
 
     }
 
-    private void logado(String token) {
-        DataService service = retrofit.create(DataService.class);
-        final Call<Usuario> usuarioCall = service.logado(token);
-
-        usuarioCall.enqueue(new Callback<Usuario>() {
-            @Override
-            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                if (response.isSuccessful()) {
-                    usuario = response.body();
-                    recuperarPromocoes(usuario.getId());
-                }
-            }
-            @Override
-            public void onFailure(Call<Usuario> call, Throwable t) {
-
-            }
-        });
+    private void iniciarActivityPromocaoCompleta(View view, int position) {
+        Intent intent = new Intent(myContext, PromocaoCompletaActivity.class);
+        intent.putExtra("promocao", promocoes.get(position));
+        startActivity(intent);
     }
 
     private void recuperarPromocoes(Integer id) {
@@ -131,7 +138,7 @@ public class PostFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myContext=(PerfilActivity) context;
+        myContext=(PerfilGeralActivity) context;
     }
 
     @SuppressWarnings("deprecation")
@@ -140,9 +147,10 @@ public class PostFragment extends Fragment {
         super.onAttach(activity);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            myContext=(PerfilActivity) activity;
+            myContext=(PerfilGeralActivity) activity;
         }
     }
 
 }
+
 

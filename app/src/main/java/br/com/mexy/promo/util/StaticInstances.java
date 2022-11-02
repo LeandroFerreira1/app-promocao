@@ -11,5 +11,6 @@ public class StaticInstances {
 
     public static List<Estabelecimento> estabelecimentos = new ArrayList<>();
     public static List<Departamento> departamentos = new ArrayList<>();
+    public static Integer idUsuario;
 
 }

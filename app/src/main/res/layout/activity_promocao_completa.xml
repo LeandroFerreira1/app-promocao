@@ -5,15 +5,28 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewUsuariop"
+    <ImageButton
+        android:id="@+id/imageButtonUsuario"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_usuario"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewUsuariop"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewUsuariop"
+        app:layout_constraintStart_toStartOf="@+id/imageViewUsuariop"
+        app:layout_constraintTop_toTopOf="@+id/imageViewUsuariop"
+        tools:ignore="MissingConstraints"
+        android:background="#00000000"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewUsuariop"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_usuario"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -246,9 +259,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/texto" />
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

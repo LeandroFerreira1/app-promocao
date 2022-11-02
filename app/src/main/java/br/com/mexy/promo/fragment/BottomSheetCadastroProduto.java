@@ -159,7 +159,7 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String imageFileName = idProduto;
+        String imageFileName = "tmp";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */

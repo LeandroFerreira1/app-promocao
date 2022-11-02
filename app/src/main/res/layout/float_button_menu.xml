@@ -2,7 +2,7 @@
 <com.google.android.material.floatingactionbutton.FloatingActionButton android:id="@+id/fab"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_anchor="@id/bar"
+    app:layout_anchor="@id/barPerfil"
     app:backgroundTint="@color/red_primary"
     android:src="@drawable/ic_add"
     xmlns:android="http://schemas.android.com/apk/res/android"

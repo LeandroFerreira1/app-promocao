@@ -71,6 +71,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String emailUsuario = editLoginEmail.getText().toString();
                 String senha = editLoginSenha.getText().toString();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        logo.startAnimation(zoomIn);
+                    }
+                }, 1000);
                 autenticarUsuario(emailUsuario, senha);
             }
         });
@@ -79,6 +85,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void autenticarUsuario(String nomeUsuario, String senha) {
 
+
+
         DataService service = retrofit.create(DataService.class);
         final Call<ResponseUsuario> usuarioCall = service.verificarUsuario(nomeUsuario, senha);
 
@@ -86,30 +94,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseUsuario> call, Response<ResponseUsuario> response) {
                 if (response.isSuccessful()) {
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            logo.startAnimation(zoomIn);
-                        }
-                    }, 1000);
-
                     usuario = response.body();
 
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(getString(R.string.pref_text), usuario.getAccessToken());
                     editor.apply();
-
-                    System.out.println("USUARIO LOGADO: " + usuario.getAccessToken());
-
-
                     Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
                     startActivity(intent);
                     finish();
 
                 } else {
-                    System.out.println("USUARIO FALHOU");
                     textCadastrar.setVisibility(View.VISIBLE);
                 }
             }
@@ -121,4 +116,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+
 }

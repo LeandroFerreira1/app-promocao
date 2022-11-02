@@ -51,7 +51,7 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
     private ImageView imageViewProdu;
     private Retrofit retrofit;
     private Produto produto = new Produto();
-    private String idEstabelecimento;
+    private String idProduto;
     private PromocaoCad promocao = new PromocaoCad();
     private Estabelecimento estabelecimentoCadastro = new Estabelecimento();
     private EditText editValorPromocional;
@@ -98,8 +98,8 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            idEstabelecimento = extras.getString("produto");
-            buscarProduto(idEstabelecimento);
+            idProduto = extras.getString("produto");
+            buscarProduto(idProduto);
         }
 
         buttonCadastarPromocao.setOnClickListener(new View.OnClickListener() {

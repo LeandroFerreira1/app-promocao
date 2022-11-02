@@ -106,5 +106,8 @@ public interface DataService {
     @GET("/api/v1/usuarios/logado")
     Call<Usuario> logado(@Header("Authorization") String token);
 
+    @GET("/api/v1/usuarios/{id}")
+    Call<Usuario> recuperarUsuario(@Path("id") Integer id);
+
 
 }

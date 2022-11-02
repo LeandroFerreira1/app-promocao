@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class Usuario implements Parcelable{
 
 	private Integer id;
@@ -14,6 +16,7 @@ public class Usuario implements Parcelable{
 	private String senha;
 	private String urlImagem;
 	private Integer pontuacao;
+	private ArrayList<Promocao> promocoes;
 
 	public Usuario(Parcel in) {
 		if (in.readByte() == 0) {
@@ -126,7 +129,12 @@ public class Usuario implements Parcelable{
 		this.pontuacao = pontuacao;
 	}
 
+	public ArrayList<Promocao> getPromocoes() {
+		return promocoes;
+	}
 
-
+	public void setPromocoes(ArrayList<Promocao> promocoes) {
+		this.promocoes = promocoes;
+	}
 
 }
