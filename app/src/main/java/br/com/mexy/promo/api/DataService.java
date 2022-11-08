@@ -35,7 +35,6 @@ public interface DataService {
    // String API_KEY = "501e0a13-f1ed-4c86-b7ec-c36d8b55c7ae";
 
     @GET("/api/v1/promocoes/")
-
     Call<List<Promocao>> recuperarPromocoes();
 
     @GET("/api/v1/promocoes/usuario/{id}")

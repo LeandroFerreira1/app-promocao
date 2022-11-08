@@ -120,7 +120,7 @@
         android:ems="10"
         android:padding="8dp"
         android:textStyle="bold"
-        android:text="Data de Validade:"
+        android:text="Oferta válida até:"
         android:textColor="@color/red_secundary"
         app:layout_constraintStart_toStartOf="@+id/editDataValidade"
         app:layout_constraintTop_toBottomOf="@+id/editValorPromocional"
