@@ -86,6 +86,9 @@ public interface DataService {
     @GET("/api/v1/usuarios")
     Call<List<Usuario>> listarUsuarios();
 
+    @GET("/api/v1/usuarios/ranking/")
+    Call<List<Usuario>> ranking();
+
     @PATCH("/api/v1/usuarios/pontuacao/{id}")
     Call<Usuario> alterarponto(@Header("Authorization") String token, @Path("id") Integer id);
 
@@ -108,6 +111,4 @@ public interface DataService {
 
     @GET("/api/v1/usuarios/{id}")
     Call<Usuario> recuperarUsuario(@Path("id") Integer id);
-
-
 }
