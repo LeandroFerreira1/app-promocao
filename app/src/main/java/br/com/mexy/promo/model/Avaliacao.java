@@ -6,6 +6,7 @@ public class Avaliacao {
 	private Integer usuario_id;
 	private Integer promocao_id;
 	private String descricao;
+	private String data_avaliacao;
 	private Integer nota;
 	private String latitude;
 	private String longitude;
@@ -40,6 +41,14 @@ public class Avaliacao {
 
 	public void setNota(Integer nota) {
 		this.nota = nota;
+	}
+
+	public String getData() {
+		return data_avaliacao;
+	}
+
+	public void setData(String data_avaliacao) {
+		this.data_avaliacao = data_avaliacao;
 	}
 
 	public String getLatitude() {

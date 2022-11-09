@@ -19,11 +19,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.adapter.PromocaoListAdapter;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.model.Avaliacao;
+import br.com.mexy.promo.model.Departamento;
+import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.Usuario;
 import retrofit2.Call;
@@ -46,9 +50,12 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
     private TextView textViewPrecoPromocional;
     private TextView textViewEstabelecimento;
     private TextView textViewDataValidade;
+    private TextView textViewAvaliacao;
     private Button buttonAvaliarPromocao;
     private ImageButton imageButtonUsuario;
     private Usuario usuario = new Usuario();
+    private List<Avaliacao> avaliacoes = new ArrayList<>();
+    private Integer avaliacaoNota = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         textViewDepartamentoProduto = (TextView) findViewById(R.id.textViewDepartamentoProduto);
         textViewEstabelecimento = (TextView) findViewById(R.id.textViewEstabelecimento);
         textViewDataValidade = (TextView) findViewById(R.id.textViewDataValidade);
+        textViewAvaliacao = (TextView) findViewById(R.id.textViewAvaliacao);
         textViewPrecoPromocional = (TextView) findViewById(R.id.textViewPrecoPromocional);
         buttonAvaliarPromocao = (Button) findViewById(R.id.buttonAvaliarPromocao);
         imageButtonUsuario = (ImageButton) findViewById(R.id.imageButtonUsuario);
@@ -78,9 +86,10 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         String res = sharedPreferences.getString("ID_USUARIO", null);
 
         String token = "Bearer " + res;
-
+        avaliacao();
         buscarPromocao();
         logado(token);
+
 
         buttonAvaliarPromocao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +128,37 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
 
     }
 
+    private void avaliacao() {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call <List<Avaliacao>> usuarioCall = service.buscarAvaliacoes(promocaoId.getId());
+
+        usuarioCall.enqueue(new Callback <List<Avaliacao>>() {
+            @Override
+            public void onResponse(Call <List<Avaliacao>> call, Response <List<Avaliacao>> response) {
+                if (response.isSuccessful()) {
+                    avaliacoes = response.body();
+                    int cont = 0;
+                    int aval = 0;
+                    for (Avaliacao a : avaliacoes) {
+                        aval = aval + a.getNota();
+                        cont++;
+                    }
+                    if(cont != 0){
+                        avaliacaoNota = aval/cont;
+                    }else{
+                        avaliacaoNota = 0;
+                    }
+                    textViewAvaliacao.setText(avaliacaoNota.toString());
+                }
+            }
+            @Override
+            public void onFailure(Call <List<Avaliacao>> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void logado(String token) {
 
         DataService service = retrofit.create(DataService.class);
@@ -149,7 +189,6 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     promocao = response.body();
-
                     Picasso.get()
                             .load(DataService.BASE_URL + promocao.getProduto().getUrlImagem())
                             .error(R.drawable.ic_error)
@@ -169,6 +208,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
                     textViewEstabelecimento.setText(promocao.getEstabelecimento().getNome());
                     textViewDataValidade.setText(promocao.getDataValidade());
                     textViewPrecoPromocional.setText("R$ "+promocao.getValorPromocional());
+
                 }
             }
 
@@ -179,4 +219,6 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         });
 
     }
+
+
 }

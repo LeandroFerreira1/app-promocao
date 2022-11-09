@@ -46,7 +46,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.MyViewHo
                 .into(holder.imageViewUsuario);
 
         holder.textNome.setText(usuario.getNome());
-        holder.textViewNota.setText(usuario.getPontuacao());
+        holder.textViewNota.setText(usuario.getPontuacao().toString());
 
     }
 

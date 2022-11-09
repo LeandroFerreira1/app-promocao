@@ -56,7 +56,7 @@ public interface DataService {
     Call<Avaliacao> registrarAvaliacao(@Header("Authorization") String token, @Body Avaliacao avaliacao);
 
     @GET("/api/v1/avaliacoes/avaliacoes_promocao/{id}")
-    Call<Avaliacao> buscarAvaliacoes(@Path("id") Integer id);
+    Call<List<Avaliacao>> buscarAvaliacoes(@Path("id") Integer id);
 
     @GET("/api/v1/estabelecimentos/promocao/{id}")
     Call<Estabelecimento> buscarPromocoes(@Path("id") Integer id);

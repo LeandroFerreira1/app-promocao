@@ -49,19 +49,16 @@ public class RankingFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         inflater.inflate(R.layout.fragment_ranking, container, false);
+        view = inflater.inflate(R.layout.fragment_ranking, container, false);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
-        recuperarRanking();
 
         recyclerRanking = view.findViewById(R.id.recyclerRanking);
 
@@ -94,6 +91,8 @@ public class RankingFragment extends Fragment {
                         }
                 )
         );
+
+        recuperarRanking();
 
 
         return view;
@@ -135,7 +134,7 @@ public class RankingFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myContext=(PerfilGeralActivity) context;
+        myContext=(PerfilActivity) context;
     }
 
     @SuppressWarnings("deprecation")
@@ -144,7 +143,7 @@ public class RankingFragment extends Fragment {
         super.onAttach(activity);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            myContext=(PerfilGeralActivity) activity;
+            myContext=(PerfilActivity) activity;
         }
     }
 
