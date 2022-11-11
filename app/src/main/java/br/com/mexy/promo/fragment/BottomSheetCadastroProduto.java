@@ -172,8 +172,8 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
         return image;
     }
 
-    @android.support.annotation.NonNull
-    public static String generateRandomFilename(@android.support.annotation.Nullable String extension) {
+    @NonNull
+    public static String generateRandomFilename(@NonNull String extension) {
         return new StringBuilder(50)
                 .append(System.currentTimeMillis())
                 .append((int) (Math.random() * 10000.0))

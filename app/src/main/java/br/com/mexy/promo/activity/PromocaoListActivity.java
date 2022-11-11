@@ -4,10 +4,15 @@ import static br.com.mexy.promo.util.StaticInstances.estabelecimentos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mexy.promo.R;
+import br.com.mexy.promo.adapter.PromocaoFilterAdapter;
 import br.com.mexy.promo.adapter.PromocaoListAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Promocao;
@@ -25,18 +31,23 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PromocaoListActivity extends AppCompatActivity {
+public class PromocaoListActivity extends AppCompatActivity  implements PromocaoFilterAdapter.PromocaoAdapterListener {
 
     private RecyclerView recyclerListPromocao;
     private List<Promocao> promocoes = new ArrayList<>();
     private int position;
     private Retrofit retrofit;
     private View view;
+    PromocaoFilterAdapter adapter;
+    private SearchView searchViewPesquisa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_promocao_list);
+
+        searchViewPesquisa = findViewById(R.id.searchViewPesquisa);
+
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
@@ -51,8 +62,9 @@ public class PromocaoListActivity extends AppCompatActivity {
 
         recuperarPromocoes();
 
-        PromocaoListAdapter adapter = new PromocaoListAdapter( promocoes );
+        adapter = new PromocaoFilterAdapter( promocoes, this);
         recyclerListPromocao.setAdapter( adapter );
+
 
         recyclerListPromocao.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -77,8 +89,36 @@ public class PromocaoListActivity extends AppCompatActivity {
                 )
         );
 
+        //Configura searchview
+
+        searchViewPesquisa.setQueryHint("Buscar Ofertas");
+        searchViewPesquisa.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.getFilter().filter(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
+        searchViewPesquisa.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchViewPesquisa.setFocusable(true);
+                searchViewPesquisa.requestFocusFromTouch();
+            }
+        });
 
     }
+
+    private void setSupportActionBar(Toolbar toolbar) {
+    }
+
 
     private void iniciarActivityPromocaoCompleta(View view, int position) {
         Intent intent = new Intent(PromocaoListActivity.this, PromocaoCompletaActivity.class);
@@ -99,8 +139,7 @@ public class PromocaoListActivity extends AppCompatActivity {
                     promocoes.clear();
                     promocoes.addAll(response.body());
                     System.out.println("TESTE "+ promocoes.get(1).getId());
-                    PromocaoListAdapter adapter = new PromocaoListAdapter( promocoes );
-                    recyclerListPromocao.setAdapter( adapter );
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -110,5 +149,13 @@ public class PromocaoListActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    @Override
+    public void onSelected(Promocao item) {
+        Intent intent = new Intent(getBaseContext(), PromocaoCompletaActivity.class);
+        intent.putExtra("idPromocao", item.getId());
+        startActivity(intent);
     }
 }

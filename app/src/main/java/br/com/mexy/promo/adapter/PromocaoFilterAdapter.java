@@ -19,23 +19,24 @@ import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Promocao;
 
-public class PromocaoFilterAdapter extends RecyclerView.Adapter<PromocaoFilterAdapter.MyViewHolder> implements Filterable {
+public class PromocaoFilterAdapter extends RecyclerView.Adapter<PromocaoFilterAdapter.MyViewHolder> implements Filterable  {
 
     private List<Promocao> promocoes;
     private List<Promocao> promocoesFiltro;
+    private PromocaoAdapterListener listener;
 
 
-    public PromocaoFilterAdapter(List<Promocao> list) {
-
+    public PromocaoFilterAdapter(List<Promocao> list, PromocaoAdapterListener listener ) {
         this.promocoes = list;
         this.promocoesFiltro =  list;
+        this.listener =listener;
     }
 
     @Override
-    public PromocaoFilterAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_list_promocao, parent, false);
-        return new PromocaoFilterAdapter.MyViewHolder(itemLista);
+        return new MyViewHolder(itemLista);
 
     }
 
@@ -116,7 +117,18 @@ public class PromocaoFilterAdapter extends RecyclerView.Adapter<PromocaoFilterAd
             textViewEstabelecimento = itemView.findViewById(R.id.textViewEstabelecimento);
             imageViewProduto = itemView.findViewById(R.id.imageViewProduto);
             imageViewUsuario = itemView.findViewById(R.id.imageViewUsuariop);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onSelected(promocoesFiltro.get(getAdapterPosition()));
+                }
+            });
         }
+    }
+
+    public interface PromocaoAdapterListener {
+        void onSelected(Promocao item);
     }
 
 }

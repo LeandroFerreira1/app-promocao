@@ -129,4 +129,6 @@ public class Promocao implements Parcelable{
 		this.estabelecimento = estabelecimento;
 	}
 
+    public void onSelected(Promocao promocao) {
+    }
 }
