@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.mexy.promo.R;
+import br.com.mexy.promo.adapter.AvaliacaoAdapter;
+import br.com.mexy.promo.adapter.PromocaoFilterAdapter;
 import br.com.mexy.promo.adapter.PromocaoListAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Avaliacao;
@@ -56,6 +60,8 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
     private Usuario usuario = new Usuario();
     private List<Avaliacao> avaliacoes = new ArrayList<>();
     private Integer avaliacaoNota = 0;
+    private RecyclerView recyclerAvaliacoes;
+    private AvaliacaoAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         textViewPrecoPromocional = (TextView) findViewById(R.id.textViewPrecoPromocional);
         buttonAvaliarPromocao = (Button) findViewById(R.id.buttonAvaliarPromocao);
         imageButtonUsuario = (ImageButton) findViewById(R.id.imageButtonUsuario);
+        recyclerAvaliacoes = (RecyclerView) findViewById(R.id.recyclerAvaliacoes);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
@@ -82,13 +89,17 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
 
         promocaoId = getIntent().getExtras().getParcelable("promocao");
 
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1 );
+        recyclerAvaliacoes.setLayoutManager( layoutManager );
+
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
         String res = sharedPreferences.getString("ID_USUARIO", null);
 
         String token = "Bearer " + res;
+        logado(token);
         avaliacao();
         buscarPromocao();
-        logado(token);
+
 
 
         buttonAvaliarPromocao.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +149,8 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
             public void onResponse(Call <List<Avaliacao>> call, Response <List<Avaliacao>> response) {
                 if (response.isSuccessful()) {
                     avaliacoes = response.body();
+                    adapter = new AvaliacaoAdapter( avaliacoes, usuario);
+                    recyclerAvaliacoes.setAdapter( adapter );
                     int cont = 0;
                     int aval = 0;
                     for (Avaliacao a : avaliacoes) {

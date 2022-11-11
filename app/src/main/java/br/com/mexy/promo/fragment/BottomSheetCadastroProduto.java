@@ -40,10 +40,12 @@ package br.com.mexy.promo.fragment;
         import static androidx.core.content.FileProvider.getUriForFile;
 
         import br.com.mexy.promo.R;
+        import br.com.mexy.promo.activity.CadastroUsuarioActivity;
         import br.com.mexy.promo.activity.MainActivity;
         import br.com.mexy.promo.activity.ProdutoActivity;
         import br.com.mexy.promo.activity.PromocaoActivity;
         import br.com.mexy.promo.api.DataService;
+        import br.com.mexy.promo.util.CustomInterface;
         import br.com.mexy.promo.util.Permissao;
         import okhttp3.MediaType;
         import okhttp3.MultipartBody;
@@ -58,11 +60,15 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
 
     private ImageButton buttonCamera;
     private ImageButton buttonArquivos;
-    private String idProduto;
-    private BigInteger id;
+    private Integer idUsuario;
     private FragmentActivity myContext;
     private Retrofit retrofit;
     private Bitmap imagem;
+    private final CustomInterface callback;
+
+    public BottomSheetCadastroProduto(CustomInterface callback) {
+        this.callback=callback;
+    }
 
     private String[] permissoes = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -73,6 +79,7 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
     private static final int SELECAO_CAMERA  = 100;
     private static final int SELECAO_GALERIA = 200;
 
+
     @Nullable
     @Override public View onCreateView(
             @NonNull LayoutInflater inflater,
@@ -80,8 +87,6 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
             @Nullable Bundle savedInstanceState
     ) {
 
-        idProduto = getArguments().getString("idProduto");
-        id = new BigInteger(idProduto);
         return inflater
                 .inflate(R.layout.produto_bottom_sheet_foto, container, false);
     }
@@ -159,7 +164,7 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String imageFileName = "tmp";
+        String imageFileName = "TMP";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -172,23 +177,9 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
         return image;
     }
 
-    @NonNull
-    public static String generateRandomFilename(@NonNull String extension) {
-        return new StringBuilder(50)
-                .append(System.currentTimeMillis())
-                .append((int) (Math.random() * 10000.0))
-                .append(".")
-                .append(extension)
-                .toString();
-    }
 
-    private MultipartBody.Part prepareFilePart(String partName, File file) {
-        RequestBody requestBody = RequestBody.create(
-                MediaType.parse(partName),
-                file
-        );
-        return MultipartBody.Part.createFormData(partName, file.getName(), requestBody);
-    }
+
+
 
     public static File savebitmap(Bitmap bmp) throws IOException {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -202,41 +193,9 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
         return f;
     }
 
-    @NonNull
-    public static File storeOnCache(Context context, Bitmap bitmap) throws IOException {
-        File cacheDir = context.getCacheDir();
-        File file = new File(cacheDir, generateRandomFilename("jpg"));
-        FileOutputStream out = new FileOutputStream(file);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, out);
-        out.flush();
-        out.close();
 
-        return file;
-    }
+    View view;
 
-    private void uploadImageProduto(BigInteger id, File file){
-
-        System.out.println("TESTE2 "+ id + file);
-
-        DataService service = retrofit.create(DataService.class);
-        final Call<String> postCall = service.uploadImageProduto(id, prepareFilePart("file", file));
-
-        postCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()){
-                    System.out.println("Sucesso");
-                }
-
-            }
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                System.out.println("IMAGEM FALHA: " + t.toString());
-            }
-        });
-
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -252,30 +211,19 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
                 switch ( requestCode ){
                     case SELECAO_CAMERA :
                         //imagem = (Bitmap) BitmapFactory.decodeFile(currentPhotoPath);
-                        Intent i = new Intent(getActivity(), ProdutoActivity.class);
-                        i.putExtra("fotoEscolhida", currentPhotoPath );
-                        publicarImagemProduto(currentPhotoPath);
-                        startActivity( i );
+                        passarimagem(view, currentPhotoPath);
                         break;
                     case SELECAO_GALERIA :
-                        Intent i2 = new Intent(getActivity(), ProdutoActivity.class);
                         Uri localImagemSelecionada = data.getData();
-
                         Uri selectedImage = data.getData();
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
                         Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                         cursor.moveToFirst();
-
                         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                         String picturePath = cursor.getString(columnIndex);
                         cursor.close();
 
-                        String testee = localImagemSelecionada.getPath();
-                        Toast.makeText(getActivity().getApplicationContext(), testee, Toast.LENGTH_SHORT).show();
-
-                        i2.putExtra("fotoEscolhida", picturePath );
-                        publicarImagemProduto(picturePath);
-                        startActivity( i2 );
+                        passarimagem(view, picturePath);
                         //imagem = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), localImagemSelecionada);
                         break;
                 }
@@ -303,66 +251,12 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
 
     }
 
-    private void publicarImagemProduto(String dadosImagem) throws IOException {
-
-        Bitmap bitmapOri = BitmapFactory.decodeFile(dadosImagem);
-        ExifInterface ei = null;
-        try {
-            ei = new ExifInterface(dadosImagem);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED);
-
-        Bitmap rotatedBitmap = null;
-            switch (orientation) {
-
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotatedBitmap = rotateImage(bitmapOri, 90);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotatedBitmap = rotateImage(bitmapOri, 180);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotatedBitmap = rotateImage(bitmapOri, 270);
-                    break;
-
-                case ExifInterface.ORIENTATION_NORMAL:
-                default:
-                    rotatedBitmap = bitmapOri;
-            }
-
-            Bitmap bitmapResize = null;
-        final int maxSize = 560;
-        int outWidth;
-        int outHeight;
-        int inWidth = bitmapOri.getWidth();
-        int inHeight = bitmapOri.getHeight();
-        if(inWidth > inHeight){
-            outWidth = maxSize;
-            outHeight = (inHeight * maxSize) / inWidth;
-        } else {
-            outHeight = maxSize;
-            outWidth = (inWidth * maxSize) / inHeight;
-        }
-
-        bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, outHeight, outWidth, false);
-            imagem = bitmapResize;
-            File file = storeOnCache(myContext,imagem);
-            uploadImageProduto(id, file);
+    private void passarimagem(View view, String photo) throws IOException {
+        callback.callbackMethodPhoto(photo);
+        dismiss();
     }
 
 
-
-    public static Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -379,6 +273,4 @@ public class BottomSheetCadastroProduto extends BottomSheetDialogFragment {
             myContext=(ProdutoActivity) activity;
         }
     }
-
-
 }

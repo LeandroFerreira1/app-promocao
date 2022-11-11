@@ -31,7 +31,7 @@ import retrofit2.http.Query;
 
 public interface DataService {
 
-    public static final String BASE_URL = "http://192.168.0.109:8000";
+    public static final String BASE_URL = "http://172.16.2.61:8000";
    // String API_KEY = "501e0a13-f1ed-4c86-b7ec-c36d8b55c7ae";
 
     @GET("/api/v1/promocoes/")
@@ -72,6 +72,9 @@ public interface DataService {
 
     @PATCH("/api/v1/produtos/{id}")
     Call<Produto> alterarProduto(@Path("id") BigInteger id, @Body Produto produto);
+
+    @POST("/api/v1/produtos/")
+    Call<Produto> cadastraProduto(@Body Produto produto);
 
     @GET("/api/v1/departamentos/")
     Call<List<Departamento>> recuperarDepartamentos();

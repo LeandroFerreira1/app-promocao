@@ -3,18 +3,17 @@ package br.com.mexy.promo.activity;
 import static java.lang.String.valueOf;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -22,12 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.mlkit.common.MlKitException;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
@@ -35,16 +30,13 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
@@ -53,6 +45,7 @@ import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
 import br.com.mexy.promo.model.Result;
+import br.com.mexy.promo.util.CustomInterface;
 import br.com.mexy.promo.util.StaticInstances;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -63,7 +56,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ProdutoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ProdutoActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, CustomInterface {
 
     private static final String KEY_ALLOW_MANUAL_INPUT = "allow_manual_input";
 
@@ -79,18 +72,28 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private Result result;
     private Produto produtoAlterado = new Produto();
     private Produto produtoAlteradoCompleto = new Produto();
+    private Produto produtoCadastro = new Produto();
     private Produto produto = new Produto();
     private ProgressBar progressBar;
     private Spinner spinner;
     private Integer idDepartamento = 0;
     private Button btnSalvar;
     private BigInteger idProduto;
+    private Bitmap imagem;
+    private String dadosImagem;
+    private File file;
 
+    private int validador = 0;
+    private int validadorBusca = 0;
+
+    private CustomInterface callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_produto);
+
+        callback=this;
 
         spinner = (Spinner) findViewById(R.id.spinnerDepartamento);
 
@@ -115,17 +118,18 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         btnSalvar = (Button) findViewById(R.id.buttonCadastarPromocao);
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(produto != null){
+                if(validadorBusca == 600){
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
                     i.putExtra("produto", valueOf(produto.getId()));
                     startActivity(i);
                     finish();
                 }else if(result != null){
+                    produtoAlterado.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
                     alteraProdutos(idProduto);
-                }else{
-                    alteraProdutosCompleto(idProduto);
+                }else if(validador == 500){
+                    produtoAlteradoCompleto.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
+                    cadastraProdutoManual(idProduto);
                 }
-
             }
         });
     }
@@ -196,6 +200,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     }
 
     private void configurarCadastro(String ean){
+        validador = 500;
         idProduto = new BigInteger(ean);
         editNomeProduto.setFocusable(true);
         editMarca.setFocusable(true);
@@ -204,17 +209,14 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         imageButtonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final BottomSheetCadastroProduto bottomSheetCadastroProduto = new BottomSheetCadastroProduto();
-                Bundle bundle = new Bundle();
-                bundle.putString("idProduto", (String) ean);
-                bottomSheetCadastroProduto.setArguments(bundle);
+                final BottomSheetCadastroProduto bottomSheetCadastroProduto = new BottomSheetCadastroProduto(callback);
                 bottomSheetCadastroProduto.show(getSupportFragmentManager(), bottomSheetCadastroProduto.getTag());
             }
         });
     }
 
 
-
+//cadastra o produto via ean
     private void registrarProdutoEan(final String ean) {
         progressBar.setVisibility(View.VISIBLE);
         idProduto = new BigInteger(ean);
@@ -260,6 +262,8 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
+    //metodo de busca no banco de dados de produto se não encontrar, busca no metodo de scrap
+
     private void buscarProduto(final String str) {
 
         idProduto = new BigInteger(str);
@@ -271,6 +275,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             public void onResponse(Call<Produto> call, Response<Produto> response) {
 
                 if (response.isSuccessful()) {
+                    validadorBusca = 600;
                     produto = response.body();
                     editNomeProduto.setText(produto.getNome());
                     editMarca.setText(produto.getMarca());
@@ -308,62 +313,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    /*
-
-    private void buscarProdutoEan(final String str) {
-
-        idProduto = new BigInteger(str);
-        DataService service = retrofit.create(DataService.class);
-        final Call<List<Produto>> produtoCall = service.buscarProdutos();
-
-        produtoCall.enqueue(new Callback<List<Produto>>() {
-            @Override
-            public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
-
-                if (response.isSuccessful()) {
-                    produtos = response.body();
-
-                    if(produtos.isEmpty()){
-                        progressBar.setVisibility(View.GONE);
-                        registrarProdutoEan(str);
-                    }
-
-                    for (Produto p : produtos) {
-                        if(!p.getId().equals(idProduto)) {
-                            cont = 1;
-                            System.out.println("TESTE1");
-
-                        }else if(p.getId().equals(idProduto)){
-                            editNomeProduto.setText(p.getNome());
-                            editMarca.setText(p.getMarca());
-                            Picasso.get()
-                                    .load(DataService.BASE_URL + p.getUrlImagem())
-                                    .error(R.drawable.ic_error)
-                                    .into(imageViewProduto);
-                            spinner.setSelection(p.getDepartamento());
-                            cont = 0;
-                        }
-                    }
-                    if(cont == 1){
-                        System.out.println("TESTE2");
-                        progressBar.setVisibility(View.GONE);
-                        registrarProdutoEan(str);
-                    }
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Produto>> call, Throwable t) {
-                System.out.println("FALHA: " + t.toString());
-            }
-        });
-
-    }
-
-     */
-
     private void recuperarDepartamentos() {
 
         DataService service = retrofit.create(DataService.class);
@@ -397,8 +346,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
+    //metodo de alteração de departamento quando vem do scrap
+
     private void alteraProdutos(BigInteger id) {
-        produtoAlterado.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
         DataService service = retrofit.create(DataService.class);
         Call<Produto> produtoCall = service.alterarProduto(id, produtoAlterado);
 
@@ -423,22 +373,24 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private void alteraProdutosCompleto(BigInteger id) {
-        produtoAlteradoCompleto.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
-        produtoAlteradoCompleto.setNome((String) editNomeProduto.getText());
-        produtoAlteradoCompleto.setMarca((String) editMarca.getText());
-        DataService service = retrofit.create(DataService.class);
-        Call<Produto> produtoCall = service.alterarProduto(id, produtoAlteradoCompleto);
+    //metodo de cadastro manual do produto
 
-        idDepartamento = ((Departamento)spinner.getSelectedItem()).getId();
+    private void cadastraProdutoManual(BigInteger id) {
+        produtoAlteradoCompleto.setId(id);
+        produtoAlteradoCompleto.setNome((String) editNomeProduto.getText().toString());
+        produtoAlteradoCompleto.setMarca((String) editMarca.getText().toString());
+
+        DataService service = retrofit.create(DataService.class);
+        Call<Produto> produtoCall = service.cadastraProduto(produtoAlteradoCompleto);
 
         produtoCall.enqueue(new Callback<Produto>() {
             @Override
             public void onResponse(Call<Produto> call, Response<Produto> response) {
                 if (response.isSuccessful()) {
-                    produto = response.body();
+                    produtoCadastro = response.body();
+                    uploadImageProduto(produtoCadastro.getId(),file);
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
-                    i.putExtra("produto", valueOf(produto.getId()));
+                    i.putExtra("produto", valueOf(produtoCadastro.getId()));
                     startActivity(i);
                     finish();
                 }
@@ -450,6 +402,128 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             }
         });
 
+    }
+
+    private MultipartBody.Part prepareFilePart(String partName, File file) {
+        RequestBody requestBody = RequestBody.create(
+                MediaType.parse(partName),
+                file
+        );
+        return MultipartBody.Part.createFormData(partName, file.getName(), requestBody);
+    }
+
+    private void uploadImageProduto(BigInteger id, File file){
+        DataService service = retrofit.create(DataService.class);
+        final Call<String> postCall = service.uploadImageProduto(id, prepareFilePart("file", file));
+
+        postCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()){
+
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                System.out.println("IMAGEM FALHA: " + t.toString());
+            }
+        });
+
+
+    }
+
+    @NonNull
+    public static String generateRandomFilename(@NonNull String extension) {
+        return new StringBuilder(50)
+                .append(System.currentTimeMillis())
+                .append((int) (Math.random() * 10000.0))
+                .append(".")
+                .append(extension)
+                .toString();
+    }
+
+    @NonNull
+    public static File storeOnCache(Context context, Bitmap bitmap) throws IOException {
+        File cacheDir = context.getCacheDir();
+        File file = new File(cacheDir, generateRandomFilename("jpg"));
+        FileOutputStream out = new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, out);
+        out.flush();
+        out.close();
+
+        return file;
+    }
+
+    private void publicarImagemProduto(String dadosImagem) throws IOException {
+
+        Bitmap bitmapOri = BitmapFactory.decodeFile(dadosImagem);
+        ExifInterface ei = null;
+        try {
+            ei = new ExifInterface(dadosImagem);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        Bitmap rotatedBitmap = null;
+        switch (orientation) {
+
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotatedBitmap = rotateImage(bitmapOri, 90);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotatedBitmap = rotateImage(bitmapOri, 180);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotatedBitmap = rotateImage(bitmapOri, 270);
+                break;
+
+            case ExifInterface.ORIENTATION_NORMAL:
+            default:
+                rotatedBitmap = bitmapOri;
+        }
+
+        Bitmap bitmapResize = null;
+
+        final int maxSize = 560;
+        int outWidth;
+        int outHeight;
+        int inWidth = bitmapOri.getWidth();
+        int inHeight = bitmapOri.getHeight();
+        if(inWidth > inHeight){
+            outWidth = maxSize;
+            outHeight = (inHeight * maxSize) / inWidth;
+        } else {
+            outHeight = maxSize;
+            outWidth = (inWidth * maxSize) / inHeight;
+        }
+        bitmapResize = Bitmap.createScaledBitmap(rotatedBitmap, outHeight, outWidth, false);
+        imagem = bitmapResize;
+        imageViewProduto.setImageBitmap(imagem);
+        file = storeOnCache(this,imagem);
+    }
+
+
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+    @Override
+    public void callbackMethod(Estabelecimento estabelecimento) {
+
+    }
+
+    @Override
+    public void callbackMethodPhoto(String photo) throws IOException {
+        dadosImagem = photo;
+        publicarImagemProduto(dadosImagem);
     }
 
 }
