@@ -108,8 +108,6 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()){
             case R.id.botton_app_perfil :
-
-
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE);
                 String res = sharedPreferences.getString("ID_USUARIO", null);
 

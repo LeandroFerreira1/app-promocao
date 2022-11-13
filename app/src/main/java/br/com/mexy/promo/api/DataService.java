@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.mexy.promo.model.Avaliacao;
+import br.com.mexy.promo.model.Conquista;
 import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
@@ -13,6 +14,7 @@ import br.com.mexy.promo.model.PromocaoCad;
 import br.com.mexy.promo.model.ResponseUsuario;
 import br.com.mexy.promo.model.Result;
 import br.com.mexy.promo.model.Usuario;
+import br.com.mexy.promo.model.UsuarioConquista;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -31,7 +33,7 @@ import retrofit2.http.Query;
 
 public interface DataService {
 
-    public static final String BASE_URL = "http://172.16.2.61:8000";
+    public static final String BASE_URL = "http://10.0.0.173:8000";
    // String API_KEY = "501e0a13-f1ed-4c86-b7ec-c36d8b55c7ae";
 
     @GET("/api/v1/promocoes/")
@@ -113,4 +115,16 @@ public interface DataService {
 
     @GET("/api/v1/usuarios/{id}")
     Call<Usuario> recuperarUsuario(@Path("id") Integer id);
+
+    @POST("/api/v1/usuario-conquistas/")
+    Call<UsuarioConquista> registrarConquista(@Header("Authorization") String token, @Body UsuarioConquista conquista);
+
+    @GET("/api/v1/usuario-conquistas/")
+    Call<List<UsuarioConquista>> recuperarUsuarioConquistas(@Header("Authorization") String token);
+
+    @GET("/api/v1/usuario-conquistas/{id}")
+    Call<List<UsuarioConquista>> recuperarUsuarioConquistasAberto(@Path("id") Integer id);
+
+    @GET("/api/v1/conquistas/{id}")
+    Call<Conquista> recuperaConquista(@Path("id") Integer id);
 }

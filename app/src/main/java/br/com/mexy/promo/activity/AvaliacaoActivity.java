@@ -16,6 +16,7 @@ import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Avaliacao;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.Usuario;
+import br.com.mexy.promo.util.Pontuacao;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -98,13 +99,13 @@ public class AvaliacaoActivity extends AppCompatActivity {
         //avaliacao.setLongitude();
 
         if(avaliacao.getDescricao() != null && avaliacao.getLatitude() != null){
-            alterarponto(token, 20);
+            Pontuacao.alteraponto(retrofit, token, 20);
         }else if(avaliacao.getDescricao() == null && avaliacao.getLatitude() != null){
-            alterarponto(token, 15);
+            Pontuacao.alteraponto(retrofit, token, 15);
         }else if(avaliacao.getDescricao() != null && avaliacao.getLatitude() == null){
-            alterarponto(token, 10);
+            Pontuacao.alteraponto(retrofit, token, 10);
         }else{
-            alterarponto(token, 5);
+            Pontuacao.alteraponto(retrofit, token, 5);
         }
 
         DataService service = retrofit.create(DataService.class);
@@ -129,21 +130,4 @@ public class AvaliacaoActivity extends AppCompatActivity {
         });
     }
 
-    private void alterarponto(String token, Integer ponto) {
-
-        DataService service = retrofit.create(DataService.class);
-        final Call<Usuario> usuarioCall = service.alterarponto(token, ponto);
-
-        usuarioCall.enqueue(new Callback<Usuario>() {
-            @Override
-            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                if (response.isSuccessful()) {
-                }
-            }
-            @Override
-            public void onFailure(Call<Usuario> call, Throwable t) {
-
-            }
-        });
-    }
 }

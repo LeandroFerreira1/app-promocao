@@ -7,6 +7,7 @@ public class Conquista {
     private Integer id;
     private String nome;
     private Integer valor;
+    private String urlimagem;
 
 
     public Integer getId() {
@@ -31,5 +32,13 @@ public class Conquista {
 
     public void setValor(Integer valor) {
         this.valor = valor;
+    }
+
+    public String getImagem() {
+        return urlimagem;
+    }
+
+    public void setImagem(String urlimagem) {
+        this.urlimagem = urlimagem;
     }
 }

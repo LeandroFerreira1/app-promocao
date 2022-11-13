@@ -27,7 +27,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
-
     private ResponseUsuario usuario;
     private Retrofit retrofit;
     private EditText editLoginEmail;
@@ -37,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView textCadastrar;
     private Animation zoomIn;
     private LinearLayout logo;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,9 +82,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void autenticarUsuario(String nomeUsuario, String senha) {
-
-
-
         DataService service = retrofit.create(DataService.class);
         final Call<ResponseUsuario> usuarioCall = service.verificarUsuario(nomeUsuario, senha);
 

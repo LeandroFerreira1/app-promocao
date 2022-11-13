@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -20,13 +22,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import br.com.mexy.promo.R;
+import br.com.mexy.promo.adapter.ConquistaAdapter;
+import br.com.mexy.promo.adapter.PromocaoAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.fragment.BottomSheetAppBar;
 import br.com.mexy.promo.fragment.PostFragment;
 import br.com.mexy.promo.fragment.RankingFragment;
+import br.com.mexy.promo.model.Conquista;
+import br.com.mexy.promo.model.Departamento;
+import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.ResponseUsuario;
 import br.com.mexy.promo.model.Usuario;
+import br.com.mexy.promo.model.UsuarioConquista;
+import br.com.mexy.promo.util.StaticInstances;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +44,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PerfilActivity extends AppCompatActivity {
 
@@ -47,7 +59,10 @@ public class PerfilActivity extends AppCompatActivity {
     private SmartTabLayout smartTabLayout;
     private ViewPager viewPager;
     BottomAppBar bottomAppBar;
-
+    private RecyclerView recyclerConquista;
+    private Conquista conquista = new Conquista();
+    private List<UsuarioConquista> usuarioConquistas = new ArrayList<>();
+    private List<Conquista> conquistas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +107,13 @@ public class PerfilActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+        recyclerConquista = findViewById(R.id.recyclerConquista);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.HORIZONTAL,false);
+        recyclerConquista.setLayoutManager(layoutManager);
+
         logado(token);
+        recuperaUsuarioConquista(token);
 
         floatingActionButton = findViewById(R.id.fab);
 
@@ -106,7 +127,6 @@ public class PerfilActivity extends AppCompatActivity {
         });
 
     }
-
 
     private void logado(String token) {
 
@@ -140,5 +160,51 @@ public class PerfilActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.pref_text), null);
         editor.apply();
+    }
+
+    private void recuperaUsuarioConquista(String token) {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<List<UsuarioConquista>> usuarioConquistaCall = service.recuperarUsuarioConquistas(token);
+
+                usuarioConquistaCall.enqueue(new Callback<List<UsuarioConquista>>() {
+            @Override
+            public void onResponse(Call<List<UsuarioConquista>> call, Response<List<UsuarioConquista>> response) {
+                if (response.isSuccessful()) {
+                    StaticInstances.usuarioConquistas.clear();
+                    StaticInstances.usuarioConquistas.addAll(response.body());
+                    usuarioConquistas = StaticInstances.usuarioConquistas;
+                    for (UsuarioConquista a : usuarioConquistas) {
+                        recuperaConquistas(a.getConquista());
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<UsuarioConquista>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void recuperaConquistas(Integer id) {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<Conquista> conquistaCall = service.recuperaConquista(id);
+
+        conquistaCall.enqueue(new Callback<Conquista>() {
+            @Override
+            public void onResponse(Call<Conquista> call, Response<Conquista> response) {
+                if (response.isSuccessful()) {
+                    conquista = response.body();
+                    conquistas.add(conquista);
+                    ConquistaAdapter adapter2 = new ConquistaAdapter(conquistas);
+                    recyclerConquista.setAdapter(adapter2);
+                }
+            }
+            @Override
+            public void onFailure(Call<Conquista> call, Throwable t) {
+
+            }
+        });
     }
 }

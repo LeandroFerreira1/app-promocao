@@ -17,6 +17,7 @@ public class Usuario implements Parcelable{
 	private String urlImagem;
 	private Integer pontuacao;
 	private ArrayList<Promocao> promocoes;
+	private ArrayList<Conquista> conquistas;
 
 	public Usuario(Parcel in) {
 		if (in.readByte() == 0) {
@@ -135,6 +136,14 @@ public class Usuario implements Parcelable{
 
 	public void setPromocoes(ArrayList<Promocao> promocoes) {
 		this.promocoes = promocoes;
+	}
+
+	public ArrayList<Conquista> getConquistas() {
+		return conquistas;
+	}
+
+	public void setConquistas(ArrayList<Conquista> conquistas) {
+		this.conquistas = conquistas;
 	}
 
 }

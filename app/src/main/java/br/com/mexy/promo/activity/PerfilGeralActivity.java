@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -18,13 +20,19 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.mexy.promo.R;
+import br.com.mexy.promo.adapter.ConquistaAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.fragment.BottomSheetAppBar;
 import br.com.mexy.promo.fragment.PostFragment;
 import br.com.mexy.promo.fragment.PostGeralFragment;
 import br.com.mexy.promo.fragment.RankingFragment;
+import br.com.mexy.promo.model.Conquista;
 import br.com.mexy.promo.model.Usuario;
+import br.com.mexy.promo.model.UsuarioConquista;
 import br.com.mexy.promo.util.StaticInstances;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +52,10 @@ public class PerfilGeralActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private PostGeralFragment fragment = new PostGeralFragment();
     private Usuario usuario = new Usuario();
+    private RecyclerView recyclerConquistaGeral;
+    private Conquista conquista = new Conquista();
+    private List<UsuarioConquista> usuarioConquistas = new ArrayList<>();
+    private List<Conquista> conquistas = new ArrayList<>();
 
 
     @Override
@@ -92,7 +104,14 @@ public class PerfilGeralActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+        recyclerConquistaGeral = findViewById(R.id.recyclerConquistaGeral);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
+                this, LinearLayoutManager.HORIZONTAL,false);
+        recyclerConquistaGeral.setLayoutManager(layoutManager);
+
         recuperarUsuario(idUsuario);
+        recuperaUsuarioConquista(idUsuario);
 
     }
 
@@ -116,6 +135,51 @@ public class PerfilGeralActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void recuperaUsuarioConquista(Integer id) {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<List<UsuarioConquista>> usuarioConquistaCall = service.recuperarUsuarioConquistasAberto(id);
+
+        usuarioConquistaCall.enqueue(new Callback<List<UsuarioConquista>>() {
+            @Override
+            public void onResponse(Call<List<UsuarioConquista>> call, Response<List<UsuarioConquista>> response) {
+                if (response.isSuccessful()) {
+                    usuarioConquistas.clear();
+                    usuarioConquistas.addAll(response.body());
+                    for (UsuarioConquista a : usuarioConquistas) {
+                        recuperaConquistas(a.getConquista());
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<UsuarioConquista>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void recuperaConquistas(Integer id) {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<Conquista> conquistaCall = service.recuperaConquista(id);
+
+        conquistaCall.enqueue(new Callback<Conquista>() {
+            @Override
+            public void onResponse(Call<Conquista> call, Response<Conquista> response) {
+                if (response.isSuccessful()) {
+                    conquista = response.body();
+                    conquistas.add(conquista);
+                    ConquistaAdapter adapter2 = new ConquistaAdapter(conquistas);
+                    recyclerConquistaGeral.setAdapter(adapter2);
+                }
+            }
+            @Override
+            public void onFailure(Call<Conquista> call, Throwable t) {
 
             }
         });
