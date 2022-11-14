@@ -54,6 +54,11 @@ public class PromocaoFilterAdapter extends RecyclerView.Adapter<PromocaoFilterAd
                 .load(DataService.BASE_URL + promocao.getUsuario().getUrlImagem())
                 .error(R.drawable.ic_error)
                 .into(holder.imageViewUsuario);
+        if(promocao.getCurtidas().isEmpty()){
+            holder.textViewLike.setText(String.valueOf(0));
+        }else{
+            holder.textViewLike.setText(String.valueOf(promocao.getCurtidas().size()));
+        }
     }
 
     public void setListaPromocaoFiltro(List<Promocao> promocoesFiltro) {
@@ -109,6 +114,7 @@ public class PromocaoFilterAdapter extends RecyclerView.Adapter<PromocaoFilterAd
         private TextView textViewEstabelecimento;
         private ImageView imageViewProduto;
         private ImageView imageViewUsuario;
+        private  TextView textViewLike;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -117,6 +123,7 @@ public class PromocaoFilterAdapter extends RecyclerView.Adapter<PromocaoFilterAd
             textViewEstabelecimento = itemView.findViewById(R.id.textViewEstabelecimento);
             imageViewProduto = itemView.findViewById(R.id.imageViewProduto);
             imageViewUsuario = itemView.findViewById(R.id.imageViewUsuariop);
+            textViewLike = itemView.findViewById(R.id.textViewLike);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

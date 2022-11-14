@@ -30,7 +30,7 @@ public class PromocaoAdapter  extends RecyclerView.Adapter<PromocaoAdapter.MyVie
     @Override
     public PromocaoAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_perfil_promocao, parent, false);
+                .inflate(R.layout.card_estabelecimento_promocao, parent, false);
         return new PromocaoAdapter.MyViewHolder(itemLista);
 
     }
@@ -48,6 +48,7 @@ public class PromocaoAdapter  extends RecyclerView.Adapter<PromocaoAdapter.MyVie
                 .load(DataService.BASE_URL + estabelecimento.getUrlImagem())
                 .error(R.drawable.ic_error)
                 .into(holder.imageViewEstab);
+
     }
 
     @Override

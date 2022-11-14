@@ -2,11 +2,13 @@ package br.com.mexy.promo.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -22,10 +24,13 @@ import java.util.ArrayList;
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.activity.MainActivity;
 import br.com.mexy.promo.activity.ProdutoActivity;
+import br.com.mexy.promo.activity.PromocaoCompletaActivity;
+import br.com.mexy.promo.activity.PromocaoListActivity;
 import br.com.mexy.promo.adapter.PromocaoAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
+import br.com.mexy.promo.util.RecyclerItemClickListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,22 +79,35 @@ public class BottomSheetPromocao extends BottomSheetDialogFragment {
 
         recuperarEstabelecimentoPromocao(idEstabelecimento);
 
-/*
-        buttonPerfil.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getBaseContext(), PerfilActivity.class);
-                intent.putExtra("idArtesao", idArtesao);
-                startActivity(intent);
-            }
-        });*/
-/*
-        imageViewPerfil.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getBaseContext(), PerfilActivity.class);
-                intent.putExtra("idArtesao", idArtesao);
-                startActivity(intent);
-            }
-        });*/
+        recyclerEstabelecimento.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        myContext,
+                        recyclerEstabelecimento,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                iniciarActivityPromocaoCompleta(view, position);
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                iniciarActivityPromocaoCompleta(view, position);
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
+
+    }
+
+    private void iniciarActivityPromocaoCompleta(View view, int position) {
+        Intent intent = new Intent(myContext, PromocaoCompletaActivity.class);
+        intent.putExtra("promocao", promocoes.get(position));
+        startActivity(intent);
     }
 
 
@@ -134,8 +152,5 @@ public class BottomSheetPromocao extends BottomSheetDialogFragment {
             myContext=(MainActivity) activity;
         }
     }
-
-
-
 
 }

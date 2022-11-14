@@ -42,7 +42,7 @@ public class AvaliacaoAdapter extends RecyclerView.Adapter<AvaliacaoAdapter.MyVi
     public void onBindViewHolder(@NonNull AvaliacaoAdapter.MyViewHolder holder, int position) {
         final Avaliacao avaliacao = avaliacaos.get(position);
         Picasso.get()
-                .load(DataService.BASE_URL + usuario.getUrlImagem())
+                .load(DataService.BASE_URL + avaliacao.getUsuarioComp().getUrlImagem())
                 .error(R.drawable.ic_error)
                 .into(holder.imageViewUsuario);
         holder.textDescricao.setText(avaliacao.getDescricao());

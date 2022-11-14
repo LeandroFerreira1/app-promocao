@@ -3,6 +3,7 @@ package br.com.mexy.promo.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +31,12 @@ import br.com.mexy.promo.adapter.PromocaoFilterAdapter;
 import br.com.mexy.promo.adapter.PromocaoListAdapter;
 import br.com.mexy.promo.api.DataService;
 import br.com.mexy.promo.model.Avaliacao;
+import br.com.mexy.promo.model.Curtida;
 import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.Usuario;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,6 +65,11 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
     private Integer avaliacaoNota = 0;
     private RecyclerView recyclerAvaliacoes;
     private AvaliacaoAdapter adapter;
+    private List<Curtida> curtidas = new ArrayList<>();
+    private ImageButton curtida;
+    private Curtida postCurtida = new Curtida();
+    private Curtida curtidaUsuario = new Curtida();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         buttonAvaliarPromocao = (Button) findViewById(R.id.buttonAvaliarPromocao);
         imageButtonUsuario = (ImageButton) findViewById(R.id.imageButtonUsuario);
         recyclerAvaliacoes = (RecyclerView) findViewById(R.id.recyclerAvaliacoes);
+        curtida = (ImageButton) findViewById(R.id.curtida);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
@@ -99,8 +108,8 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         logado(token);
         avaliacao();
         buscarPromocao();
-
-
+        curtidaUsuario(token, promocaoId.getId());
+        buscarCurtida(promocaoId.getId());
 
         buttonAvaliarPromocao.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +143,21 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
+            }
+        });
+
+        curtida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                curtidaUsuario(token, promocaoId.getId());
+                if(curtidaUsuario.getUsuario() == null){
+                    curtir(token, promocaoId.getId());
+                    curtidaUsuario = new Curtida();
+                }else{
+                    descurtir(token, promocaoId.getId());
+                    curtidaUsuario = new Curtida();
+                }
+
             }
         });
 
@@ -190,6 +214,96 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void curtidaUsuario (String token, Integer id) {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<Curtida> usuarioCall = service.buscarCurtidaUsuario(token, id);
+
+        usuarioCall.enqueue(new Callback<Curtida>() {
+            @Override
+            public void onResponse(Call<Curtida> call, Response<Curtida> response) {
+                if (response.isSuccessful()) {
+                    curtidaUsuario = response.body();
+                    curtida.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
+                }
+            }
+            @Override
+            public void onFailure(Call<Curtida> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void curtir(String token, Integer id) {
+        postCurtida.setPromocao(id);
+        postCurtida.setUsuario(0);
+        DataService service = retrofit.create(DataService.class);
+        final Call<Curtida> usuarioCall = service.registrarCurtida(token, postCurtida);
+
+        usuarioCall.enqueue(new Callback<Curtida>() {
+            @Override
+            public void onResponse(Call<Curtida> call, Response<Curtida> response) {
+                if (response.isSuccessful()) {
+                    curtida.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
+                    buscarCurtida(promocaoId.getId());
+                    curtidaUsuario = new Curtida();
+                }
+            }
+            @Override
+            public void onFailure(Call<Curtida> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void buscarCurtida(Integer id) {
+        DataService service = retrofit.create(DataService.class);
+        final Call <List<Curtida>> usuarioCall = service.buscarCurtidas(id);
+
+        usuarioCall.enqueue(new Callback<List<Curtida>>() {
+            @Override
+            public void onResponse(Call<List<Curtida>> call, Response<List<Curtida>> response) {
+                if (response.isSuccessful()) {
+                    curtidas.clear();
+                    curtidas.addAll(response.body());
+                    if(curtidas.isEmpty()){
+                        textViewLike.setText(String.valueOf(0));
+                    }else{
+                        textViewLike.setText(String.valueOf(curtidas.size()));
+                    }
+
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Curtida>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void descurtir(String token, Integer id) {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<ResponseBody> curtidaCall = service.deletarCurtida(id, token);
+
+        curtidaCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    curtida.setImageDrawable(getResources().getDrawable(R.drawable.ic_deslik));
+                    buscarCurtida(promocaoId.getId());
+                    curtidaUsuario = new Curtida();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+
 
     private void buscarPromocao() {
 

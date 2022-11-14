@@ -6,6 +6,7 @@ import java.util.Map;
 
 import br.com.mexy.promo.model.Avaliacao;
 import br.com.mexy.promo.model.Conquista;
+import br.com.mexy.promo.model.Curtida;
 import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Produto;
@@ -17,8 +18,10 @@ import br.com.mexy.promo.model.Usuario;
 import br.com.mexy.promo.model.UsuarioConquista;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -53,6 +56,9 @@ public interface DataService {
 
     @POST("/api/v1/promocoes/")
     Call<PromocaoCad> registrarPromocao(@Header("Authorization") String token, @Body PromocaoCad promocao);
+
+    @DELETE("/api/v1/promocoes/{id}")
+    Call<ResponseBody> deletarPromocao(@Path("id") Integer id, @Header("Authorization") String token);
 
     @POST("/api/v1/avaliacoes/")
     Call<Avaliacao> registrarAvaliacao(@Header("Authorization") String token, @Body Avaliacao avaliacao);
@@ -127,4 +133,16 @@ public interface DataService {
 
     @GET("/api/v1/conquistas/{id}")
     Call<Conquista> recuperaConquista(@Path("id") Integer id);
+
+    @POST("/api/v1/curtidas/")
+    Call<Curtida> registrarCurtida(@Header("Authorization") String token, @Body Curtida curtida);
+
+    @GET("/api/v1/curtidas/curtidas_promocao/{id}")
+    Call<List<Curtida>> buscarCurtidas(@Path("id") Integer id);
+
+    @GET("/api/v1/curtidas/curtida_usuario/{id}")
+    Call<Curtida> buscarCurtidaUsuario(@Header("Authorization") String token, @Path("id") Integer id);
+
+    @DELETE("/api/v1/curtidas/{id}")
+    Call<ResponseBody> deletarCurtida(@Path("id") Integer id, @Header("Authorization") String token);
 }

@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Promocao implements Parcelable{
@@ -20,6 +21,8 @@ public class Promocao implements Parcelable{
 	private Integer curtida;
 
 	private Produto produto;
+
+	private ArrayList<Curtida> curtidas;
 
 	@SerializedName("criador")
 	private Usuario usuario;
@@ -128,6 +131,14 @@ public class Promocao implements Parcelable{
 	public void setEstabelecimento(Estabelecimento estabelecimento) {
 		this.estabelecimento = estabelecimento;
 	}
+	public ArrayList<Curtida> getCurtidas() {
+		return curtidas;
+	}
+
+	public void setCurtidas(ArrayList<Curtida> curtidas) {
+		this.curtidas = curtidas;
+	}
+
 
     public void onSelected(Promocao promocao) {
     }

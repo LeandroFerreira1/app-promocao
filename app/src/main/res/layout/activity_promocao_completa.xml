@@ -83,12 +83,13 @@
         app:layout_constraintEnd_toEndOf="@+id/imageViewProdu"
         tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:id="@+id/like"
+        <ImageButton
+            android:id="@+id/curtida"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/ic_like"
+            android:src="@drawable/ic_deslik"
+            android:background="#00000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +104,7 @@
             android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/like" />
+            app:layout_constraintStart_toEndOf="@+id/curtida" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

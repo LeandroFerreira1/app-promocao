@@ -1,5 +1,7 @@
 package br.com.mexy.promo.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Avaliacao {
 
 //	private Integer id;
@@ -10,6 +12,8 @@ public class Avaliacao {
 	private Integer nota;
 	private String latitude;
 	private String longitude;
+	@SerializedName("criador")
+	private Usuario usuario;
 
 	public Integer getUsuario() {
 		return usuario_id;
@@ -67,5 +71,12 @@ public class Avaliacao {
 		this.longitude = longitude;
 	}
 
+	public Usuario getUsuarioComp() {
+		return usuario;
+	}
+
+	public void setUsuarioComp (Usuario usuario) {
+		this.usuario = usuario;
+	}
 
 }

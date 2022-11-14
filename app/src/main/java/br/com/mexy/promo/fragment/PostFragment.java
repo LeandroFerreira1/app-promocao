@@ -2,13 +2,16 @@ package br.com.mexy.promo.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,8 +28,11 @@ import br.com.mexy.promo.activity.PerfilActivity;
 import br.com.mexy.promo.activity.PerfilGeralActivity;
 import br.com.mexy.promo.adapter.PromocaoCardAdapter;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.model.Curtida;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.Usuario;
+import br.com.mexy.promo.util.RecyclerItemClickListener;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +48,7 @@ public class PostFragment extends Fragment {
     private RecyclerView recyclerListPromo;
     private List<Promocao> promocoes = new ArrayList<>();
     private Usuario usuario = new Usuario();
+    PromocaoCardAdapter adapter;
 
     public PostFragment() {
         // Required empty public constructor
@@ -74,12 +81,49 @@ public class PostFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(myContext, 2 );
         recyclerListPromo.setLayoutManager( layoutManager );
 
-        PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
+        adapter = new PromocaoCardAdapter( promocoes );
         recyclerListPromo.setAdapter( adapter );
 
 
-        return view;
+        recyclerListPromo.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        myContext,
+                        recyclerListPromo,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                            }
 
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(myContext);
+
+                                //Configura título e mensagem
+                                dialog.setTitle("Confirmar exclusão");
+                                dialog.setMessage("Deseja excluir a oferta?");
+
+                                dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deletePromocao(token, position);
+                                    }
+                                });
+
+                                dialog.setNegativeButton("Não", null );
+                                //Exibir dialog
+                                dialog.create();
+                                dialog.show();
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            }
+                        }
+                )
+        );
+
+        return view;
     }
 
     private void logado(String token) {
@@ -124,6 +168,25 @@ public class PostFragment extends Fragment {
             }
         });
 
+    }
+
+    private void deletePromocao(String token, Integer id) {
+
+        DataService service = retrofit.create(DataService.class);
+        final Call<ResponseBody> curtidaCall = service.deletarPromocao(id, token);
+
+        curtidaCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
 

@@ -23,6 +23,7 @@ import br.com.mexy.promo.R;
 import br.com.mexy.promo.adapter.PromocaoFilterAdapter;
 import br.com.mexy.promo.adapter.PromocaoListAdapter;
 import br.com.mexy.promo.api.DataService;
+import br.com.mexy.promo.model.Curtida;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.util.RecyclerItemClickListener;
 import retrofit2.Call;
@@ -114,9 +115,6 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
             }
         });
 
-    }
-
-    private void setSupportActionBar(Toolbar toolbar) {
     }
 
 

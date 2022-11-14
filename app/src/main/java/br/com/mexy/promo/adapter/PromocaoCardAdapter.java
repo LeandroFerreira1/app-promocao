@@ -45,6 +45,11 @@ public class PromocaoCardAdapter extends RecyclerView.Adapter<PromocaoCardAdapte
                 .load(DataService.BASE_URL + promocao.getEstabelecimento().getUrlImagem())
                 .error(R.drawable.ic_error)
                 .into(holder.imageViewEstab);
+        if(promocao.getCurtidas().isEmpty()){
+            holder.textViewLike.setText(String.valueOf(0));
+        }else{
+            holder.textViewLike.setText(String.valueOf(promocao.getCurtidas().size()));
+        }
     }
 
     @Override
@@ -58,6 +63,7 @@ public class PromocaoCardAdapter extends RecyclerView.Adapter<PromocaoCardAdapte
         private TextView textViewPreco;
         private ImageView imageViewProduto;
         private ImageView imageViewEstab;
+        private  TextView textViewLike;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -65,6 +71,7 @@ public class PromocaoCardAdapter extends RecyclerView.Adapter<PromocaoCardAdapte
             textViewPreco = itemView.findViewById(R.id.textViewPreco);
             imageViewProduto = itemView.findViewById(R.id.imageViewProduto);
             imageViewEstab = itemView.findViewById(R.id.imageViewEstab);
+            textViewLike = itemView.findViewById(R.id.textViewLike);
         }
     }
 
