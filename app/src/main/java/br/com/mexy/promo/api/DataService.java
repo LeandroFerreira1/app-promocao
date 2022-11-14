@@ -117,7 +117,7 @@ public interface DataService {
     Call<Usuario> recuperarUsuario(@Path("id") Integer id);
 
     @POST("/api/v1/usuario-conquistas/")
-    Call<UsuarioConquista> registrarConquista(@Header("Authorization") String token, @Body UsuarioConquista conquista);
+    Call<UsuarioConquista> registrarConquista(@Header("Authorization") String token, @Body UsuarioConquista usuarioConquista);
 
     @GET("/api/v1/usuario-conquistas/")
     Call<List<UsuarioConquista>> recuperarUsuarioConquistas(@Header("Authorization") String token);

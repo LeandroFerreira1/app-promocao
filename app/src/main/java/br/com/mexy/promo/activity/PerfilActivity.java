@@ -35,6 +35,7 @@ import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.ResponseUsuario;
 import br.com.mexy.promo.model.Usuario;
 import br.com.mexy.promo.model.UsuarioConquista;
+import br.com.mexy.promo.util.Pontuacao;
 import br.com.mexy.promo.util.StaticInstances;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +52,7 @@ import java.util.List;
 public class PerfilActivity extends AppCompatActivity {
 
     private Retrofit retrofit;
-    Usuario usuario = new Usuario();
+    private Usuario usuario = new Usuario();
     private TextView textViewNome;
     private TextView textViewNota;
     private FloatingActionButton floatingActionButton;
@@ -63,6 +64,7 @@ public class PerfilActivity extends AppCompatActivity {
     private Conquista conquista = new Conquista();
     private List<UsuarioConquista> usuarioConquistas = new ArrayList<>();
     private List<Conquista> conquistas = new ArrayList<>();
+    private UsuarioConquista usuarioConquista = new UsuarioConquista();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,7 @@ public class PerfilActivity extends AppCompatActivity {
 
         logado(token);
         recuperaUsuarioConquista(token);
+       // verificaponto(token);
 
         floatingActionButton = findViewById(R.id.fab);
 
@@ -126,6 +129,8 @@ public class PerfilActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     private void logado(String token) {
@@ -137,15 +142,15 @@ public class PerfilActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful()) {
-                    usuario = response.body();
-                    textViewNome.setText(usuario.toString());
-                    textViewNota.setText(usuario.getPontuacao().toString());
+                    StaticInstances.usuario = response.body();
+                    textViewNome.setText(StaticInstances.usuario.toString());
+                    textViewNota.setText(StaticInstances.usuario.getPontuacao().toString());
                     Picasso.get()
-                            .load(DataService.BASE_URL + usuario.getUrlImagem())
+                            .load(DataService.BASE_URL + StaticInstances.usuario.getUrlImagem())
                             .error(R.drawable.ic_error)
                             .into(imageViewUsuario);
                     Bundle bundle = new Bundle();
-                    bundle.putInt("idUsuario", (Integer) usuario.getId());
+                    bundle.putInt("idUsuario", (Integer) StaticInstances.usuario.getId());
 
                 }
             }
@@ -175,8 +180,9 @@ public class PerfilActivity extends AppCompatActivity {
                     StaticInstances.usuarioConquistas.addAll(response.body());
                     usuarioConquistas = StaticInstances.usuarioConquistas;
                     for (UsuarioConquista a : usuarioConquistas) {
-                        recuperaConquistas(a.getConquista());
+                        recuperaConquistas(a.getConquista(), token);
                     }
+                    verificaPonto(token, conquistas);
                 }
             }
             @Override
@@ -186,7 +192,7 @@ public class PerfilActivity extends AppCompatActivity {
         });
     }
 
-    private void recuperaConquistas(Integer id) {
+    private void recuperaConquistas(Integer id, String token) {
 
         DataService service = retrofit.create(DataService.class);
         final Call<Conquista> conquistaCall = service.recuperaConquista(id);
@@ -204,6 +210,47 @@ public class PerfilActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Conquista> call, Throwable t) {
 
+            }
+        });
+    }
+
+    public void verificaPonto(String token, List<Conquista> conquistas1){
+        Integer ponto = StaticInstances.usuario.getPontuacao();
+
+        System.out.println("TESTE: TAMANHO"+ conquistas.size());
+        for (int i = 0; i <= ponto; i++) {
+            if( i == 15){
+                lancaponto(token, 1);
+            }else if(i == 45){
+                lancaponto(token, 2);
+            }else if(i == 75){
+                lancaponto(token, 3);
+            }else if(i == 150){
+                lancaponto(token, 4);
+            }else if(i == 300){
+                lancaponto(token, 5);
+            }else if(i == 600){
+                lancaponto(token, 6);
+            }
+        }
+    }
+
+    public void lancaponto(String token, Integer conquista) {
+
+        usuarioConquista.setConquista(conquista);
+        usuarioConquista.setUsuario(0);
+
+        System.out.println("TESTE CONQUISTA " + usuarioConquista.getConquista());
+        DataService service = retrofit.create(DataService.class);
+        final Call<UsuarioConquista> usuarioCall = service.registrarConquista(token, usuarioConquista);
+        usuarioCall.enqueue(new Callback<UsuarioConquista>() {
+            @Override
+            public void onResponse(Call<UsuarioConquista> call, Response<UsuarioConquista> response) {
+                if (response.isSuccessful()) {
+                }
+            }
+            @Override
+            public void onFailure(Call<UsuarioConquista> call, Throwable t) {
             }
         });
     }

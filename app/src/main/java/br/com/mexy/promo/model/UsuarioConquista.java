@@ -9,7 +9,7 @@ public class UsuarioConquista {
 		return usuario_id;
 	}
 
-	public void setUsuario(Integer usuario) {
+	public void setUsuario(Integer usuario_id) {
 		this.usuario_id = usuario_id;
 	}
 
@@ -17,7 +17,7 @@ public class UsuarioConquista {
 		return conquista_id;
 	}
 
-	public void setConquista(Integer conquista) {
+	public void setConquista(Integer conquista_id) {
 		this.conquista_id = conquista_id;
 	}
 
