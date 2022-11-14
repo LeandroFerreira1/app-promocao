@@ -105,7 +105,7 @@ public class PostFragment extends Fragment {
                                 dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        deletePromocao(token, position);
+                                        deletePromocao(token, promocoes.get(position).getId());
                                     }
                                 });
 
@@ -157,8 +157,7 @@ public class PostFragment extends Fragment {
 
                     promocoes.clear();
                     promocoes.addAll(response.body());
-                    PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
-                    recyclerListPromo.setAdapter( adapter );
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -179,7 +178,7 @@ public class PostFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    adapter.notifyDataSetChanged();
+                    recuperarPromocoes(usuario.getId());
                 }
             }
             @Override
