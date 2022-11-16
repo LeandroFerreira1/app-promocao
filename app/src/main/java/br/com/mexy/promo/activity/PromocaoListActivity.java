@@ -136,7 +136,6 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
 
                     promocoes.clear();
                     promocoes.addAll(response.body());
-                    System.out.println("TESTE "+ promocoes.get(1).getId());
                     adapter.notifyDataSetChanged();
                 }
             }

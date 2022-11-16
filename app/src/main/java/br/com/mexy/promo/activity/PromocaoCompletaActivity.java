@@ -67,6 +67,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
     private AvaliacaoAdapter adapter;
     private List<Curtida> curtidas = new ArrayList<>();
     private ImageButton curtida;
+    private ImageButton imageButtonCompartilhar;
     private Curtida postCurtida = new Curtida();
     private Curtida curtidaUsuario = new Curtida();
 
@@ -90,6 +91,8 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         imageButtonUsuario = (ImageButton) findViewById(R.id.imageButtonUsuario);
         recyclerAvaliacoes = (RecyclerView) findViewById(R.id.recyclerAvaliacoes);
         curtida = (ImageButton) findViewById(R.id.curtida);
+        imageButtonCompartilhar = (ImageButton) findViewById(R.id.imageButtonCompartilhar);
+
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
@@ -151,13 +154,27 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 curtidaUsuario(token, promocaoId.getId());
                 if(curtidaUsuario.getUsuario() == null){
+                    curtida.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
                     curtir(token, promocaoId.getId());
                     curtidaUsuario = new Curtida();
                 }else{
+                    curtida.setImageDrawable(getResources().getDrawable(R.drawable.ic_deslik));
                     descurtir(token, promocaoId.getId());
                     curtidaUsuario = new Curtida();
                 }
 
+            }
+        });
+
+        imageButtonCompartilhar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "O Guia das ofertas tem novidade para você: " + promocao.getProduto().getNome() + " - R$ "+ promocao.getValorPromocional() + " Logo alí no: "+ promocao.getEstabelecimento().getNome());
+                sendIntent.setType("text/plain");
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
             }
         });
 
@@ -245,7 +262,6 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Curtida> call, Response<Curtida> response) {
                 if (response.isSuccessful()) {
-                    curtida.setImageDrawable(getResources().getDrawable(R.drawable.ic_like));
                     buscarCurtida(promocaoId.getId());
                     curtidaUsuario = new Curtida();
                 }
@@ -291,7 +307,6 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    curtida.setImageDrawable(getResources().getDrawable(R.drawable.ic_deslik));
                     buscarCurtida(promocaoId.getId());
                     curtidaUsuario = new Curtida();
                 }

@@ -36,7 +36,7 @@ import retrofit2.http.Query;
 
 public interface DataService {
 
-    public static final String BASE_URL = "http://10.0.0.173:8000";
+    public static final String BASE_URL = "http://172.16.2.61:8000";
    // String API_KEY = "501e0a13-f1ed-4c86-b7ec-c36d8b55c7ae";
 
     @GET("/api/v1/promocoes/")
