@@ -34,6 +34,7 @@ import br.com.mexy.promo.model.PromocaoCad;
 import br.com.mexy.promo.util.CustomInterface;
 import br.com.mexy.promo.util.Mask;
 import br.com.mexy.promo.util.MoneyTextWatcher;
+import br.com.mexy.promo.util.Pontuacao;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -160,6 +161,7 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
             @Override
             public void onResponse(Call<PromocaoCad> call, Response<PromocaoCad> response) {
                 if (response.isSuccessful()) {
+                    Pontuacao.alteraponto(retrofit, token, 10);
                     Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
                     startActivity(intent);
                     finish();

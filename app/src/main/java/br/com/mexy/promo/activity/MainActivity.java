@@ -146,6 +146,9 @@ public class MainActivity extends AppCompatActivity
 
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.maps_style));
 
+        LatLng localUsuario = new LatLng(-20.843044, -41.122878);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(localUsuario,12));
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -194,8 +197,8 @@ public class MainActivity extends AppCompatActivity
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
                 //-23.593054, -46.663584
                 //-23.590679, -46.652288
-                LatLng localUsuario = new LatLng(latitude, longitude);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(localUsuario,15));
+                //LatLng localUsuario = new LatLng(latitude, longitude);
+                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(localUsuario,15));
 
             }
 

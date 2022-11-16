@@ -247,6 +247,13 @@ public class PerfilActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UsuarioConquista> call, Response<UsuarioConquista> response) {
                 if (response.isSuccessful()) {
+                    UsuarioConquista usuarioConquista = response.body();
+                    if(usuarioConquista.getConquista() == 1){
+                        Pontuacao.alteraponto(retrofit, token, 50);
+                    }else{
+                        Pontuacao.alteraponto(retrofit, token, 20);
+                    }
+
                 }
             }
             @Override

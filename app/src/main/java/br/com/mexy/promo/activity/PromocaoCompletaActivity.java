@@ -36,6 +36,7 @@ import br.com.mexy.promo.model.Departamento;
 import br.com.mexy.promo.model.Estabelecimento;
 import br.com.mexy.promo.model.Promocao;
 import br.com.mexy.promo.model.Usuario;
+import br.com.mexy.promo.util.Pontuacao;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -175,6 +176,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
                 sendIntent.setType("text/plain");
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
                 startActivity(shareIntent);
+                Pontuacao.alteraponto(retrofit, token, 2);
             }
         });
 
