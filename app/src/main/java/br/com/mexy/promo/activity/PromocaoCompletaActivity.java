@@ -59,6 +59,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
     private TextView textViewEstabelecimento;
     private TextView textViewDataValidade;
     private TextView textViewAvaliacao;
+    private TextView textViewPrecoOriginal;
     private Button buttonAvaliarPromocao;
     private ImageButton imageButtonUsuario;
     private Usuario usuario = new Usuario();
@@ -71,6 +72,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
     private ImageButton imageButtonCompartilhar;
     private Curtida postCurtida = new Curtida();
     private Curtida curtidaUsuario = new Curtida();
+    private TextView textViewMarca;
 
 
     @Override
@@ -83,7 +85,6 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         imageViewEstabelecimento = (ImageView) findViewById(R.id.imageViewEstabelecimento);
         textViewLike = (TextView) findViewById(R.id.textViewLike);
         textViewNomeProduto = (TextView) findViewById(R.id.textViewNomeProduto);
-        textViewDepartamentoProduto = (TextView) findViewById(R.id.textViewDepartamentoProduto);
         textViewEstabelecimento = (TextView) findViewById(R.id.textViewEstabelecimento);
         textViewDataValidade = (TextView) findViewById(R.id.textViewDataValidade);
         textViewAvaliacao = (TextView) findViewById(R.id.textViewAvaliacao);
@@ -93,6 +94,8 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
         recyclerAvaliacoes = (RecyclerView) findViewById(R.id.recyclerAvaliacoes);
         curtida = (ImageButton) findViewById(R.id.curtida);
         imageButtonCompartilhar = (ImageButton) findViewById(R.id.imageButtonCompartilhar);
+        textViewMarca = findViewById(R.id.textViewMarca);
+        textViewPrecoOriginal = findViewById(R.id.textViewPrecoOriginal);
 
 
         retrofit = new Retrofit.Builder()
@@ -128,6 +131,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
                     Intent intent = new Intent(PromocaoCompletaActivity.this, AvaliacaoActivity.class);
                     intent.putExtra("promocao", promocaoId);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -348,10 +352,16 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
                     //textViewLike.setText(promocao.getCurtida());
 
                     textViewNomeProduto.setText(promocao.getProduto().getNome());
+                    textViewMarca.setText(promocao.getProduto().getMarca());
                     //textViewDepartamentoProduto.setText(promocao.getProduto().getDepartamento());
                     textViewEstabelecimento.setText(promocao.getEstabelecimento().getNome());
-                    textViewDataValidade.setText(promocao.getDataValidade());
+                    if(promocao.getDataValidade() != null){
+                        textViewDataValidade.setText(promocao.getDataValidade());
+                    }
                     textViewPrecoPromocional.setText("R$ "+promocao.getValorPromocional());
+                    if(promocao.getValorOriginal() != null){
+                        textViewPrecoOriginal.setText("R$ "+promocao.getValorOriginal());
+                    }
 
                 }
             }
@@ -362,6 +372,13 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(getBaseContext(), PromocaoListActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

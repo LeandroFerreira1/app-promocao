@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -43,6 +44,7 @@ public class RankingFragment extends Fragment {
     private RecyclerView recyclerRanking;
     private List<Usuario> usuarios = new ArrayList<>();
     private Usuario usuario = new Usuario();
+    private ProgressBar progressBar;
 
 
     public RankingFragment() {
@@ -61,6 +63,7 @@ public class RankingFragment extends Fragment {
                 .build();
 
         recyclerRanking = view.findViewById(R.id.recyclerRanking);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         //Define layout
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(myContext, 1 );
@@ -107,6 +110,8 @@ public class RankingFragment extends Fragment {
 
     private void recuperarRanking() {
 
+        progressBar.setVisibility(View.VISIBLE);
+
         DataService service = retrofit.create(DataService.class);
         Call<List<Usuario>> promocaoCall = service.ranking();
 
@@ -119,6 +124,8 @@ public class RankingFragment extends Fragment {
                     usuarios.addAll(response.body());
                     RankingAdapter adapter = new RankingAdapter( usuarios );
                     recyclerRanking.setAdapter( adapter );
+
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

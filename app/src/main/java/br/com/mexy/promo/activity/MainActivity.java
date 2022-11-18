@@ -19,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import br.com.mexy.promo.R;
 import br.com.mexy.promo.api.DataService;
@@ -94,6 +100,12 @@ public class MainActivity extends AppCompatActivity
 
         recuperarEstabelecimentos();
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recuperarEstabelecimentos();
+            }
+        }, 5000);
     }
 
     @Override
@@ -113,9 +125,12 @@ public class MainActivity extends AppCompatActivity
 
                 if (res == null) {
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    finish();
+
                 } else {
                     Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
                     startActivity(intent);
+                    finish();
                 }
 
                 break;
@@ -338,6 +353,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onMarkerClick(Marker marker) {
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recuperarEstabelecimentos();
     }
 
 }

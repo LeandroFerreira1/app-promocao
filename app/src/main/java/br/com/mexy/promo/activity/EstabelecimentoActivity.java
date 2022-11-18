@@ -1,6 +1,8 @@
 package br.com.mexy.promo.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,6 +26,7 @@ public class EstabelecimentoActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private List<Estabelecimento> estabelecimentos = new ArrayList<>();
     private RecyclerView recyclerEstabelecimento;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class EstabelecimentoActivity extends AppCompatActivity {
                 .build();
 
         recyclerEstabelecimento = findViewById(R.id.recyclerEstabelecimento);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         //Define layout
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 1 );
@@ -50,6 +54,8 @@ public class EstabelecimentoActivity extends AppCompatActivity {
 
     private void recuperarEstabelecimentos() {
 
+        progressBar.setVisibility(View.VISIBLE);
+
         DataService service = retrofit.create(DataService.class);
         Call<List<Estabelecimento>> estabelecimentoCall = service.recuperarEstabelecimentos();
 
@@ -62,6 +68,8 @@ public class EstabelecimentoActivity extends AppCompatActivity {
                     estabelecimentos.addAll(response.body());
                     EstabelecimentoAdapter adapter = new EstabelecimentoAdapter(estabelecimentos);
                     recyclerEstabelecimento.setAdapter(adapter);
+
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

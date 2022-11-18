@@ -82,6 +82,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     private Bitmap imagem;
     private String dadosImagem;
     private File file;
+    private Button buttonADD;
 
     private int validador = 0;
     private int validadorBusca = 0;
@@ -101,11 +102,11 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
         barcodeResultView = findViewById(R.id.EditTextEan);
         allowManualInput = true;
-
         editNomeProduto = findViewById(R.id.editNomeProduto);
         editMarca = findViewById(R.id.editMarca);
         imageViewProduto =findViewById(R.id.imageViewProduto);
         imageButtonFoto = (ImageButton)findViewById(R.id.imageButtonFoto);
+        buttonADD =(Button) findViewById(R.id.buttonADD);
 
 
         retrofit = new Retrofit.Builder()
@@ -124,12 +125,27 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     startActivity(i);
                     finish();
                 }else if(result != null){
-                    produtoAlterado.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
-                    alteraProdutos(idProduto);
+                    //produtoAlterado.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
+                    Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
+                    i.putExtra("produto", valueOf(result.getId()));
+                    startActivity(i);
+                    finish();
                 }else if(validador == 500){
-                    produtoAlteradoCompleto.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
+                    //produtoAlteradoCompleto.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
                     cadastraProdutoManual(idProduto);
                 }
+            }
+        });
+
+        buttonADD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(codigo != null){
+                    buscarProduto(codigo);
+                }else {
+                    Toast.makeText(ProdutoActivity.this, "Escaneie ou Digite um código de Barras", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -179,7 +195,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                         "%s",
                         barcode.getRawValue());
         codigo = barcodeValue;
-        buscarProduto(codigo);
         return getString(R.string.barcode_result, barcodeValue);
     }
 
@@ -204,7 +219,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         idProduto = new BigInteger(ean);
         editNomeProduto.setFocusable(true);
         editMarca.setFocusable(true);
-        spinner.setFocusable(true);
+        //spinner.setFocusable(true);
         imageButtonFoto.setVisibility(View.VISIBLE);
         imageButtonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,7 +302,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     imageButtonFoto.setVisibility(View.GONE);
                     editNomeProduto.setFocusable(false);
                     editMarca.setFocusable(false);
-                    spinner.setFocusable(false);
+                    //spinner.setFocusable(false);
                 }else{
                     switch (response.code()) {
                         case 404:
@@ -347,8 +362,8 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     }
 
     //metodo de alteração de departamento quando vem do scrap
-
-    private void alteraProdutos(BigInteger id) {
+/*
+    private void alteraProdutos() {
         DataService service = retrofit.create(DataService.class);
         Call<Produto> produtoCall = service.alterarProduto(id, produtoAlterado);
 
@@ -358,11 +373,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onResponse(Call<Produto> call, Response<Produto> response) {
                 if (response.isSuccessful()) {
-                    produto = response.body();
-                    Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
-                    i.putExtra("produto", valueOf(produto.getId()));
-                    startActivity(i);
-                    finish();
+
                 }
             }
             @Override
@@ -371,7 +382,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             }
         });
 
-    }
+    }*/
 
     //metodo de cadastro manual do produto
 
@@ -524,6 +535,13 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     public void callbackMethodPhoto(String photo) throws IOException {
         dadosImagem = photo;
         publicarImagemProduto(dadosImagem);
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
+        finish();
+        startActivity(intent);
     }
 
 }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -49,6 +50,7 @@ public class PostFragment extends Fragment {
     private List<Promocao> promocoes = new ArrayList<>();
     private Usuario usuario = new Usuario();
     PromocaoCardAdapter adapter;
+    private ProgressBar progressBar;
 
     public PostFragment() {
         // Required empty public constructor
@@ -76,6 +78,7 @@ public class PostFragment extends Fragment {
         logado(token);
 
         recyclerListPromo = view.findViewById(R.id.recyclerListPromo);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         //Define layout
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(myContext, 2 );
@@ -147,6 +150,8 @@ public class PostFragment extends Fragment {
 
     private void recuperarPromocoes(Integer id) {
 
+        progressBar.setVisibility(View.VISIBLE);
+
         DataService service = retrofit.create(DataService.class);
         Call<List<Promocao>> promocaoCall = service.recuperarPromocoesUsuario(id);
 
@@ -158,6 +163,7 @@ public class PostFragment extends Fragment {
                     promocoes.clear();
                     promocoes.addAll(response.body());
                     adapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

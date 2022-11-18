@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,7 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
     private View view;
     PromocaoFilterAdapter adapter;
     private SearchView searchViewPesquisa;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
         setContentView(R.layout.activity_promocao_list);
 
         searchViewPesquisa = findViewById(R.id.searchViewPesquisa);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 
         retrofit = new Retrofit.Builder()
@@ -75,11 +78,13 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
                             @Override
                             public void onItemClick(View view, int position) {
                                 iniciarActivityPromocaoCompleta(view, position);
+                                finish();
                             }
 
                             @Override
                             public void onLongItemClick(View view, int position) {
                                 iniciarActivityPromocaoCompleta(view, position);
+                                finish();
                             }
 
                             @Override
@@ -125,7 +130,7 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
     }
 
     private void recuperarPromocoes() {
-
+        progressBar.setVisibility(View.VISIBLE);
         DataService service = retrofit.create(DataService.class);
         Call<List<Promocao>> promocaoCall = service.recuperarPromocoes();
 
@@ -137,6 +142,7 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
                     promocoes.clear();
                     promocoes.addAll(response.body());
                     adapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 

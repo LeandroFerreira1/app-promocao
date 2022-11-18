@@ -116,7 +116,7 @@ public class AvaliacaoActivity extends AppCompatActivity {
             public void onResponse(Call<Avaliacao> call, Response<Avaliacao> response) {
                 if (response.isSuccessful()) {
                     avaliacao = response.body();
-                    Intent intent = new Intent(AvaliacaoActivity.this, MainActivity.class);
+                    Intent intent = new Intent(AvaliacaoActivity.this, PromocaoListActivity.class);
                     startActivity(intent);
                     finish();
                 }else{

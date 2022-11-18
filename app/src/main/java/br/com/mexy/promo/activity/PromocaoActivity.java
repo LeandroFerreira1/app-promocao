@@ -187,4 +187,11 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
     public void callbackMethodPhoto(String photo) {
 
     }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(getBaseContext(), PerfilActivity.class);
+        finish();
+        startActivity(intent);
+    }
 }

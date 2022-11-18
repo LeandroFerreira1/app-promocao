@@ -128,7 +128,7 @@
         android:layout_margin="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPrecoPromocional"
+        app:layout_constraintTop_toBottomOf="@+id/preco"
         tools:ignore="MissingConstraints">
 
         <TextView
@@ -173,7 +173,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageViewProdu" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewMarca"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
@@ -181,44 +181,76 @@
         android:gravity="center"
         android:padding="5dp"
         android:text=""
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textViewNomeProduto"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNomeProduto" />
-
-
-    <TextView
-        android:id="@+id/textViewDepartamentoProduto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text=""
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/textViewNomeProduto"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNomeProduto" />
-
-    <TextView
-        android:id="@+id/textViewPrecoPromocional"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:ems="10"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text=""
-        android:textSize="20sp"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewNomeProduto"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNomeProduto" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/preco"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewMarca">
+
+        <TextView
+            android:id="@+id/original"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Preço Original:"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/textViewPrecoOriginal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="4"
+            android:padding="5dp"
+            android:text=""
+
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/original"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/promocao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Preço Promocional:"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintStart_toEndOf="@+id/textViewPrecoOriginal"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/textViewPrecoPromocional"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:ems="4"
+            android:padding="5dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/promocao"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
     <TextView
         android:id="@+id/texto"

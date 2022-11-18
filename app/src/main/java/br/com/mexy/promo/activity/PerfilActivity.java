@@ -261,4 +261,11 @@ public class PerfilActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        finish();
+        startActivity(intent);
+    }
 }
