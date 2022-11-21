@@ -76,7 +76,7 @@ public interface DataService {
     Call<List<Produto>> buscarProdutos();
 
     @GET("/api/v1/produtos/{id}")
-    Call<Produto> buscarProduto(@Path("id") BigInteger id);
+    Call<Produto> buscarProduto(@Path("id") String id);
 
     @PATCH("/api/v1/produtos/{id}")
     Call<Produto> alterarProduto(@Path("id") BigInteger id, @Body Produto produto);
@@ -90,7 +90,7 @@ public interface DataService {
     @POST("/api/v1/upload-images/{id}")
     @Multipart
     Call<String> uploadImageProduto(
-            @Path("id") BigInteger id,
+            @Path("ean") String ean,
             @Part MultipartBody.Part file);
 
     @GET("/api/v1/usuarios")

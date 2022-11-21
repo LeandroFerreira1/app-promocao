@@ -132,7 +132,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     finish();
                 }else if(validador == 500){
                     //produtoAlteradoCompleto.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
-                    cadastraProdutoManual(idProduto);
+                    cadastraProdutoManual(codigo);
                 }
             }
         });
@@ -216,7 +216,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     private void configurarCadastro(String ean){
         validador = 500;
-        idProduto = new BigInteger(ean);
         editNomeProduto.setFocusable(true);
         editMarca.setFocusable(true);
         //spinner.setFocusable(true);
@@ -234,7 +233,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 //cadastra o produto via ean
     private void registrarProdutoEan(final String ean) {
         progressBar.setVisibility(View.VISIBLE);
-        idProduto = new BigInteger(ean);
         DataService service = retrofit.create(DataService.class);
         final Call<Result> produtoCall = service.registrarProdutoEan(ean);
         produtoCall.enqueue(new Callback<Result>() {
@@ -279,11 +277,10 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     //metodo de busca no banco de dados de produto se não encontrar, busca no metodo de scrap
 
-    private void buscarProduto(final String str) {
+    private void buscarProduto(final String ean) {
 
-        idProduto = new BigInteger(str);
         DataService service = retrofit.create(DataService.class);
-        final Call<Produto> produtoCall = service.buscarProduto(idProduto);
+        final Call<Produto> produtoCall = service.buscarProduto(ean);
 
         produtoCall.enqueue(new Callback<Produto>() {
             @Override
@@ -307,7 +304,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     switch (response.code()) {
                         case 404:
                             progressBar.setVisibility(View.GONE);
-                            registrarProdutoEan(str);
+                            registrarProdutoEan(ean);
                             break;
                         case 500:
                             Toast.makeText(ProdutoActivity.this, "Produto não localizado, favor cadastrar!", Toast.LENGTH_SHORT).show();
@@ -386,8 +383,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
     //metodo de cadastro manual do produto
 
-    private void cadastraProdutoManual(BigInteger id) {
-        produtoAlteradoCompleto.setId(id);
+    private void cadastraProdutoManual(String ean) {
+        produtoAlteradoCompleto.setId(0);
+        produtoAlteradoCompleto.setEan(ean);
         produtoAlteradoCompleto.setNome((String) editNomeProduto.getText().toString());
         produtoAlteradoCompleto.setMarca((String) editMarca.getText().toString());
 
@@ -399,7 +397,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             public void onResponse(Call<Produto> call, Response<Produto> response) {
                 if (response.isSuccessful()) {
                     produtoCadastro = response.body();
-                    uploadImageProduto(produtoCadastro.getId(),file);
+                    uploadImageProduto(produtoCadastro.getEan(),file);
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
                     i.putExtra("produto", valueOf(produtoCadastro.getId()));
                     startActivity(i);
@@ -423,9 +421,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         return MultipartBody.Part.createFormData(partName, file.getName(), requestBody);
     }
 
-    private void uploadImageProduto(BigInteger id, File file){
+    private void uploadImageProduto(String ean, File file){
         DataService service = retrofit.create(DataService.class);
-        final Call<String> postCall = service.uploadImageProduto(id, prepareFilePart("file", file));
+        final Call<String> postCall = service.uploadImageProduto(ean, prepareFilePart("file", file));
 
         postCall.enqueue(new Callback<String>() {
             @Override

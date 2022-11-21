@@ -9,18 +9,27 @@ import java.math.BigInteger;
 
 public class Produto {
 
-	private BigInteger id;
+	private Integer id;
+	private String ean;
 	private String nome;
 	private String marca;
 	private Integer departamento_id;
 	private String urlImagem;
 
-	public BigInteger getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(BigInteger id) {
+	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getEan() {
+		return ean;
+	}
+
+	public void setEan(String ean) {
+		this.ean = ean;
 	}
 
 	public String getNome() {

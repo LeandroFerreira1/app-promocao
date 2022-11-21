@@ -122,9 +122,8 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
 
     private void buscarProduto(final String str) {
 
-        BigInteger id = new BigInteger(str);
         DataService service = retrofit.create(DataService.class);
-        final Call<Produto> produtoCall = service.buscarProduto(id);
+        final Call<Produto> produtoCall = service.buscarProduto(str);
 
         produtoCall.enqueue(new Callback<Produto>() {
             @Override

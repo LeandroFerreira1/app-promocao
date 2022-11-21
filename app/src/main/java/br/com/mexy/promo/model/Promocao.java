@@ -19,7 +19,6 @@ public class Promocao implements Parcelable{
 	@SerializedName("data_validade")
 	private String dataValidade;
 
-
 	private Integer curtida;
 
 	private Produto produto;

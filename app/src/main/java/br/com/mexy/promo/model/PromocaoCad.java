@@ -21,7 +21,7 @@ public class PromocaoCad {
 
     private  Integer estabelecimento_id;
 
-    private BigInteger produto_id;
+    private Integer produto_id;
 
     public Integer getId() {
         return id;
@@ -55,11 +55,11 @@ public class PromocaoCad {
         this.data_validade = data_validade;
     }
 
-    public BigInteger getProduto() {
+    public Integer getProduto() {
         return produto_id;
     }
 
-    public void setProduto(BigInteger produto_id) {
+    public void setProduto(Integer produto_id) {
         this.produto_id = produto_id;
     }
 
