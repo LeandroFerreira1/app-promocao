@@ -113,7 +113,7 @@ public class PostGeralFragment extends Fragment {
 
     private void recuperarPromocoes(Integer id) {
 
-        progressBar.setVisibility(View.VISIBLE);
+       // progressBar.setVisibility(View.VISIBLE);
 
         DataService service = retrofit.create(DataService.class);
         Call<List<Promocao>> promocaoCall = service.recuperarPromocoesUsuario(id);
@@ -127,7 +127,7 @@ public class PostGeralFragment extends Fragment {
                     promocoes.addAll(response.body());
                     PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
                     recyclerListPromo.setAdapter( adapter );
-                    progressBar.setVisibility(View.GONE);
+                  //  progressBar.setVisibility(View.GONE);
                 }
             }
 

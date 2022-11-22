@@ -121,13 +121,13 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             public void onClick(View v) {
                 if(validadorBusca == 600){
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
-                    i.putExtra("produto", valueOf(produto.getId()));
+                    i.putExtra("produto", valueOf(produto.getEan()));
                     startActivity(i);
                     finish();
                 }else if(result != null){
                     //produtoAlterado.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
-                    i.putExtra("produto", valueOf(result.getId()));
+                    i.putExtra("produto", valueOf(result.getEan()));
                     startActivity(i);
                     finish();
                 }else if(validador == 500){
@@ -399,7 +399,7 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     produtoCadastro = response.body();
                     uploadImageProduto(produtoCadastro.getEan(),file);
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
-                    i.putExtra("produto", valueOf(produtoCadastro.getId()));
+                    i.putExtra("produto", valueOf(produtoCadastro.getEan()));
                     startActivity(i);
                     finish();
                 }
