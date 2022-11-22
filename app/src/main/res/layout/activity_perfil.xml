@@ -71,6 +71,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewNome"
         tools:ignore="MissingConstraints" />
 
+    <TextView
+        android:id="@+id/textmensagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ganhe pontos e conquiste novas Tags!"
+        android:textColor="@color/red_primary"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout3"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
@@ -79,6 +91,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNome"
         tools:ignore="MissingConstraints">
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerConquista"

@@ -12,6 +12,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textmensagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ainda não existe postagens aqui!"
+        android:textColor="@color/red_primary"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerListPromo"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerListPromo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerListPromo" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

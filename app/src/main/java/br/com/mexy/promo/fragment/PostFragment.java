@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -51,6 +52,8 @@ public class PostFragment extends Fragment {
     private Usuario usuario = new Usuario();
     PromocaoCardAdapter adapter;
     private ProgressBar progressBar;
+    private TextView textmensagem;
+
 
     public PostFragment() {
         // Required empty public constructor
@@ -67,7 +70,7 @@ public class PostFragment extends Fragment {
 
         String token = "Bearer " + res;
 
-        System.out.println("TESTE: "+ token);
+        textmensagem = view.findViewById(R.id.textmensagem);
 
 
         retrofit = new Retrofit.Builder()
@@ -162,6 +165,9 @@ public class PostFragment extends Fragment {
 
                     promocoes.clear();
                     promocoes.addAll(response.body());
+                    if(promocoes.isEmpty()){
+                        textmensagem.setVisibility(View.VISIBLE);
+                    }
                     adapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.GONE);
                 }

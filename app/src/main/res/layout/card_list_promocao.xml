@@ -27,7 +27,6 @@
             android:id="@+id/imageViewProduto"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/teste"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             app:layout_constraintEnd_toEndOf="parent"

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
@@ -55,6 +56,7 @@ public class PerfilActivity extends AppCompatActivity {
     private Usuario usuario = new Usuario();
     private TextView textViewNome;
     private TextView textViewNota;
+    private TextView textmensagem;
     private FloatingActionButton floatingActionButton;
     private ImageView imageViewUsuario;
     private SmartTabLayout smartTabLayout;
@@ -96,6 +98,7 @@ public class PerfilActivity extends AppCompatActivity {
         viewPager.setAdapter( adapter );
         smartTabLayout.setViewPager( viewPager );
 
+        textmensagem = findViewById(R.id.textmensagem);
         textViewNome = findViewById(R.id.textViewNome);
         textViewNota = findViewById(R.id.textViewNota);
         imageViewUsuario = findViewById(R.id.imageViewUsuario);
@@ -115,7 +118,16 @@ public class PerfilActivity extends AppCompatActivity {
         recyclerConquista.setLayoutManager(layoutManager);
 
         logado(token);
-        recuperaUsuarioConquista(token);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recuperaUsuarioConquista(token);
+            }
+        }, 2000);
+
+
+
        // verificaponto(token);
 
         floatingActionButton = findViewById(R.id.fab);
@@ -179,10 +191,13 @@ public class PerfilActivity extends AppCompatActivity {
                     StaticInstances.usuarioConquistas.clear();
                     StaticInstances.usuarioConquistas.addAll(response.body());
                     usuarioConquistas = StaticInstances.usuarioConquistas;
+                    if(usuarioConquistas.isEmpty()){
+                        textmensagem.setVisibility(View.VISIBLE);
+                    }
                     for (UsuarioConquista a : usuarioConquistas) {
                         recuperaConquistas(a.getConquista(), token);
                     }
-                    verificaPonto(token, conquistas);
+                    verificaPonto(token);
                 }
             }
             @Override
@@ -209,28 +224,23 @@ public class PerfilActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<Conquista> call, Throwable t) {
-
             }
         });
     }
 
-    public void verificaPonto(String token, List<Conquista> conquistas1){
+    public void verificaPonto(String token){
         Integer ponto = StaticInstances.usuario.getPontuacao();
-
-        System.out.println("TESTE: TAMANHO"+ conquistas.size());
         for (int i = 0; i <= ponto; i++) {
-            if( i == 15){
+            if( i == 50){
                 lancaponto(token, 1);
-            }else if(i == 45){
+            }else if(i == 120){
                 lancaponto(token, 2);
-            }else if(i == 75){
+            }else if(i == 320){
                 lancaponto(token, 3);
-            }else if(i == 150){
+            }else if(i == 520){
                 lancaponto(token, 4);
-            }else if(i == 300){
+            }else if(i == 920){
                 lancaponto(token, 5);
-            }else if(i == 600){
-                lancaponto(token, 6);
             }
         }
     }
@@ -240,7 +250,6 @@ public class PerfilActivity extends AppCompatActivity {
         usuarioConquista.setConquista(conquista);
         usuarioConquista.setUsuario(0);
 
-        System.out.println("TESTE CONQUISTA " + usuarioConquista.getConquista());
         DataService service = retrofit.create(DataService.class);
         final Call<UsuarioConquista> usuarioCall = service.registrarConquista(token, usuarioConquista);
         usuarioCall.enqueue(new Callback<UsuarioConquista>() {
