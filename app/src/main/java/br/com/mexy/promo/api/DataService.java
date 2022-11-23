@@ -90,7 +90,7 @@ public interface DataService {
     @POST("/api/v1/upload-images/{id}")
     @Multipart
     Call<String> uploadImageProduto(
-            @Path("ean") String ean,
+            @Path("id") String id,
             @Part MultipartBody.Part file);
 
     @GET("/api/v1/usuarios")

@@ -52,7 +52,7 @@ public class PromocaoFilterAdapter extends RecyclerView.Adapter<PromocaoFilterAd
                 .into(holder.imageViewProduto);
         Picasso.get()
                 .load(DataService.BASE_URL + promocao.getUsuario().getUrlImagem())
-                .error(R.drawable.ic_error)
+                .error(R.mipmap.ic_logo)
                 .into(holder.imageViewUsuario);
         if(promocao.getCurtidas().isEmpty()){
             holder.textViewLike.setText(String.valueOf(0));

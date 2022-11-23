@@ -159,7 +159,7 @@ public class PerfilActivity extends AppCompatActivity {
                     textViewNota.setText(StaticInstances.usuario.getPontuacao().toString());
                     Picasso.get()
                             .load(DataService.BASE_URL + StaticInstances.usuario.getUrlImagem())
-                            .error(R.drawable.ic_error)
+                            .error(R.mipmap.ic_logo)
                             .into(imageViewUsuario);
                     Bundle bundle = new Bundle();
                     bundle.putInt("idUsuario", (Integer) StaticInstances.usuario.getId());

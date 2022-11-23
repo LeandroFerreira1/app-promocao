@@ -69,7 +69,7 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
         adapter = new PromocaoFilterAdapter( promocoes, this);
         recyclerListPromocao.setAdapter( adapter );
 
-
+/*
         recyclerListPromocao.addOnItemTouchListener(
                 new RecyclerItemClickListener(
                         getApplicationContext(),
@@ -93,7 +93,7 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
                             }
                         }
                 )
-        );
+        );*/
 
         //Configura searchview
 
@@ -158,7 +158,7 @@ public class PromocaoListActivity extends AppCompatActivity  implements Promocao
     @Override
     public void onSelected(Promocao item) {
         Intent intent = new Intent(getBaseContext(), PromocaoCompletaActivity.class);
-        intent.putExtra("idPromocao", item.getId());
+        intent.putExtra("promocao", item);
         startActivity(intent);
     }
 }

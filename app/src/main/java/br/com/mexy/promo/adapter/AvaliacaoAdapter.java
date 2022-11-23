@@ -43,7 +43,7 @@ public class AvaliacaoAdapter extends RecyclerView.Adapter<AvaliacaoAdapter.MyVi
         final Avaliacao avaliacao = avaliacaos.get(position);
         Picasso.get()
                 .load(DataService.BASE_URL + avaliacao.getUsuarioComp().getUrlImagem())
-                .error(R.drawable.ic_error)
+                .error(R.mipmap.ic_logo)
                 .into(holder.imageViewUsuario);
         holder.textDescricao.setText(avaliacao.getDescricao());
         holder.textViewNota.setText(avaliacao.getNota().toString());

@@ -343,7 +343,7 @@ public class PromocaoCompletaActivity extends AppCompatActivity {
                             .into(imageViewProdu);
                     Picasso.get()
                             .load(DataService.BASE_URL + promocao.getUsuario().getUrlImagem())
-                            .error(R.drawable.ic_error)
+                            .error(R.mipmap.ic_logo)
                             .into(imageViewUsuariop);
                     Picasso.get()
                             .load(DataService.BASE_URL + promocao.getEstabelecimento().getUrlImagem())

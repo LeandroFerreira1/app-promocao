@@ -42,7 +42,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.MyViewHo
 
         Picasso.get()
                 .load(DataService.BASE_URL + usuario.getUrlImagem())
-                .error(R.drawable.ic_error)
+                .error(R.mipmap.ic_logo)
                 .into(holder.imageViewUsuario);
 
         holder.textNome.setText(usuario.getNome());

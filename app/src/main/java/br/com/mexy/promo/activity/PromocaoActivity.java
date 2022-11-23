@@ -106,7 +106,27 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
         buttonCadastarPromocao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registrarPromocao(token);
+                int teste = 0;
+                promocao.setProduto(produto.getId());
+                promocao.setUsuario_id(0);
+                if(estabelecimentoCadastro.getId() != null){
+                    promocao.setEstabelecimento(estabelecimentoCadastro.getId());
+
+                }else{
+                    teste = 1;
+                    Toast.makeText(PromocaoActivity.this, "Busque um estabelecimento!", Toast.LENGTH_SHORT).show();
+                }
+                if(editValorPromocional.getText().toString() != ""){
+                    promocao.setValorPromocional(String.valueOf(editValorPromocional.getText()));
+                }else{
+                    teste = 1;
+                    Toast.makeText(PromocaoActivity.this, "Cadastre um valor promocional para a oferta!", Toast.LENGTH_SHORT).show();
+                }
+                promocao.setValorOriginal(String.valueOf(editValorOriginal.getText()));
+                promocao.setDataValidade(String.valueOf(editDataValidade.getText()));
+                if(teste == 0){
+                    registrarPromocao(token);
+                }
             }
         });
 
@@ -145,13 +165,6 @@ public class PromocaoActivity extends AppCompatActivity  implements CustomInterf
     }
 
     private void registrarPromocao(String token) {
-
-        promocao.setProduto(produto.getId());
-        promocao.setEstabelecimento(estabelecimentoCadastro.getId());
-        promocao.setValorPromocional(String.valueOf(editValorPromocional.getText()));
-        promocao.setValorOriginal(String.valueOf(editValorOriginal.getText()));
-        promocao.setDataValidade(String.valueOf(editDataValidade.getText()));
-        promocao.setUsuario_id(0);
 
         DataService service = retrofit.create(DataService.class);
         final Call<PromocaoCad> promocaoCall = service.registrarPromocao(token, promocao);

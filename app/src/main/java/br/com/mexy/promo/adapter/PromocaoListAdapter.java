@@ -45,7 +45,7 @@ public class PromocaoListAdapter extends RecyclerView.Adapter<PromocaoListAdapte
                 .into(holder.imageViewProduto);
         Picasso.get()
                 .load(DataService.BASE_URL + promocao.getUsuario().getUrlImagem())
-                .error(R.drawable.ic_error)
+                .error(R.mipmap.ic_logo)
                 .into(holder.imageViewUsuario);
     }
 

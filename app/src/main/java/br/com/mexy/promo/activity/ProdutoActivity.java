@@ -384,11 +384,23 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     //metodo de cadastro manual do produto
 
     private void cadastraProdutoManual(String ean) {
-        produtoAlteradoCompleto.setId(0);
-        produtoAlteradoCompleto.setEan(ean);
-        produtoAlteradoCompleto.setNome((String) editNomeProduto.getText().toString());
-        produtoAlteradoCompleto.setMarca((String) editMarca.getText().toString());
 
+        if(ean != null){
+            produtoAlteradoCompleto.setId(0);
+            produtoAlteradoCompleto.setEan(ean);
+        }else{
+            Toast.makeText(ProdutoActivity.this, "Leia um código de barras para cadastrar!", Toast.LENGTH_SHORT).show();
+        }
+        if(editNomeProduto.getText() != null){
+            produtoAlteradoCompleto.setNome((String) editNomeProduto.getText().toString());
+        } else{
+            Toast.makeText(ProdutoActivity.this, "Cadastre um nome para o produto!", Toast.LENGTH_SHORT).show();
+        }
+        if(editNomeProduto.getText() != null){
+            produtoAlteradoCompleto.setMarca((String) editMarca.getText().toString());
+        }else{
+            Toast.makeText(ProdutoActivity.this, "Cadastre uma marca para o produto!", Toast.LENGTH_SHORT).show();
+        }
         DataService service = retrofit.create(DataService.class);
         Call<Produto> produtoCall = service.cadastraProduto(produtoAlteradoCompleto);
 
