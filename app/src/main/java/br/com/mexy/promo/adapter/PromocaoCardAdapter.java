@@ -35,21 +35,22 @@ public class PromocaoCardAdapter extends RecyclerView.Adapter<PromocaoCardAdapte
     @Override
     public void onBindViewHolder(PromocaoCardAdapter.MyViewHolder holder, int position) {
         Promocao promocao = promocoes.get(position);
-        holder.textViewMarca.setText(promocao.getProduto().getNome());
-        holder.textViewPreco.setText("R$ "+promocao.getValorPromocional());
-        Picasso.get()
-                .load(DataService.BASE_URL + promocao.getProduto().getUrlImagem())
-                .error(R.drawable.ic_error)
-                .into(holder.imageViewProduto);
-        Picasso.get()
-                .load(DataService.BASE_URL + promocao.getEstabelecimento().getUrlImagem())
-                .error(R.drawable.ic_error)
-                .into(holder.imageViewEstab);
-        if(promocao.getCurtidas().isEmpty()){
-            holder.textViewLike.setText(String.valueOf(0));
-        }else{
-            holder.textViewLike.setText(String.valueOf(promocao.getCurtidas().size()));
-        }
+
+            holder.textViewMarca.setText(promocao.getProduto().getNome());
+            holder.textViewPreco.setText("R$ "+promocao.getValorPromocional());
+            Picasso.get()
+                    .load(DataService.BASE_URL + promocao.getProduto().getUrlImagem())
+                    .error(R.drawable.ic_error)
+                    .into(holder.imageViewProduto);
+            Picasso.get()
+                    .load(DataService.BASE_URL + promocao.getEstabelecimento().getUrlImagem())
+                    .error(R.drawable.ic_error)
+                    .into(holder.imageViewEstab);
+            if(promocao.getCurtidas().isEmpty()){
+                holder.textViewLike.setText(String.valueOf(0));
+            }else{
+                holder.textViewLike.setText(String.valueOf(promocao.getCurtidas().size()));
+            }
     }
 
     @Override

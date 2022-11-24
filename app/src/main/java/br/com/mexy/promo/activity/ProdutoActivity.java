@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -119,6 +120,9 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
         btnSalvar = (Button) findViewById(R.id.buttonCadastarPromocao);
         btnSalvar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+
+
                 if(validadorBusca == 600){
                     Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
                     i.putExtra("produto", valueOf(produto.getEan()));
@@ -131,8 +135,19 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
                     startActivity(i);
                     finish();
                 }else if(validador == 500){
+                    boolean res = false;
                     //produtoAlteradoCompleto.setDepartamento(((Departamento)spinner.getSelectedItem()).getId());
-                    cadastraProdutoManual(codigo);
+                    res = verificaCampovazio();
+                    if(res && file != null) {
+                        produtoAlteradoCompleto.setId(0);
+                        produtoAlteradoCompleto.setEan(codigo);
+                        produtoAlteradoCompleto.setNome((String) editNomeProduto.getText().toString());
+                        produtoAlteradoCompleto.setMarca((String) editMarca.getText().toString());
+                        cadastraProdutoManual(codigo);
+                    }else{
+                        Toast.makeText(ProdutoActivity.this, "Verifique se não está faltando algo...", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });
@@ -148,6 +163,27 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
 
             }
         });
+    }
+
+    private boolean verificaCampovazio() {
+        boolean resultado = false;
+
+        if(!TextUtils.isEmpty(editNomeProduto.getText().toString())){
+            resultado = true;
+        }else{
+            editNomeProduto.setError("*");
+            editNomeProduto.requestFocus();
+            resultado = false;
+        }
+        if(!TextUtils.isEmpty(editMarca.getText().toString())){
+            resultado = true;
+        }else{
+
+            editMarca.setError("*");
+            editMarca.requestFocus();
+            resultado = false;
+        }
+        return resultado;
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -384,23 +420,6 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
     //metodo de cadastro manual do produto
 
     private void cadastraProdutoManual(String ean) {
-
-        if(ean != null){
-            produtoAlteradoCompleto.setId(0);
-            produtoAlteradoCompleto.setEan(ean);
-        }else{
-            Toast.makeText(ProdutoActivity.this, "Leia um código de barras para cadastrar!", Toast.LENGTH_SHORT).show();
-        }
-        if(editNomeProduto.getText() != null){
-            produtoAlteradoCompleto.setNome((String) editNomeProduto.getText().toString());
-        } else{
-            Toast.makeText(ProdutoActivity.this, "Cadastre um nome para o produto!", Toast.LENGTH_SHORT).show();
-        }
-        if(editNomeProduto.getText() != null){
-            produtoAlteradoCompleto.setMarca((String) editMarca.getText().toString());
-        }else{
-            Toast.makeText(ProdutoActivity.this, "Cadastre uma marca para o produto!", Toast.LENGTH_SHORT).show();
-        }
         DataService service = retrofit.create(DataService.class);
         Call<Produto> produtoCall = service.cadastraProduto(produtoAlteradoCompleto);
 
@@ -409,11 +428,17 @@ public class ProdutoActivity extends AppCompatActivity implements AdapterView.On
             public void onResponse(Call<Produto> call, Response<Produto> response) {
                 if (response.isSuccessful()) {
                     produtoCadastro = response.body();
-                    uploadImageProduto(produtoCadastro.getEan(),file);
-                    Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
-                    i.putExtra("produto", valueOf(produtoCadastro.getEan()));
-                    startActivity(i);
-                    finish();
+
+                    if(file != null){
+                        uploadImageProduto(produtoCadastro.getEan(),file);
+                        Intent i = new Intent(getApplicationContext(), PromocaoActivity.class);
+                        i.putExtra("produto", valueOf(produtoCadastro.getEan()));
+                        startActivity(i);
+                        finish();
+                    }else{
+                        Toast.makeText(ProdutoActivity.this, "Tire ou escolha uma foto!", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
 

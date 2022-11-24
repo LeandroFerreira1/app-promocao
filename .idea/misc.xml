@@ -36,6 +36,7 @@
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/activity_perfil_geral.xml" value="0.3" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/activity_promocao_completa.xml" value="0.33" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/activity_promocao_list.xml" value="0.3" />
+        <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/activity_splash.xml" value="0.2318840579710145" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/activity_supermercado.xml" value="0.20683760683760682" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/bottom_app_bar.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/bottom_app_bar_perfil.xml" value="0.27421875" />
@@ -43,7 +44,9 @@
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/bottom_sheet_perfil.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/bottom_sheet_promocao.xml" value="0.14764492753623187" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/card_avaliado.xml" value="0.33" />
+        <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/card_conquista.xml" value="0.2318840579710145" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/card_estabelecimento.xml" value="0.1358974358974359" />
+        <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/card_estabelecimento_promocao.xml" value="0.2318840579710145" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/card_list_promocao.xml" value="0.22" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/card_perfil_promocao.xml" value="0.5" />
         <entry key="..\:/Users/leand/AndroidStudioProjects/app-promocao/app/src/main/res/layout/card_supermercado.xml" value="0.2076923076923077" />

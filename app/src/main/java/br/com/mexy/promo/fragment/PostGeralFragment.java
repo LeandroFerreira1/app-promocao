@@ -74,8 +74,7 @@ public class PostGeralFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(myContext, 2 );
         recyclerListPromo.setLayoutManager( layoutManager );
 
-        PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
-        recyclerListPromo.setAdapter( adapter );
+
 
         recyclerListPromo.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -122,11 +121,13 @@ public class PostGeralFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Promocao>> call, Response<List<Promocao>> response) {
                 if (response.isSuccessful()) {
-
                     promocoes.clear();
                     promocoes.addAll(response.body());
-                    PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
-                    recyclerListPromo.setAdapter( adapter );
+                    if(promocoes.isEmpty()){
+                    }else{
+                        PromocaoCardAdapter adapter = new PromocaoCardAdapter( promocoes );
+                        recyclerListPromo.setAdapter( adapter );
+                    }
                   //  progressBar.setVisibility(View.GONE);
                 }
             }

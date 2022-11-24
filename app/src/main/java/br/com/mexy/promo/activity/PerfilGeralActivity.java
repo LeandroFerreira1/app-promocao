@@ -174,6 +174,7 @@ public class PerfilGeralActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     conquista = response.body();
                     conquistas.add(conquista);
+
                     ConquistaAdapter adapter2 = new ConquistaAdapter(conquistas);
                     recyclerConquistaGeral.setAdapter(adapter2);
                 }
